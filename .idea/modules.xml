@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/BargainHunter.iml" filepath="$PROJECT_DIR$/BargainHunter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bargainhunterandroid/bargainhunterandroid.iml" filepath="$PROJECT_DIR$/bargainhunterandroid/bargainhunterandroid.iml" />
+    </modules>
+  </component>
+</project>
+
