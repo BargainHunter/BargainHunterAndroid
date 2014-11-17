@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BargainHunter.iml" filepath="$PROJECT_DIR$/BargainHunter.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bargainhunterandroid/bargainhunterandroid.iml" filepath="$PROJECT_DIR$/bargainhunterandroid/bargainhunterandroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BargainHunterAndroid.iml" filepath="$PROJECT_DIR$/BargainHunterAndroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
 </project>
-
