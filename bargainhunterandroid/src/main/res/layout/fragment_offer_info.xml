@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+        <LinearLayout
+
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/LightGrey" >
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="@dimen/abc_action_bar_stacked_max_height"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:gravity="center"
+                        android:text="Offer Title"
+                        android:id="@+id/titleLabel"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/title_back"
+                        android:textColor="@color/Ivory"/>
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:gravity="center"
+                        android:id="@+id/offerView"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/rounded_corner"/>
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="@dimen/abc_action_bar_stacked_max_height"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:gravity="center"
+                        android:text="Offer Description"
+                        android:id="@+id/descriptionLabel"
+                        android:layout_marginTop="0dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/title_back"
+                        android:textColor="@color/Ivory"/>
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:id="@+id/descriptionView"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/rounded_corner"/>
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="@dimen/abc_action_bar_stacked_max_height"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:gravity="center"
+                        android:id="@+id/priceLabel"
+                        android:text="Price"
+                        android:layout_marginTop="0dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/title_back"
+                        android:textColor="@color/Ivory"/>
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:id="@+id/priceView"
+                        android:layout_margin="5dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/rounded_corner"/>
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="@dimen/abc_action_bar_stacked_max_height"
+                        android:gravity="center"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Company ID"
+                        android:id="@+id/companyIdLabel"
+                        android:layout_marginTop="0dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/title_back"
+                        android:textColor="@color/Ivory"/>
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:id="@+id/companyIdView"
+                        android:layout_margin="5dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/rounded_corner"/>
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="@dimen/abc_action_bar_stacked_max_height"
+                        android:gravity="center"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Offer ID:"
+                        android:id="@+id/offerIdLabel"
+                        android:layout_marginTop="0dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/title_back"
+                        android:textColor="@color/Ivory"/>
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:id="@+id/offerIdView"
+                        android:layout_margin="5dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/rounded_corner"/>
+        </LinearLayout>
+
+</ScrollView>
