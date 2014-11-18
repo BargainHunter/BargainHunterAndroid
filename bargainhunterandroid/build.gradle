@@ -41,4 +41,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.0'
     compile 'com.android.support:gridlayout-v7:21.0.0'
     compile 'com.android.support:support-v4:21.0.0'
+    compile 'com.squareup.retrofit:retrofit:1.7.1'
 }
