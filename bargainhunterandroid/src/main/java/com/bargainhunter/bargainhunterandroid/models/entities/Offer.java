@@ -7,17 +7,17 @@ package com.bargainhunter.bargainhunterandroid.models.entities;
  */
 public class Offer {
 
-    private Long offerId;
+    private long offerId;
     private String title;
     private String description;
     private double price;
     private Long companyId;
 
-    public Long getOfferId() {
+    public long getOfferId() {
         return offerId;
     }
 
-    public void setOfferId(Long offerId) {
+    public void setOfferId(long offerId) {
         this.offerId = offerId;
     }
 
