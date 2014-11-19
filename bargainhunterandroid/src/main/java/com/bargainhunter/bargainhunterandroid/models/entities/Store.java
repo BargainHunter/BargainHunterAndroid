@@ -7,7 +7,7 @@ package com.bargainhunter.bargainhunterandroid.models.entities;
  */
 public class Store {
 
-    private Long storeId;
+    private long storeId;
     private String storeName;
     private String city;
     private String address;
