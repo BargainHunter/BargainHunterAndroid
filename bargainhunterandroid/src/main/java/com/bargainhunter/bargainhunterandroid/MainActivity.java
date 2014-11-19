@@ -13,7 +13,8 @@ import android.view.MenuItem;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        OfferInfoFragment.OnFragmentInteractionListener {
+        OfferInfoFragment.OnFragmentInteractionListener,
+        StoreInfoFragment.OnFragmentInteractionListener{
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -47,9 +48,9 @@ public class MainActivity extends ActionBarActivity
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        // Change to Map fragment.
+        // Change to Map fragment
         Fragment fragment = StoreInfoFragment.newInstance(sectionNumber, "1");
-        //Fragment fragment = OfferInfoFragment.newInstance(sectionNumber, "1");
+//        Fragment fragment = OfferInfoFragment.newInstance(sectionNumber, "1");
 //        Fragment fragment =  MapFragment.newInstance(sectionNumber);
 
         switch (sectionNumber) {
@@ -121,6 +122,10 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onOfferInfoFragmentInteraction(Uri uri) {
+    }
+
+    @Override
+    public void onStoreInfoFragmentInteraction(Uri uri) {
     }
 
 //    /**

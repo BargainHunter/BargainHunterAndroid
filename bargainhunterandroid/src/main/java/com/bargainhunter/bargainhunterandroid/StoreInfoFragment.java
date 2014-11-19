@@ -31,7 +31,7 @@ public class StoreInfoFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_STORE_ID = "param1";
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private static final String ENDPOINT = "http://192.168.1.65:8080" ;
+    private static final String ENDPOINT = "http://192.168.1.2:8080" ;
 
     private String mStoreId;
     private int mSectionNumber;
@@ -43,8 +43,8 @@ public class StoreInfoFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param sectionNumber Parameter 1.
+     * @param storeId Parameter 2.
      * @return A new instance of fragment StoreInfoFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -67,6 +67,8 @@ public class StoreInfoFragment extends Fragment {
             mStoreId = getArguments().getString(ARG_STORE_ID);
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
         }
+
+        requestData();
     }
 
     //Call Retrofit to fetch data from server
@@ -111,16 +113,7 @@ public class StoreInfoFragment extends Fragment {
         cityView.setText(store.getCity());
 
         TextView addressView = (TextView) getView().findViewById(R.id.addressView);
-        addressView.setText(String.valueOf(store.getAddress()));
-
-        TextView addressNumView = (TextView) getView().findViewById(R.id.addressNumView);
-        addressNumView.setText(String.valueOf(store.getAddressNo()));
-
-        TextView latitudeView = (TextView) getView().findViewById(R.id.latitudeView);
-        latitudeView.setText(String.valueOf(store.getLatitude()));
-
-        TextView longitudeView = (TextView) getView().findViewById(R.id.longitudeView);
-        longitudeView.setText(String.valueOf(store.getLongitude()));
+        addressView.setText(String.valueOf(store.getAddress()) + " " + String.valueOf(store.getAddressNo()));
     }
 
 
@@ -134,13 +127,15 @@ public class StoreInfoFragment extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onStoreInfoFragmentInteraction(uri);
         }
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        ((MainActivity) activity).onSectionAttached(
+                getArguments().getInt(ARG_SECTION_NUMBER));
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -167,7 +162,7 @@ public class StoreInfoFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+        public void onStoreInfoFragmentInteraction(Uri uri);
     }
 
 }

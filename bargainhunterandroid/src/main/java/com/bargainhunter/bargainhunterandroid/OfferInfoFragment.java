@@ -31,7 +31,7 @@ public class OfferInfoFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_OFFER_ID = "param1";
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private static final String ENDPOINT = "http://192.168.1.65:8080" ;
+    private static final String ENDPOINT = "http://192.168.1.2:8080" ;
 
 
     private String mOfferId;
