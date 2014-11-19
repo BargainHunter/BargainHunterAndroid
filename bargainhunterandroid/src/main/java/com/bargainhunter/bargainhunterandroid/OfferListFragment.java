@@ -1,21 +1,16 @@
 package com.bargainhunter.bargainhunterandroid;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.TextView;
+import android.widget.*;
+
+import java.util.List;
 
 import com.bargainhunter.bargainhunterandroid.dummy.DummyContent;
-import com.bargainhunter.bargainhunterandroid.models.OfferAdapter;
-import com.bargainhunter.bargainhunterandroid.controllers.OfferParser;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 
 
@@ -66,21 +61,19 @@ public class OfferListFragment extends Fragment implements AbsListView.OnItemCli
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.fragment_item_list);
-        OfferAdapter adapter = new OfferAdapter(this, R.layout.fragment_item_list, offers);
-        setListAdapter(adapter);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item, container, false);
 
-        // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        List<Offer> offers;
 
-        // Set OnItemClickListener so we can be notified on item clicks
+        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+        ListView lv = (ListView) view.findViewById(android.R.id.list);
+        OfferAdapter adapter = new OfferAdapter(this, R.layout.fragment_item_list, offers);
+        lv.setAdapter(adapter);
+
         mListView.setOnItemClickListener(this);
 
         return view;
