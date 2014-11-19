@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 
@@ -24,12 +22,12 @@ import android.widget.TextView;
 public class OfferInfoFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_OFFER_ID = "param1";
+    private static final String ARG_SECTION_NUMBER = "section_number";
 
     // TODO: Rename and change types of parameters
-    ScrollView scrollView;
-    private String mParam2;
+    private String mOfferId;
+    private int mSectionNumber;
 
     private OnFragmentInteractionListener mListener;
 
@@ -37,16 +35,15 @@ public class OfferInfoFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param offerId Parameter 1.
      * @return A new instance of fragment OfferInfoFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static OfferInfoFragment newInstance(String param1, String param2) {
+    public static OfferInfoFragment newInstance(int sectionNumber, String offerId) {
         OfferInfoFragment fragment = new OfferInfoFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_OFFER_ID, offerId);
+        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,8 +59,8 @@ public class OfferInfoFragment extends Fragment {
 
 
         if (getArguments() != null) {
-//            scrollView = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mOfferId = getArguments().getString(ARG_OFFER_ID);
+            mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
         }
     }
 
@@ -77,13 +74,15 @@ public class OfferInfoFragment extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onOfferInfoFragmentInteraction(uri);
         }
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        ((MainActivity) activity).onSectionAttached(
+                getArguments().getInt(ARG_SECTION_NUMBER));
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -110,7 +109,7 @@ public class OfferInfoFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+        public void onOfferInfoFragmentInteraction(Uri uri);
     }
 
 }

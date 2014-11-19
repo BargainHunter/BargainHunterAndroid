@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:fillViewport="false" android:id="@+id/">
+            android:layout_height="match_parent" android:fillViewport="false" android:id="@+id/scrollView">
 
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="wrap_content">
@@ -82,59 +82,6 @@
                                 android:background="@drawable/rounded_corner"
                                 android:layout_below="@+id/priceLabel"
                                 android:layout_margin="5dp"/>
-                        <TextView
-                                android:layout_width="fill_parent"
-                                android:layout_height="@dimen/abc_action_bar_stacked_max_height"
-                                android:gravity="center"
-                                android:textAppearance="?android:attr/textAppearanceLarge"
-                                android:text="Company ID"
-                                android:id="@+id/companyIdLabel"
-                                android:layout_gravity="center_horizontal"
-                                android:background="@drawable/title_back"
-                                android:textColor="@color/Ivory"
-                                android:layout_below="@id/priceView"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"/>
-                        <TextView
-                                android:layout_width="fill_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:textAppearance="?android:attr/textAppearanceLarge"
-                                android:id="@+id/companyIdView"
-                                android:layout_gravity="center_horizontal"
-                                android:background="@drawable/rounded_corner"
-                                android:layout_below="@id/companyIdLabel"
-                                android:layout_margin="5dp"/>
-                        <TextView
-                                android:layout_width="fill_parent"
-                                android:layout_height="@dimen/abc_action_bar_stacked_max_height"
-                                android:gravity="center"
-                                android:textAppearance="?android:attr/textAppearanceLarge"
-                                android:text="Offer ID"
-                                android:id="@+id/offerIdLabel"
-                                android:layout_gravity="center_horizontal"
-                                android:background="@drawable/title_back"
-                                android:textColor="@color/Ivory"
-                                android:layout_below="@id/companyIdView"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"/>
-                        <TextView
-                                android:layout_width="fill_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:textAppearance="?android:attr/textAppearanceLarge"
-                                android:id="@+id/offerIdView"
-                                android:layout_gravity="center_horizontal"
-                                android:background="@drawable/rounded_corner"
-                                android:layout_below="@id/offerIdLabel"
-                                android:layout_margin="5dp"
-                                android:layout_marginBottom="10dp"/>
-                        <ProgressBar
-                                android:id="@+id/prgLoading"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@android:style/Widget.ProgressBar.Inverse"
-                                android:layout_centerInParent="true" />
 
                 </RelativeLayout>
         </LinearLayout>
