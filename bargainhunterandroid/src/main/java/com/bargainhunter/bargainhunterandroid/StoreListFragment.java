@@ -3,13 +3,11 @@ package com.bargainhunter.bargainhunterandroid;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ListAdapter;
-import android.widget.TextView;
+import android.widget.*;
 import com.bargainhunter.bargainhunterandroid.models.APIs.StoreAPI;
 import com.bargainhunter.bargainhunterandroid.models.StoreAdapter;
 import com.bargainhunter.bargainhunterandroid.models.entities.Store;
@@ -33,12 +31,10 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private static final String ENDPOINT="http://192.168.1.65:8080";
+    private static final String ENDPOINT="http://192.168.1.2:8080";
 
     TextView output;
     List<Store> storeList;
-    private int mSectionNumber ;
-
 
     private OnFragmentInteractionListener mListener;
 
@@ -73,11 +69,6 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
-
-        }
-
         requestData();
 
 //        // TODO: Change Adapter to display your content
@@ -107,7 +98,7 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
             //Here i can handle the Retrofit error. Connection unsuccessful.
             @Override
             public void failure(RetrofitError error) {
-//                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -119,8 +110,7 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_store, container, false);
 
         // Set the adapter
@@ -136,6 +126,8 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        ((MainActivity) activity).onSectionAttached(
+                getArguments().getInt(ARG_SECTION_NUMBER));
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -156,8 +148,10 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-//            mListener.onStoreListFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            mListener.onStoreListFragmentInteraction(storeList.get(position).getStoreId().toString());
+
         }
+        Log.d("MainActivity", "Selected Store Id" + storeList.get(position).getStoreId().toString());
     }
 
     /**
