@@ -22,6 +22,6 @@ public interface StoreAPI {
 
     //GET method for ENDPOINT/stores/storeId (Asynchronous execution)
     @GET("/stores/{storeId}")
-    public void getStore(@Path("storeId") int storeId, Callback<Store> response);
+    public void getStore(@Path("storeId") long storeId, Callback<Store> response);
 
 }
