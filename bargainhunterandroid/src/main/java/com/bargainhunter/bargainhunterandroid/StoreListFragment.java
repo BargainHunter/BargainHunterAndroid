@@ -2,16 +2,14 @@ package com.bargainhunter.bargainhunterandroid;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-
-
-import com.bargainhunter.bargainhunterandroid.dummy.DummyContent;
-import com.bargainhunter.bargainhunterandroid.models.APIs.OfferAPI;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ListAdapter;
+import android.widget.TextView;
 import com.bargainhunter.bargainhunterandroid.models.APIs.StoreAPI;
 import com.bargainhunter.bargainhunterandroid.models.StoreAdapter;
 import com.bargainhunter.bargainhunterandroid.models.entities.Store;
@@ -158,7 +156,7 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+//            mListener.onStoreListFragmentInteraction(DummyContent.ITEMS.get(position).id);
         }
     }
 
@@ -187,7 +185,7 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(String id);
+        public void onStoreListFragmentInteraction(String id);
     }
 
 }
