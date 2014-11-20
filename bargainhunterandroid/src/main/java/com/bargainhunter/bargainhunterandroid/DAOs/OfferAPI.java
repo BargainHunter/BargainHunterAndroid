@@ -1,4 +1,4 @@
-package com.bargainhunter.bargainhunterandroid.models.APIs;
+package com.bargainhunter.bargainhunterandroid.DAOs;
 
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 import retrofit.Callback;

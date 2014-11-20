@@ -1,4 +1,4 @@
-package com.bargainhunter.bargainhunterandroid;
+package com.bargainhunter.bargainhunterandroid.controllers.adapters;
 import java.util.List;
 
 import android.app.Activity;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 
 public class OfferAdapter extends ArrayAdapter<Offer>{

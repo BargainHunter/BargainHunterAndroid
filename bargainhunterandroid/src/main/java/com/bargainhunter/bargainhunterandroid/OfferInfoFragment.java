@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.bargainhunter.bargainhunterandroid.models.APIs.OfferAPI;
+import com.bargainhunter.bargainhunterandroid.DAOs.OfferAPI;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -31,11 +31,13 @@ public class OfferInfoFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_OFFER_ID = "param1";
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private static final String ENDPOINT = "http://192.168.1.2:8080" ;
+    private static final String ARG_ENDPOINT = "endpoint";
 
 
     private String mOfferId;
     private int mSectionNumber;
+    private String mEndpoint;
+
     private Offer offer;
 
     private OnFragmentInteractionListener mListener;
@@ -48,11 +50,12 @@ public class OfferInfoFragment extends Fragment {
      * @return A new instance of fragment OfferInfoFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static OfferInfoFragment newInstance(int sectionNumber, String offerId) {
+    public static OfferInfoFragment newInstance(int sectionNumber, String offerId, String endpoint) {
         OfferInfoFragment fragment = new OfferInfoFragment();
         Bundle args = new Bundle();
         args.putString(ARG_OFFER_ID, offerId);
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        args.putString(ARG_ENDPOINT, endpoint);
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,6 +70,7 @@ public class OfferInfoFragment extends Fragment {
         if (getArguments() != null) {
             mOfferId = getArguments().getString(ARG_OFFER_ID);
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+            mEndpoint = getArguments().getString(ARG_ENDPOINT);
         }
 
         requestData();
@@ -77,14 +81,14 @@ public class OfferInfoFragment extends Fragment {
     private void requestData() {
 
         RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(ENDPOINT)
+                .setEndpoint(mEndpoint)
                 .build();
 
         //implement the api interface
         OfferAPI api = adapter.create(OfferAPI.class);
 
         //connect to server and user getOffer.
-        api.getOffer(Long.valueOf(getArguments().getString(ARG_OFFER_ID)) , new Callback<Offer>() {
+        api.getOffer(Long.valueOf(getArguments().getString(mOfferId)) , new Callback<Offer>() {
 
             //Here i can save my data if the connection was successful.
             @Override
@@ -98,7 +102,7 @@ public class OfferInfoFragment extends Fragment {
             @Override
             public void failure(RetrofitError arg0) {
 
-                Toast.makeText(getActivity(),arg0.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),arg0.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -122,15 +126,7 @@ public class OfferInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_offer_info, container, false);
-        return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onOfferInfoFragmentInteraction(uri);
-        }
+        return inflater.inflate(R.layout.fragment_offer_info, container, false);
     }
 
     @Override

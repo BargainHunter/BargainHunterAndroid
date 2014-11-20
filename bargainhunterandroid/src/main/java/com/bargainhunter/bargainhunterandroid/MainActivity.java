@@ -9,13 +9,17 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.bargainhunter.bargainhunterandroid.*;
 
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
         StoreListFragment.OnFragmentInteractionListener,
         StoreInfoFragment.OnFragmentInteractionListener,
+        OfferListFragment.OnFragmentInteractionListener,
         OfferInfoFragment.OnFragmentInteractionListener {
+
+    private static final String ENDPOINT = "http://bargainhunter.dyndns.org:8080/bargainhunterws";
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -50,9 +54,9 @@ public class MainActivity extends ActionBarActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         // Change to Map fragment.
-        Fragment fragment = StoreListFragment.newInstance(sectionNumber);
-//        Fragment fragment = StoreInfoFragment.newInstance(sectionNumber, "1");
-//        Fragment fragment = OfferInfoFragment.newInstance(sectionNumber, "1");
+        Fragment fragment = OfferListFragment.newInstance(sectionNumber, ENDPOINT);
+//        Fragment fragment = StoreInfoFragment.newInstance(sectionNumber, "1", ENDPOINT);
+//        Fragment fragment = OfferInfoFragment.newInstance(sectionNumber, "1", ENDPOINT);
 //        Fragment fragment =  MapFragment.newInstance(sectionNumber);
 
         switch (sectionNumber) {
@@ -60,10 +64,10 @@ public class MainActivity extends ActionBarActivity
 //                fragment = MapFragment.newInstance(sectionNumber);
                 break;
             case 2:
-//                fragment = OfferListFragment.newInstance(sectionNumber);
+                fragment = OfferListFragment.newInstance(sectionNumber, ENDPOINT);
                 break;
             case 3:
-//                fragment = StoreListFragment.newInstance(sectionNumber);
+                fragment = StoreListFragment.newInstance(sectionNumber, ENDPOINT);
                 break;
         }
 
@@ -127,6 +131,10 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onStoreInfoFragmentInteraction(Uri uri) {
+    }
+
+    @Override
+    public void onOfferListFragmentInteraction(String id) {
     }
 
     @Override

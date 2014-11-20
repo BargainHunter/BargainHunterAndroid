@@ -8,8 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.bargainhunter.bargainhunterandroid.models.APIs.StoreAPI;
-import com.bargainhunter.bargainhunterandroid.models.StoreAdapter;
+import com.bargainhunter.bargainhunterandroid.DAOs.StoreAPI;
+import com.bargainhunter.bargainhunterandroid.controllers.adapters.StoreAdapter;
 import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -31,9 +31,11 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private static final String ENDPOINT="http://192.168.1.2:8080";
+    private static final String ARG_ENDPOINT = "endpoint";
 
-    TextView output;
+    private int mSectionNumber;
+    private String mEndpoint;
+
     List<Store> storeList;
 
     private OnFragmentInteractionListener mListener;
@@ -49,10 +51,10 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
      */
     private ListAdapter mAdapter;
 
-    // TODO: Rename and change types of parameters
-    public static StoreListFragment newInstance(int sectionNumber) {
+    public static StoreListFragment newInstance(int sectionNumber, String endpoint) {
         StoreListFragment fragment = new StoreListFragment();
         Bundle args = new Bundle();
+        args.putString(ARG_ENDPOINT, endpoint);
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
@@ -69,17 +71,17 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (getArguments() != null) {
+            mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+            mEndpoint = getArguments().getString(ARG_ENDPOINT);
+        }
         requestData();
-
-//        // TODO: Change Adapter to display your content
-//        mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-//                android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS);
     }
 
     private void requestData() {
 
         RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(ENDPOINT)
+                .setEndpoint(mEndpoint)
                 .build();
 
         //implement the api interface
@@ -98,9 +100,8 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
             //Here i can handle the Retrofit error. Connection unsuccessful.
             @Override
             public void failure(RetrofitError error) {
-                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
             }
-
         });
     }
 
@@ -110,9 +111,11 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_store, container, false);
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
+                             Bundle savedInstanceState) {
 
+        View view = inflater.inflate(R.layout.fragment_store, container, false);
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
@@ -149,7 +152,6 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
             mListener.onStoreListFragmentInteraction(storeList.get(position).getStoreId().toString());
-
         }
         Log.d("MainActivity", "Selected Store Id" + storeList.get(position).getStoreId().toString());
     }

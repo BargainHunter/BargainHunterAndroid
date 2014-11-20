@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.bargainhunter.bargainhunterandroid.models.APIs.StoreAPI;
+import com.bargainhunter.bargainhunterandroid.DAOs.StoreAPI;
 import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -31,10 +31,12 @@ public class StoreInfoFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_STORE_ID = "param1";
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private static final String ENDPOINT = "http://192.168.1.2:8080" ;
+    private static final String ARG_ENDPOINT = "endpoint";
 
     private String mStoreId;
     private int mSectionNumber;
+    private String mEndpoint;
+
     private Store store;
 
     private OnFragmentInteractionListener mListener;
@@ -47,12 +49,12 @@ public class StoreInfoFragment extends Fragment {
      * @param storeId Parameter 2.
      * @return A new instance of fragment StoreInfoFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static StoreInfoFragment newInstance(int sectionNumber, String storeId) {
+    public static StoreInfoFragment newInstance(int sectionNumber, String storeId, String endpoint) {
         StoreInfoFragment fragment = new StoreInfoFragment();
         Bundle args = new Bundle();
         args.putString(ARG_STORE_ID, storeId);
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        args.putString(ARG_ENDPOINT, endpoint);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,9 +65,11 @@ public class StoreInfoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mStoreId = getArguments().getString(ARG_STORE_ID);
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+            mEndpoint = getArguments().getString(ARG_ENDPOINT);
         }
 
         requestData();
@@ -76,28 +80,26 @@ public class StoreInfoFragment extends Fragment {
     private void requestData() {
 
         RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(ENDPOINT)
+                .setEndpoint(mEndpoint)
                 .build();
 
         //implement the api interface
         StoreAPI api = adapter.create(StoreAPI.class);
 
         //connect to server and user getOffer.
-        api.getStore(Long.valueOf(getArguments().getString(ARG_STORE_ID)), new Callback<Store>() {
+        api.getStore(Long.valueOf(getArguments().getString(mStoreId)), new Callback<Store>() {
 
             //Here i can save my data if the connection was successful.
             @Override
             public void success(Store arg0, Response response) {
                 store = arg0;
                 updateDisplay(store);
-
             }
 
             //Here i can handle the Retrofit error. Connection unsuccessful.
             @Override
             public void failure(RetrofitError arg0) {
-
-                Toast.makeText(getActivity(), arg0.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), arg0.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -122,13 +124,6 @@ public class StoreInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_store_info, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onStoreInfoFragmentInteraction(uri);
-        }
     }
 
     @Override

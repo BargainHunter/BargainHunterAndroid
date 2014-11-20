@@ -7,14 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.bargainhunter.bargainhunterandroid.controllers.adapters.OfferAdapter;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import java.util.List;
 
-import com.bargainhunter.bargainhunterandroid.dummy.DummyContent;
-import com.bargainhunter.bargainhunterandroid.models.APIs.OfferAPI;
+import com.bargainhunter.bargainhunterandroid.DAOs.OfferAPI;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 
 
@@ -31,11 +31,12 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private static final String ENDPOINT="http://192.168.1.65:8080";
+    private static final String ARG_ENDPOINT="endpoint";
 
-    TextView output;
+    private int mSectionNumber;
+    private String mEndpoint;
+
     List<Offer> offerList;
-    private int mSectionNumber ;
 
     private OnFragmentInteractionListener mListener;
 
@@ -51,10 +52,11 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
     private ListAdapter mAdapter;
 
     // TODO: Rename and change types of parameters
-    public static OfferListFragment newInstance(String param1, String param2) {
+    public static OfferListFragment newInstance(int sectionNumber, String endpoint) {
         OfferListFragment fragment = new OfferListFragment();
         Bundle args = new Bundle();
-
+        args.putString(ARG_ENDPOINT, endpoint);
+        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,11 +72,16 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (getArguments() != null) {
+            mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+            mEndpoint = getArguments().getString(ARG_ENDPOINT);
+        }
+        requestData();
     }
     private void requestData() {
 
         RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(ENDPOINT)
+                .setEndpoint(mEndpoint)
                 .build();
 
         //implement the api interface
@@ -93,23 +100,25 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
             //Here i can handle the Retrofit error. Connection unsuccessful.
             @Override
             public void failure(RetrofitError error) {
-//                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
             }
-
         });
     }
 
     protected void updateDisplay(List<Offer> offerList){
         OfferAdapter adapter = new OfferAdapter(this.getActivity(), R.layout.fragment_offer_list,offerList);
-
         setListAdapter(adapter);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_offer_list, container, false);
 
+        View view = inflater.inflate(R.layout.fragment_offer_list, container, false);
+        //set the adapter
+        mListView = (AbsListView) view.findViewById(android.R.id.list);
+        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
         mListView.setOnItemClickListener(this);
 
@@ -119,6 +128,8 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        ((MainActivity) activity).onSectionAttached(
+                getArguments().getInt(ARG_SECTION_NUMBER));
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -139,7 +150,7 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+//            mListener.onOfferListFragmentInteraction(DummyContent.ITEMS.get(position).id);
         }
     }
 
@@ -156,8 +167,6 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
         }
     }
 
-
-
     /**
     * This interface must be implemented by activities that contain this
     * fragment to allow an interaction in this fragment to be communicated
@@ -170,7 +179,7 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(String id);
+        public void onOfferListFragmentInteraction(String id);
     }
 
 }
