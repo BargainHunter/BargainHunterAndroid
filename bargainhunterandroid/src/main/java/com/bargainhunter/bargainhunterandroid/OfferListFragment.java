@@ -2,15 +2,19 @@ package com.bargainhunter.bargainhunterandroid;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import java.util.List;
 
 import com.bargainhunter.bargainhunterandroid.dummy.DummyContent;
+import com.bargainhunter.bargainhunterandroid.models.APIs.OfferAPI;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 
 
@@ -23,10 +27,15 @@ import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class OfferListFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class OfferListFragment extends ListFragment implements AbsListView.OnItemClickListener {
+
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final String ENDPOINT="http://192.168.1.65:8080";
 
     TextView output;
-    List<Offer> offers;
+    List<Offer> offerList;
+    private int mSectionNumber ;
 
     private OnFragmentInteractionListener mListener;
 
@@ -62,17 +71,45 @@ public class OfferListFragment extends Fragment implements AbsListView.OnItemCli
         super.onCreate(savedInstanceState);
 
     }
+    private void requestData() {
+
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(ENDPOINT)
+                .build();
+
+        //implement the api interface
+        OfferAPI api = adapter.create(OfferAPI.class);
+
+        //connect to server and user getOffer.
+        api.getOffers(new Callback<List<Offer>>() {
+
+            //Here i can save my data if the connection was successful.
+            @Override
+            public void success(List<Offer> offers, Response response) {
+                offerList = offers;
+                updateDisplay(offerList);
+            }
+
+            //Here i can handle the Retrofit error. Connection unsuccessful.
+            @Override
+            public void failure(RetrofitError error) {
+//                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+        });
+    }
+
+    protected void updateDisplay(List<Offer> offerList){
+        OfferAdapter adapter = new OfferAdapter(this.getActivity(), R.layout.fragment_offer_list,offerList);
+
+        setListAdapter(adapter);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_offer_list, container, false);
 
-        List<Offer> offers;
-
-        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
-        ListView lv = (ListView) view.findViewById(android.R.id.list);
-        OfferAdapter adapter = new OfferAdapter(this, R.layout.fragment_item_list, offers);
-        lv.setAdapter(adapter);
 
         mListView.setOnItemClickListener(this);
 
@@ -118,6 +155,8 @@ public class OfferListFragment extends Fragment implements AbsListView.OnItemCli
             ((TextView) emptyView).setText(emptyText);
         }
     }
+
+
 
     /**
     * This interface must be implemented by activities that contain this
