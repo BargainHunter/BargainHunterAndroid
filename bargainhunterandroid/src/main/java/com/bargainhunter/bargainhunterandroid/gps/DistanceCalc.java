@@ -2,12 +2,13 @@ package com.bargainhunter.bargainhunterandroid.gps;
 
 import android.location.Location;
 import com.bargainhunter.bargainhunterandroid.models.entities.Coordinates;
+import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 
 /**
  * Created by vasovourka on 11/9/14.
  */
 public class DistanceCalc {
-    public static float calculate(MockLocations mock,Coordinates coordinates) {
+    public static float calculate(Store store,Coordinates coordinates) {
 
         float distance=0;
 
@@ -19,8 +20,8 @@ public class DistanceCalc {
 
         Location loc2 = new Location("store location");
 
-        loc2.setLatitude(mock.getLatitude());
-        loc2.setLongitude(mock.getLongitude());
+        loc2.setLatitude(store.getLatitude());
+        loc2.setLongitude(store.getLongitude());
 
         distance=loc1.distanceTo(loc2);
 
