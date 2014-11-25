@@ -88,7 +88,7 @@ public class OfferInfoFragment extends Fragment {
         OfferAPI api = adapter.create(OfferAPI.class);
 
         //connect to server and user getOffer.
-        api.getOffer(Long.valueOf(getArguments().getString(mOfferId)) , new Callback<Offer>() {
+        api.getOffer(Long.valueOf(mOfferId).longValue() , new Callback<Offer>() {
 
             //Here i can save my data if the connection was successful.
             @Override

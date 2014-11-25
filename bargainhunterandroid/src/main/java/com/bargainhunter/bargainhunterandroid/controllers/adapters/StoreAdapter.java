@@ -25,14 +25,15 @@ public class StoreAdapter extends ArrayAdapter<Store>{
     private List<Store> storeList;
     MainActivity activity;
     Coordinates phoneLoc;
-    LocationController controller;
+   // LocationController controller;
 
-    public StoreAdapter(Context context, int resource, List<Store> objects) {
+    public StoreAdapter(Context context, int resource, List<Store> objects,Coordinates phoneLoc) {
         super(context, resource, objects);
         this.context = context;
         this.storeList = objects;
-        controller=new LocationController();
-        phoneLoc=controller.findCoordinates(context);
+//        controller=new LocationController();
+//        phoneLoc=controller.findCoordinates(context);
+        this.phoneLoc=phoneLoc;
     }
 
 
@@ -52,7 +53,7 @@ public class StoreAdapter extends ArrayAdapter<Store>{
         TextView tv2=(TextView) view.findViewById(R.id.storeDistance);
       // phoneLoc=activity.getPhoneLoc();
         if(phoneLoc!=null){
-            float dist=DistanceCalc.calculate(store,phoneLoc);
+            float dist= DistanceCalc.calculate(store, phoneLoc);
             DecimalFormat numberFormat = new DecimalFormat("##");
             tv2.setText("distance from store: " +numberFormat.format(dist) );
         }

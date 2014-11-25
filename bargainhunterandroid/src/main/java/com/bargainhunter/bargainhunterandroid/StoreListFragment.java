@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.bargainhunter.bargainhunterandroid.DAOs.StoreAPI;
+import com.bargainhunter.bargainhunterandroid.controllers.adapters.LocationController;
 import com.bargainhunter.bargainhunterandroid.controllers.adapters.StoreAdapter;
+import com.bargainhunter.bargainhunterandroid.models.entities.Coordinates;
 import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -68,6 +70,13 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
     }
 
     @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+       // super.onListItemClick(l, v, position, id);
+        Store store=(Store)(getListAdapter()).getItem(position);
+        Toast.makeText(getActivity(),store.getStoreName()+ "was clicked", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -104,9 +113,15 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
             }
         });
     }
+    Coordinates phoneLoc;
+    protected Coordinates getLocation(){
+        LocationController controller=new LocationController();
+        phoneLoc=controller.findCoordinates(this.getActivity());
+        return phoneLoc;
+    }
 
     protected void updateDisplay(List<Store> storeList){
-        StoreAdapter adapter = new StoreAdapter(this.getActivity(), R.layout.fragment_store, storeList);
+        StoreAdapter adapter = new StoreAdapter(this.getActivity(), R.layout.fragment_store, storeList,getLocation());
         setListAdapter(adapter);
     }
 

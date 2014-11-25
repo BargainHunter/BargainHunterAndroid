@@ -124,6 +124,7 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onStoreListFragmentInteraction(String id) {
+
     }
 
     @Override

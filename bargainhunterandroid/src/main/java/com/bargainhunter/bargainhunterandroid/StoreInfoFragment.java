@@ -87,7 +87,7 @@ public class StoreInfoFragment extends Fragment {
         StoreAPI api = adapter.create(StoreAPI.class);
 
         //connect to server and user getOffer.
-        api.getStore(Long.valueOf(getArguments().getString(mStoreId)), new Callback<Store>() {
+        api.getStore(Long.valueOf(mStoreId).longValue(), new Callback<Store>() {
 
             //Here i can save my data if the connection was successful.
             @Override
