@@ -11,6 +11,7 @@ import android.widget.*;
 import com.bargainhunter.bargainhunterandroid.DAOs.StoreAPI;
 import com.bargainhunter.bargainhunterandroid.controllers.adapters.LocationController;
 import com.bargainhunter.bargainhunterandroid.controllers.adapters.StoreAdapter;
+import com.bargainhunter.bargainhunterandroid.controllers.adapters.StoreListController;
 import com.bargainhunter.bargainhunterandroid.models.entities.Coordinates;
 import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 import retrofit.Callback;
@@ -41,6 +42,8 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
     List<Store> storeList;
 
     private OnFragmentInteractionListener mListener;
+
+    private StoreListController storeListController = new StoreListController();
 
     /**
      * The fragment's ListView/GridView.
@@ -84,35 +87,13 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
             mEndpoint = getArguments().getString(ARG_ENDPOINT);
         }
-        requestData();
+        storeList = storeListController.requestData(mEndpoint,this.getActivity());
+
+        if (storeList != null) {
+            updateDisplay(storeList);
+        }
     }
 
-    private void requestData() {
-
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(mEndpoint)
-                .build();
-
-        //implement the api interface
-        StoreAPI api = adapter.create(StoreAPI.class);
-
-        //connect to server and user getOffer.
-        api.getStores(new Callback<List<Store>>() {
-
-            //Here i can save my data if the connection was successful.
-            @Override
-            public void success(List<Store> stores, Response response) {
-                storeList = stores;
-                updateDisplay(storeList);
-            }
-
-            //Here i can handle the Retrofit error. Connection unsuccessful.
-            @Override
-            public void failure(RetrofitError error) {
-                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-    }
     Coordinates phoneLoc;
     protected Coordinates getLocation(){
         LocationController controller=new LocationController();
