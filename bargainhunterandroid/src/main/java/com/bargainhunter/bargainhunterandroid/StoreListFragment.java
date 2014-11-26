@@ -70,13 +70,6 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
     }
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-       // super.onListItemClick(l, v, position, id);
-        Store store=(Store)(getListAdapter()).getItem(position);
-        Toast.makeText(getActivity(),store.getStoreName()+ "was clicked", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -160,15 +153,18 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
         mListener = null;
     }
 
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        Store store = (Store)(getListAdapter()).getItem(position);
+        long storeId = store.getStoreId();
+        if (null != mListener) {
+            mListener.onStoreListFragmentInteraction(String.valueOf(storeId));
+        }
+    }
+
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            mListener.onStoreListFragmentInteraction(storeList.get(position).getStoreId().toString());
-        }
-        Log.d("MainActivity", "Selected Store Id" + storeList.get(position).getStoreId().toString());
     }
 
     /**

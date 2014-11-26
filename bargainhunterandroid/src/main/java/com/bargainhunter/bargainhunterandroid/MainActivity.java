@@ -124,7 +124,11 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onStoreListFragmentInteraction(String id) {
-
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = StoreInfoFragment.newInstance(1, id, ENDPOINT);
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
     }
 
     @Override
