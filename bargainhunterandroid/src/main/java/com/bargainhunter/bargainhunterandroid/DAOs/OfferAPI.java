@@ -24,4 +24,7 @@ public interface OfferAPI {
     @GET("/offers/{offerId}")
     public void getOffer(@Path("offerId") long offerId, Callback<Offer> response);
 
+    //GET method for ENDPOINT/stores/storeId/offers (Asynchronous execution)
+    @GET("/stores/{storeId}/offers")
+    public void getOffersFromStore(@Path("storeId") long storeId, Callback<List<Offer>> response);
 }

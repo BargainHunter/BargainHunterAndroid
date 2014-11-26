@@ -16,7 +16,8 @@ public class MainActivity extends ActionBarActivity
         StoreListFragment.OnFragmentInteractionListener,
         StoreInfoFragment.OnFragmentInteractionListener,
         OfferListFragment.OnFragmentInteractionListener,
-        OfferInfoFragment.OnFragmentInteractionListener {
+        OfferInfoFragment.OnFragmentInteractionListener,
+        OfferListFromStoreFragment.OnFragmentInteractionListener {
 
     private static final String ENDPOINT = "http://bargainhunter.dyndns.org:8080/bargainhunterws";
 
@@ -143,6 +144,10 @@ public class MainActivity extends ActionBarActivity
     public void onOfferInfoFragmentInteraction(Uri uri) {
     }
 
+    @Override
+    public void onOfferListFromStoreFragmentInteraction(String id) {
+    }
+
 //    /**
 //     * A placeholder fragment containing a simple view.
 //     */
@@ -182,5 +187,4 @@ public class MainActivity extends ActionBarActivity
 //                    getArguments().getInt(ARG_SECTION_NUMBER));
 //        }
 //    }
-
 }
