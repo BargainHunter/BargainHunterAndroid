@@ -14,6 +14,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import java.util.List;
 
+import  com.bargainhunter.bargainhunterandroid.controllers.adapters.OfferListController;
 import com.bargainhunter.bargainhunterandroid.DAOs.OfferAPI;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 
@@ -38,6 +39,7 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
 
     List<Offer> offerList;
 
+    private OfferListController offerListController =new OfferListController();
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -76,34 +78,13 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
             mEndpoint = getArguments().getString(ARG_ENDPOINT);
         }
-        requestData();
+
+        offerList = offerListController.requestData(mEndpoint,this.getActivity());
+        if (offerList != null) {
+            updateDisplay(offerList);
+        }
     }
-    private void requestData() {
 
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(mEndpoint)
-                .build();
-
-        //implement the api interface
-        OfferAPI api = adapter.create(OfferAPI.class);
-
-        //connect to server and user getOffer.
-        api.getOffers(new Callback<List<Offer>>() {
-
-            //Here i can save my data if the connection was successful.
-            @Override
-            public void success(List<Offer> offers, Response response) {
-                offerList = offers;
-                updateDisplay(offerList);
-            }
-
-            //Here i can handle the Retrofit error. Connection unsuccessful.
-            @Override
-            public void failure(RetrofitError error) {
-                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-    }
 
     protected void updateDisplay(List<Offer> offerList){
         OfferAdapter adapter = new OfferAdapter(this.getActivity(), R.layout.fragment_offer_list,offerList);
