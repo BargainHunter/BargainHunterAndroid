@@ -22,6 +22,11 @@ public class MainActivity extends ActionBarActivity
     private static final String ENDPOINT = "http://bargainhunter.dyndns.org:8080/bargainhunterws";
 
     /**
+     * Represents radius in (km). //TODO: change the value from settings
+     */
+    private static final double RADIUS = 5.0;
+
+    /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
@@ -52,7 +57,7 @@ public class MainActivity extends ActionBarActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         // Change to Map fragment.
-        Fragment fragment = OfferListFragment.newInstance(sectionNumber, ENDPOINT);
+        Fragment fragment = OfferListFragment.newInstance(sectionNumber, ENDPOINT, RADIUS);
 //        Fragment fragment = StoreInfoFragment.newInstance(sectionNumber, "1", ENDPOINT);
 //        Fragment fragment = OfferInfoFragment.newInstance(sectionNumber, "1", ENDPOINT);
 //        Fragment fragment =  MapFragment.newInstance(sectionNumber);
@@ -62,7 +67,7 @@ public class MainActivity extends ActionBarActivity
 //                fragment = MapFragment.newInstance(sectionNumber);
                 break;
             case 2:
-                fragment = OfferListFragment.newInstance(sectionNumber, ENDPOINT);
+                fragment = OfferListFragment.newInstance(sectionNumber, ENDPOINT, RADIUS);
                 break;
             case 3:
                 fragment = StoreListFragment.newInstance(sectionNumber, ENDPOINT);

@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.bargainhunter.bargainhunterandroid.controllers.adapters.LocationController;
 import com.bargainhunter.bargainhunterandroid.controllers.adapters.OfferAdapter;
+import com.bargainhunter.bargainhunterandroid.models.entities.Coordinates;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -31,10 +33,15 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private static final String ARG_ENDPOINT="endpoint";
+    private static final String ARG_ENDPOINT = "endpoint";
+    private static final String ARG_RADIUS = "radius";
 
     private int mSectionNumber;
     private String mEndpoint;
+    private double mRadius;
+
+    Coordinates phoneLoc;
+    LocationController controller;
 
     List<Offer> offerList;
 
@@ -51,10 +58,10 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
      */
     private ListAdapter mAdapter;
 
-    // TODO: Rename and change types of parameters
-    public static OfferListFragment newInstance(int sectionNumber, String endpoint) {
+    public static OfferListFragment newInstance(int sectionNumber, String endpoint, double radius) {
         OfferListFragment fragment = new OfferListFragment();
         Bundle args = new Bundle();
+        args.putDouble(ARG_RADIUS, radius);
         args.putString(ARG_ENDPOINT, endpoint);
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
@@ -73,11 +80,13 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
+            mRadius = getArguments().getDouble(ARG_RADIUS);
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
             mEndpoint = getArguments().getString(ARG_ENDPOINT);
         }
         requestData();
     }
+
     private void requestData() {
 
         RestAdapter adapter = new RestAdapter.Builder()
@@ -87,22 +96,29 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
         //implement the api interface
         OfferAPI api = adapter.create(OfferAPI.class);
 
+
+        controller=new LocationController();
+        phoneLoc=controller.findCoordinates(getActivity());
+
         //connect to server and user getOffer.
-        api.getOffers(new Callback<List<Offer>>() {
+        api.getOffers(phoneLoc.getLatitude(),
+                phoneLoc.getLongitude(),
+                mRadius,
+                new Callback<List<Offer>>() {
 
-            //Here i can save my data if the connection was successful.
-            @Override
-            public void success(List<Offer> offers, Response response) {
-                offerList = offers;
-                updateDisplay(offerList);
-            }
+                    //Here i can save my data if the connection was successful.
+                    @Override
+                    public void success(List<Offer> offers, Response response) {
+                        offerList = offers;
+                        updateDisplay(offerList);
+                    }
 
-            //Here i can handle the Retrofit error. Connection unsuccessful.
-            @Override
-            public void failure(RetrofitError error) {
-                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
+                    //Here i can handle the Retrofit error. Connection unsuccessful.
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     protected void updateDisplay(List<Offer> offerList){
@@ -134,7 +150,7 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                + " must implement OnFragmentInteractionListener");
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -143,7 +159,6 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
         super.onDetach();
         mListener = null;
     }
-
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -161,25 +176,22 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
      */
     public void setEmptyText(CharSequence emptyText) {
         View emptyView = mListView.getEmptyView();
-
         if (emptyView instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);
         }
     }
 
     /**
-    * This interface must be implemented by activities that contain this
-    * fragment to allow an interaction in this fragment to be communicated
-    * to the activity and potentially other fragments contained in that
-    * activity.
-    * <p>
-    * See the Android Training lesson <a href=
-    * "http://developer.android.com/training/basics/fragments/communicating.html"
-    * >Communicating with Other Fragments</a> for more information.
-    */
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onOfferListFragmentInteraction(String id);
     }
-
 }
