@@ -24,7 +24,7 @@ public class MainActivity extends ActionBarActivity
     /**
      * Represents radius in (km). //TODO: change the value from settings
      */
-    private static final double RADIUS = 5.0;
+    private static final double RADIUS = 100.0;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
