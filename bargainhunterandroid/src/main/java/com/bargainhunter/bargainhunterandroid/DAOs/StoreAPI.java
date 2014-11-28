@@ -4,6 +4,7 @@ import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.Path;
+import retrofit.http.Query;
 
 import java.util.List;
 
@@ -16,9 +17,12 @@ import java.util.List;
  */
 public interface StoreAPI {
 
-    //GET method for ENDPOINT/stores (Asynchronous execution)
+    //GET method for ENDPOINT/stores?latitude={}&longitude={}&radius={} (Asynchronous execution)
     @GET("/stores")
-    public void getStores(Callback<List<Store>> response);
+    public void getStores(@Query("latitude") double latitude,
+                          @Query("longitude") double longitude,
+                          @Query("radius") double radius,
+                          Callback<List<Store>> response);
 
     //GET method for ENDPOINT/stores/storeId (Asynchronous execution)
     @GET("/stores/{storeId}")
