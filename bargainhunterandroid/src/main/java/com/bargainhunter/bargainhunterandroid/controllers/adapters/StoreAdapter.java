@@ -16,9 +16,6 @@ import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 import java.text.DecimalFormat;
 import java.util.List;
 
-/**
- * Created by Vasilis on 19/11/2014.
- */
 public class StoreAdapter extends ArrayAdapter<Store>{
 
     private Context context;

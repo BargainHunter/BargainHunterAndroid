@@ -49,7 +49,6 @@ public class OfferInfoFragment extends Fragment {
      * @param offerId Parameter 1.
      * @return A new instance of fragment OfferInfoFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static OfferInfoFragment newInstance(int sectionNumber, String offerId, String endpoint) {
         OfferInfoFragment fragment = new OfferInfoFragment();
         Bundle args = new Bundle();
@@ -88,7 +87,7 @@ public class OfferInfoFragment extends Fragment {
         OfferAPI api = adapter.create(OfferAPI.class);
 
         //connect to server and user getOffer.
-        api.getOffer(Long.valueOf(mOfferId).longValue() , new Callback<Offer>() {
+        api.getOffer(Long.valueOf(mOfferId).longValue(), new Callback<Offer>() {
 
             //Here i can save my data if the connection was successful.
             @Override
@@ -120,7 +119,6 @@ public class OfferInfoFragment extends Fragment {
         TextView priceView = (TextView) getView().findViewById(R.id.priceView);
         priceView.setText(String.valueOf(offer.getPrice()));
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

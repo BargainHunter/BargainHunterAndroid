@@ -145,6 +145,15 @@ public class OfferListFromStoreFragment extends ListFragment implements AbsListV
     }
 
     @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        Offer offer = (Offer)(getListAdapter()).getItem(position);
+        long offerId = offer.getOfferId();
+        if (null != mListener) {
+            mListener.onOfferListFromStoreFragmentInteraction(String.valueOf(offerId));
+        }
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     }
 

@@ -2,7 +2,6 @@ package com.bargainhunter.bargainhunterandroid;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +10,7 @@ import android.widget.*;
 import com.bargainhunter.bargainhunterandroid.controllers.adapters.LocationController;
 import com.bargainhunter.bargainhunterandroid.controllers.adapters.OfferAdapter;
 import com.bargainhunter.bargainhunterandroid.models.entities.Coordinates;
+import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -161,12 +161,16 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        Offer offer = (Offer)(getListAdapter()).getItem(position);
+        long offerId = offer.getOfferId();
         if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-//            mListener.onOfferListFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            mListener.onOfferListFragmentInteraction(String.valueOf(offerId));
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     }
 
     /**

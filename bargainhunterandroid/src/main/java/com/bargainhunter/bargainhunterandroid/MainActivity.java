@@ -148,7 +148,14 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
-    public void onOfferListFragmentInteraction(String id) {
+    public void onOfferListFragmentInteraction(String offerId) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment storeInfoFragment = StoreInfoFragment.newInstance(1, offerId, ENDPOINT);
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.firstFragmentContainer, storeInfoFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
@@ -156,7 +163,15 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
-    public void onOfferListFromStoreFragmentInteraction(String id) {
+    public void onOfferListFromStoreFragmentInteraction(String offerId) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment offerInfoFragment = OfferInfoFragment.newInstance(2, offerId, ENDPOINT);
+        Fragment blankFragment = new Fragment();
+        fragmentManager.beginTransaction()
+                .replace(R.id.firstFragmentContainer, offerInfoFragment)
+                .replace(R.id.secondFragmentContainer, blankFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
 //    /**

@@ -25,10 +25,10 @@ public class OfferAdapter extends ArrayAdapter<Offer>{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.fragment_offer_list, parent, false);
+        View view = inflater.inflate(R.layout.fragment_offer_custom, parent, false);
 
         Offer offer = offers.get(position);
-        TextView tv = (TextView) view.findViewById(R.id.textView1);
+        TextView tv = (TextView) view.findViewById(R.id.offerTitle);
         tv.setText(offer.getTitle());
 
         return view;
