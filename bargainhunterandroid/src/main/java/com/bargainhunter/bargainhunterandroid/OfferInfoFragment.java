@@ -8,9 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import android.widget.Toast;
+import com.bargainhunter.bargainhunterandroid.DAOs.OfferAPI;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
-import com.bargainhunter.bargainhunterandroid.controllers.adapters.OfferInfoController;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 /**
@@ -29,7 +33,7 @@ public class OfferInfoFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String ARG_ENDPOINT = "endpoint";
 
-    private OfferInfoController offerInfoController = new OfferInfoController();
+
     private String mOfferId;
     private int mSectionNumber;
     private String mEndpoint;
@@ -69,14 +73,39 @@ public class OfferInfoFragment extends Fragment {
             mEndpoint = getArguments().getString(ARG_ENDPOINT);
         }
 
-        offer = offerInfoController.requestData(mEndpoint, mOfferId, this.getActivity());
-
-        if (offer != null) {updateDisplay(offer);}
+        requestData();
     }
 
     //Call Retrofit to fetch data from server
     //and store data to an offer object.
+    private void requestData() {
 
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(mEndpoint)
+                .build();
+
+        //implement the api interface
+        OfferAPI api = adapter.create(OfferAPI.class);
+
+        //connect to server and user getOffer.
+        api.getOffer(Long.valueOf(mOfferId).longValue() , new Callback<Offer>() {
+
+            //Here i can save my data if the connection was successful.
+            @Override
+            public void success(Offer arg0, Response response) {
+                offer = arg0;
+                updateDisplay(offer);
+
+            }
+
+            //Here i can handle the Retrofit error. Connection unsuccessful.
+            @Override
+            public void failure(RetrofitError arg0) {
+
+                Toast.makeText(getActivity(),arg0.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
 
     //Updates the display!

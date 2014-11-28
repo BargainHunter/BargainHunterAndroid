@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bargainhunter.bargainhunterandroid.DAOs.StoreAPI;
-import com.bargainhunter.bargainhunterandroid.controllers.adapters.StoreInfoController;
 import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -41,8 +40,6 @@ public class StoreInfoFragment extends Fragment {
     private Store store;
 
     private OnFragmentInteractionListener mListener;
-
-    StoreInfoController storeInfoController = new StoreInfoController();
 
     /**
      * Use this factory method to create a new instance of
@@ -75,16 +72,40 @@ public class StoreInfoFragment extends Fragment {
             mEndpoint = getArguments().getString(ARG_ENDPOINT);
         }
 
-        store = storeInfoController.requestData(mEndpoint, mStoreId, this.getActivity());
+        requestData();
+    }
 
-        if (store != null) {
-            updateDisplay(store);
-        }
+    //Call Retrofit to fetch data from server
+    //and store data to an offer object.
+    private void requestData() {
 
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(mEndpoint)
+                .build();
+
+        //implement the api interface
+        StoreAPI api = adapter.create(StoreAPI.class);
+
+        //connect to server and user getOffer.
+        api.getStore(Long.valueOf(mStoreId).longValue(), new Callback<Store>() {
+
+            //Here i can save my data if the connection was successful.
+            @Override
+            public void success(Store arg0, Response response) {
+                store = arg0;
+                updateDisplay(store);
+            }
+
+            //Here i can handle the Retrofit error. Connection unsuccessful.
+            @Override
+            public void failure(RetrofitError arg0) {
+                Toast.makeText(getActivity(), arg0.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 
-//    Updates the display!
+    //Updates the display!
     private void updateDisplay(Store store) {
 
         TextView storeNameView = (TextView) getView().findViewById(R.id.storeNameView);

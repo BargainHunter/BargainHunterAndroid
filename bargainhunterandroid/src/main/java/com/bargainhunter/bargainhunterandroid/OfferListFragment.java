@@ -176,7 +176,6 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
      */
     public void setEmptyText(CharSequence emptyText) {
         View emptyView = mListView.getEmptyView();
-
         if (emptyView instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);
         }
