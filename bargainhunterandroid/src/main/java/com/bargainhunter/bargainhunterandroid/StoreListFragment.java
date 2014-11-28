@@ -139,6 +139,7 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
+        mListView.setScrollContainer(false);
 
         return view;
     }

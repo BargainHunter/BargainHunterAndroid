@@ -17,8 +17,7 @@ public class MainActivity extends ActionBarActivity
         StoreInfoFragment.OnFragmentInteractionListener,
         OfferListFragment.OnFragmentInteractionListener,
         OfferInfoFragment.OnFragmentInteractionListener,
-        OfferListFromStoreFragment.OnFragmentInteractionListener,
-        StoreFragment.OnFragmentInteractionListener {
+        OfferListFromStoreFragment.OnFragmentInteractionListener {
 
     private static final String ENDPOINT = "http://bargainhunter.dyndns.org:8080/bargainhunterws";
 
@@ -76,7 +75,8 @@ public class MainActivity extends ActionBarActivity
         }
 
         fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
+                .replace(R.id.firstFragmentContainer, fragment)
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -130,11 +130,16 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
-    public void onStoreListFragmentInteraction(String id) {
+    public void onStoreListFragmentInteraction(String storeId) {
+
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment storeFragment = StoreFragment.newInstance(ENDPOINT, 1, id, RADIUS);
+        Fragment storeInfoFragment = StoreInfoFragment.newInstance(1, storeId, ENDPOINT);
+        Fragment offerListFromStoreFragment = OfferListFromStoreFragment.newInstance(2, ENDPOINT, storeId);
+
         fragmentManager.beginTransaction()
-                .add(R.id.fragment_store_info_offer_list, storeFragment)
+                .replace(R.id.firstFragmentContainer, storeInfoFragment)
+                .replace(R.id.secondFragmentContainer, offerListFromStoreFragment)
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -152,24 +157,6 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onOfferListFromStoreFragmentInteraction(String id) {
-    }
-
-    @Override
-    public void onFragmentInteraction(String endpoint,
-                                      int sectionNumber,
-                                      String storeId,
-                                      double radius) {
-
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment storeInfoFragment = StoreInfoFragment.newInstance(sectionNumber, storeId, endpoint);
-        Fragment offerListFromStoreFragment = OfferListFromStoreFragment.newInstance(sectionNumber, endpoint, storeId);
-
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_store_container, storeInfoFragment)
-                .replace(R.id.fragment_offer_list_from_store_container, offerListFromStoreFragment)
-                .commit();
-
     }
 
 //    /**
