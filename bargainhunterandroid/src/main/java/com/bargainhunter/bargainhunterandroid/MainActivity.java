@@ -73,9 +73,11 @@ public class MainActivity extends ActionBarActivity
                 fragment = StoreListFragment.newInstance(sectionNumber, ENDPOINT, RADIUS);
                 break;
         }
+        Fragment emptyFragment = new Fragment();
 
         fragmentManager.beginTransaction()
                 .replace(R.id.firstFragmentContainer, fragment)
+                .replace(R.id.secondFragmentContainer, emptyFragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -150,10 +152,10 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onOfferListFragmentInteraction(String offerId) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment storeInfoFragment = StoreInfoFragment.newInstance(1, offerId, ENDPOINT);
+        Fragment offerInfoFragment = OfferInfoFragment.newInstance(1, offerId, ENDPOINT);
 
         fragmentManager.beginTransaction()
-                .replace(R.id.firstFragmentContainer, storeInfoFragment)
+                .replace(R.id.firstFragmentContainer, offerInfoFragment)
                 .addToBackStack(null)
                 .commit();
     }
