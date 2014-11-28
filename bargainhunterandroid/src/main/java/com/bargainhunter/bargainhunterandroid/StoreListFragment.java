@@ -3,7 +3,6 @@ package com.bargainhunter.bargainhunterandroid;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,9 +33,14 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String ARG_ENDPOINT = "endpoint";
+    private static final String ARG_RADIUS = "radius";
 
     private int mSectionNumber;
     private String mEndpoint;
+    private double mRadius;
+
+    private Coordinates phoneLoc;
+    private LocationController controller;
 
     List<Store> storeList;
 
@@ -53,11 +57,12 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
      */
     private ListAdapter mAdapter;
 
-    public static StoreListFragment newInstance(int sectionNumber, String endpoint) {
+    public static StoreListFragment newInstance(int sectionNumber, String endpoint, double radius) {
         StoreListFragment fragment = new StoreListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_ENDPOINT, endpoint);
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        args.putDouble(ARG_RADIUS, radius);
         fragment.setArguments(args);
         return fragment;
     }
@@ -76,6 +81,7 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
         if (getArguments() != null) {
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
             mEndpoint = getArguments().getString(ARG_ENDPOINT);
+            mRadius = getArguments().getDouble(ARG_RADIUS);
         }
         requestData();
     }
@@ -90,7 +96,10 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
         StoreAPI api = adapter.create(StoreAPI.class);
 
         //connect to server and user getOffer.
-        api.getStores(new Callback<List<Store>>() {
+        api.getStores(getLocation().getLatitude(),
+                getLocation().getLongitude(),
+                mRadius,
+                new Callback<List<Store>>() {
 
             //Here i can save my data if the connection was successful.
             @Override
@@ -106,7 +115,7 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
             }
         });
     }
-    Coordinates phoneLoc;
+
     protected Coordinates getLocation(){
         LocationController controller=new LocationController();
         phoneLoc=controller.findCoordinates(this.getActivity());

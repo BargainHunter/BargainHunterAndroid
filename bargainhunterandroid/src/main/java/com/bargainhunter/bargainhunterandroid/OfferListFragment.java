@@ -40,8 +40,8 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
     private String mEndpoint;
     private double mRadius;
 
-    Coordinates phoneLoc;
-    LocationController controller;
+    private Coordinates phoneLoc;
+    private LocationController controller;
 
     List<Offer> offerList;
 
@@ -95,7 +95,6 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
 
         //implement the api interface
         OfferAPI api = adapter.create(OfferAPI.class);
-
 
         controller=new LocationController();
         phoneLoc=controller.findCoordinates(getActivity());

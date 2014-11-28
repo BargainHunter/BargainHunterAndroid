@@ -70,7 +70,7 @@ public class MainActivity extends ActionBarActivity
                 fragment = OfferListFragment.newInstance(sectionNumber, ENDPOINT, RADIUS);
                 break;
             case 3:
-                fragment = StoreListFragment.newInstance(sectionNumber, ENDPOINT);
+                fragment = StoreListFragment.newInstance(sectionNumber, ENDPOINT, RADIUS);
                 break;
         }
 
