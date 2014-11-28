@@ -16,9 +16,15 @@ public class MainActivity extends ActionBarActivity
         StoreListFragment.OnFragmentInteractionListener,
         StoreInfoFragment.OnFragmentInteractionListener,
         OfferListFragment.OnFragmentInteractionListener,
-        OfferInfoFragment.OnFragmentInteractionListener {
+        OfferInfoFragment.OnFragmentInteractionListener,
+        OfferListFromStoreFragment.OnFragmentInteractionListener {
 
     private static final String ENDPOINT = "http://bargainhunter.dyndns.org:8080/bargainhunterws";
+
+    /**
+     * Represents radius in (km). //TODO: change the value from settings
+     */
+    private static final double RADIUS = 100.0;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -51,7 +57,7 @@ public class MainActivity extends ActionBarActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         // Change to Map fragment.
-        Fragment fragment = OfferListFragment.newInstance(sectionNumber, ENDPOINT);
+        Fragment fragment = OfferListFragment.newInstance(sectionNumber, ENDPOINT, RADIUS);
 //        Fragment fragment = StoreInfoFragment.newInstance(sectionNumber, "1", ENDPOINT);
 //        Fragment fragment = OfferInfoFragment.newInstance(sectionNumber, "1", ENDPOINT);
 //        Fragment fragment =  MapFragment.newInstance(sectionNumber);
@@ -61,15 +67,16 @@ public class MainActivity extends ActionBarActivity
 //                fragment = MapFragment.newInstance(sectionNumber);
                 break;
             case 2:
-                fragment = OfferListFragment.newInstance(sectionNumber, ENDPOINT);
+                fragment = OfferListFragment.newInstance(sectionNumber, ENDPOINT, RADIUS);
                 break;
             case 3:
-                fragment = StoreListFragment.newInstance(sectionNumber, ENDPOINT);
+                fragment = StoreListFragment.newInstance(sectionNumber, ENDPOINT, RADIUS);
                 break;
         }
 
         fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
+                .replace(R.id.firstFragmentContainer, fragment)
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -123,8 +130,17 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
-    public void onStoreListFragmentInteraction(String id) {
+    public void onStoreListFragmentInteraction(String storeId) {
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment storeInfoFragment = StoreInfoFragment.newInstance(1, storeId, ENDPOINT);
+        Fragment offerListFromStoreFragment = OfferListFromStoreFragment.newInstance(2, ENDPOINT, storeId);
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.firstFragmentContainer, storeInfoFragment)
+                .replace(R.id.secondFragmentContainer, offerListFromStoreFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
@@ -137,6 +153,10 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onOfferInfoFragmentInteraction(Uri uri) {
+    }
+
+    @Override
+    public void onOfferListFromStoreFragmentInteraction(String id) {
     }
 
 //    /**
@@ -178,5 +198,4 @@ public class MainActivity extends ActionBarActivity
 //                    getArguments().getInt(ARG_SECTION_NUMBER));
 //        }
 //    }
-
 }

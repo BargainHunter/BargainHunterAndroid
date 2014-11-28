@@ -3,7 +3,6 @@ package com.bargainhunter.bargainhunterandroid;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.*;
 import com.bargainhunter.bargainhunterandroid.DAOs.StoreAPI;
 import com.bargainhunter.bargainhunterandroid.controllers.adapters.LocationController;
 import com.bargainhunter.bargainhunterandroid.controllers.adapters.StoreAdapter;
-import com.bargainhunter.bargainhunterandroid.controllers.adapters.StoreListController;
 import com.bargainhunter.bargainhunterandroid.models.entities.Coordinates;
 import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 import retrofit.Callback;
@@ -35,15 +33,18 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String ARG_ENDPOINT = "endpoint";
+    private static final String ARG_RADIUS = "radius";
 
     private int mSectionNumber;
     private String mEndpoint;
+    private double mRadius;
+
+    private Coordinates phoneLoc;
+    private LocationController controller;
 
     List<Store> storeList;
 
     private OnFragmentInteractionListener mListener;
-
-    private StoreListController storeListController = new StoreListController();
 
     /**
      * The fragment's ListView/GridView.
@@ -56,11 +57,12 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
      */
     private ListAdapter mAdapter;
 
-    public static StoreListFragment newInstance(int sectionNumber, String endpoint) {
+    public static StoreListFragment newInstance(int sectionNumber, String endpoint, double radius) {
         StoreListFragment fragment = new StoreListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_ENDPOINT, endpoint);
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        args.putDouble(ARG_RADIUS, radius);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,28 +75,47 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
     }
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-       // super.onListItemClick(l, v, position, id);
-        Store store=(Store)(getListAdapter()).getItem(position);
-        Toast.makeText(getActivity(),store.getStoreName()+ "was clicked", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
             mEndpoint = getArguments().getString(ARG_ENDPOINT);
+            mRadius = getArguments().getDouble(ARG_RADIUS);
         }
-        storeList = storeListController.requestData(mEndpoint,this.getActivity());
-
-        if (storeList != null) {
-            updateDisplay(storeList);
-        }
+        requestData();
     }
 
-    Coordinates phoneLoc;
+    private void requestData() {
+
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(mEndpoint)
+                .build();
+
+        //implement the api interface
+        StoreAPI api = adapter.create(StoreAPI.class);
+
+        //connect to server and user getOffer.
+        api.getStores(getLocation().getLatitude(),
+                getLocation().getLongitude(),
+                mRadius,
+                new Callback<List<Store>>() {
+
+            //Here i can save my data if the connection was successful.
+            @Override
+            public void success(List<Store> stores, Response response) {
+                storeList = stores;
+                updateDisplay(storeList);
+            }
+
+            //Here i can handle the Retrofit error. Connection unsuccessful.
+            @Override
+            public void failure(RetrofitError error) {
+                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     protected Coordinates getLocation(){
         LocationController controller=new LocationController();
         phoneLoc=controller.findCoordinates(this.getActivity());
@@ -118,6 +139,7 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
+        mListView.setScrollContainer(false);
 
         return view;
     }
@@ -141,15 +163,18 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
         mListener = null;
     }
 
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        Store store = (Store)(getListAdapter()).getItem(position);
+        long storeId = store.getStoreId();
+        if (null != mListener) {
+            mListener.onStoreListFragmentInteraction(String.valueOf(storeId));
+        }
+    }
+
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            mListener.onStoreListFragmentInteraction(storeList.get(position).getStoreId().toString());
-        }
-        Log.d("MainActivity", "Selected Store Id" + storeList.get(position).getStoreId().toString());
     }
 
     /**
