@@ -1,0 +1,31 @@
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical"
+              android:id="@+id/fragment_store_info_offer_list" >
+
+<FrameLayout
+        android:id="@+id/fragment_store_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/abc_action_bar_stacked_max_height"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:gravity="center"
+            android:text="Avaliable Offers"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/title_back"
+            android:textColor="@color/Ivory"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="5dp"/>
+
+    </FrameLayout>
+
+<FrameLayout
+        android:id="@+id/fragment_offer_list_from_store_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

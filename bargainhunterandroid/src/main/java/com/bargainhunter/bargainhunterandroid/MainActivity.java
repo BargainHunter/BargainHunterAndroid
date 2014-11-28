@@ -17,7 +17,8 @@ public class MainActivity extends ActionBarActivity
         StoreInfoFragment.OnFragmentInteractionListener,
         OfferListFragment.OnFragmentInteractionListener,
         OfferInfoFragment.OnFragmentInteractionListener,
-        OfferListFromStoreFragment.OnFragmentInteractionListener {
+        OfferListFromStoreFragment.OnFragmentInteractionListener,
+        StoreFragment.OnFragmentInteractionListener {
 
     private static final String ENDPOINT = "http://bargainhunter.dyndns.org:8080/bargainhunterws";
 
@@ -131,9 +132,9 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onStoreListFragmentInteraction(String id) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = StoreInfoFragment.newInstance(1, id, ENDPOINT);
+        Fragment storeFragment = StoreFragment.newInstance(ENDPOINT, 1, id, RADIUS);
         fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
+                .add(R.id.fragment_store_info_offer_list, storeFragment)
                 .commit();
     }
 
@@ -151,6 +152,24 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onOfferListFromStoreFragmentInteraction(String id) {
+    }
+
+    @Override
+    public void onFragmentInteraction(String endpoint,
+                                      int sectionNumber,
+                                      String storeId,
+                                      double radius) {
+
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment storeInfoFragment = StoreInfoFragment.newInstance(sectionNumber, storeId, endpoint);
+        Fragment offerListFromStoreFragment = OfferListFromStoreFragment.newInstance(sectionNumber, endpoint, storeId);
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_store_container, storeInfoFragment)
+                .replace(R.id.fragment_offer_list_from_store_container, offerListFromStoreFragment)
+                .commit();
+
     }
 
 //    /**
