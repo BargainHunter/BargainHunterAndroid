@@ -15,6 +15,8 @@ import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
+import java.util.Collections;
 import java.util.List;
 
 import com.bargainhunter.bargainhunterandroid.DAOs.OfferAPI;
@@ -45,6 +47,7 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
     private LocationController controller;
 
     List<Offer> offerList;
+    List<Offer> finalofferList;
 
     private OnFragmentInteractionListener mListener;
 
@@ -110,8 +113,26 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
                     @Override
                     public void success(List<Offer> offers, Response response) {
                         offerList = offers;
+                        Offer temp = new Offer();
+                        int i=0;
+                        double price=0;
+
+
+                        while(i<offerList.size())
+                        {
+
+                            temp = offerList.get(i);
+
+                            price = temp.getPrice();
+                            if (price<(double)80){
+
+                                offerList.remove(i);
+                            }
+                            else i++;
+                        }
                         updateDisplay(offerList);
                     }
+
 
                     //Here i can handle the Retrofit error. Connection unsuccessful.
                     @Override
