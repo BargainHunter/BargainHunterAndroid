@@ -3,24 +3,19 @@ package com.bargainhunter.bargainhunterandroid;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.*;
+import com.bargainhunter.bargainhunterandroid.DAOs.OfferAPI;
 import com.bargainhunter.bargainhunterandroid.controllers.adapters.LocationController;
 import com.bargainhunter.bargainhunterandroid.controllers.adapters.OfferAdapter;
 import com.bargainhunter.bargainhunterandroid.models.entities.Coordinates;
-import com.bargainhunter.bargainhunterandroid.models.entities.Store;
+import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-import java.util.Collections;
 import java.util.List;
-
-import com.bargainhunter.bargainhunterandroid.DAOs.OfferAPI;
-import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 
 
 /**
@@ -48,6 +43,7 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
 
     List<Offer> offerList;
     List<Offer> finalofferList;
+    public double price=0;
 
     private OnFragmentInteractionListener mListener;
 
@@ -82,7 +78,7 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
             mRadius = getArguments().getDouble(ARG_RADIUS);
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
@@ -90,7 +86,11 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
         }
         requestData();
     }
-
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.price_list, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
     private void requestData() {
 
         RestAdapter adapter = new RestAdapter.Builder()
@@ -113,24 +113,19 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
                     @Override
                     public void success(List<Offer> offers, Response response) {
                         offerList = offers;
+                        finalofferList = offerList;
                         Offer temp = new Offer();
                         int i=0;
-                        double price=0;
-
-
-                        while(i<offerList.size())
+                        while(i<finalofferList.size())
                         {
-
-                            temp = offerList.get(i);
-
+                            temp = finalofferList.get(i);
                             price = temp.getPrice();
                             if (price<(double)80){
-
-                                offerList.remove(i);
+                                finalofferList.remove(i);
                             }
                             else i++;
                         }
-                        updateDisplay(offerList);
+                        updateDisplay(finalofferList);
                     }
 
 
