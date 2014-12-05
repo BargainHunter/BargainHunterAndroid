@@ -15,4 +15,5 @@
     <string name="between5_and_10_euros">5 &#45; 10 Euros</string>
     <string name="between50_and_100_euros">80 &#45; 100 Euros</string>
     <string name="from_100_euros">100 &#43; Euros</string>
+    <string name="no_price_filter">No Filter</string>
 </resources>

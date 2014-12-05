@@ -44,7 +44,7 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
     List<Offer> offerList;
     List<Offer> finalofferList;
     public double price=0;
-
+    public int choice=0;
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -91,6 +91,53 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
         inflater.inflate(R.menu.price_list, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.upto_5:
+                Toast.makeText(getActivity(),"Setting filter up to 5 euros",Toast.LENGTH_SHORT).show();
+                choice=2;
+                requestData();
+                return true;
+            case R.id.upto_10:
+                Toast.makeText(getActivity(),"Setting filter between 5-10 euros",Toast.LENGTH_SHORT).show();
+                choice=3;
+                requestData();
+                return true;
+            case R.id.from_80:
+                Toast.makeText(getActivity(),"Setting filter between 80-100 euros",Toast.LENGTH_SHORT).show();
+                choice=4;
+                requestData();
+                return true;
+            case R.id.from_100:
+                Toast.makeText(getActivity(),"Setting filter to 100+ euros",Toast.LENGTH_SHORT).show();
+                choice=5;
+                requestData();
+                return true;
+            case R.id.no_filter:
+                Toast.makeText(getActivity(),"No Filter Active",Toast.LENGTH_SHORT).show();
+                choice=1;
+                requestData();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    private List<Offer> applyFilter(List<Offer> mylist, double low, double high)
+    {
+        Offer temp = new Offer();
+        int i=0;
+        while(i<mylist.size())
+        {
+            temp = mylist.get(i);
+            price = temp.getPrice();
+            if (price<low || price >high){
+                mylist.remove(i);
+            }
+            else i++;
+        }
+        return mylist;
+    }
     private void requestData() {
 
         RestAdapter adapter = new RestAdapter.Builder()
@@ -114,21 +161,27 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
                     public void success(List<Offer> offers, Response response) {
                         offerList = offers;
                         finalofferList = offerList;
-                        Offer temp = new Offer();
-                        int i=0;
-                        while(i<finalofferList.size())
+                        switch (choice)
                         {
-                            temp = finalofferList.get(i);
-                            price = temp.getPrice();
-                            if (price<(double)80){
-                                finalofferList.remove(i);
-                            }
-                            else i++;
+                            case 0:case 1:
+                                break;
+                            case 2:
+                                finalofferList=applyFilter(offerList,0,5.0);
+                                break;
+                            case 3:
+                                finalofferList=applyFilter(offerList,5.0,10.0);
+                                break;
+                            case 4:
+                                finalofferList=applyFilter(offerList,80.0,100.0);
+                                break;
+                            case 5:
+                                finalofferList=applyFilter(offerList,100.1,Double.MAX_VALUE);
+                                break;
+                            default:
+                                break;
                         }
                         updateDisplay(finalofferList);
                     }
-
-
                     //Here i can handle the Retrofit error. Connection unsuccessful.
                     @Override
                     public void failure(RetrofitError error) {

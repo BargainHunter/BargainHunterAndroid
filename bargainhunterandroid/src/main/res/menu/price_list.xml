@@ -8,17 +8,20 @@
           android:visible="true"
             app:showAsAction="always">
         <menu>
+            <item android:id="@+id/no_filter"
+                  android:title="@string/no_price_filter"/>
+
             <item android:title="@string/up_to_5euros"
                   android:id="@+id/upto_5"/>
 
-            <item android:title="@string/between5_and_10_euros"
-                  android:id="@+id/upto_10"/>
+            <item android:id="@+id/upto_10"
+                  android:title="@string/between5_and_10_euros"/>
 
-            <item android:title="@string/between50_and_100_euros"
-                  android:id="@+id/from_80"/>
+            <item android:id="@+id/from_80"
+                  android:title="@string/between50_and_100_euros"/>
 
-            <item android:title="@string/from_100_euros"
-                  android:id="@+id/from_100"/>
+            <item android:id="@+id/from_100"
+                  android:title="@string/from_100_euros"/>
         </menu>
     </item>
 </menu>
