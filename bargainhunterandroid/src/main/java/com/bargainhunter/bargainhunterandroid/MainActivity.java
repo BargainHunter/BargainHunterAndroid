@@ -1,5 +1,6 @@
 package com.bargainhunter.bargainhunterandroid;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import java.util.prefs.Preferences;
 
 
 public class MainActivity extends ActionBarActivity
@@ -17,7 +21,7 @@ public class MainActivity extends ActionBarActivity
         StoreInfoFragment.OnFragmentInteractionListener,
         OfferListFragment.OnFragmentInteractionListener,
         OfferInfoFragment.OnFragmentInteractionListener,
-        OfferListFromStoreFragment.OnFragmentInteractionListener {
+        OfferListFromStoreFragment.OnFragmentInteractionListener{
 
     private static final String ENDPOINT = "http://bargainhunter.dyndns.org:8080/bargainhunterws";
 
@@ -125,6 +129,15 @@ public class MainActivity extends ActionBarActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            //View rootView = getMenuInflater().inflate(R.menu.global, );
+            Button settingsButton = (Button)this.findViewById(R.id.action_settings);
+            settingsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MainActivity.this, Preferences.class);
+                    startActivity(intent);
+                }
+            });
             return true;
         }
 
