@@ -10,9 +10,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import java.util.prefs.Preferences;
 
 
 public class MainActivity extends ActionBarActivity
@@ -129,15 +126,8 @@ public class MainActivity extends ActionBarActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            //View rootView = getMenuInflater().inflate(R.menu.global, );
-            Button settingsButton = (Button)this.findViewById(R.id.action_settings);
-            settingsButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(MainActivity.this, Preferences.class);
-                    startActivity(intent);
-                }
-            });
+            Intent intent = new Intent(MainActivity.this, com.bargainhunter.bargainhunterandroid.Preferences.class);
+            startActivity(intent);
             return true;
         }
 
