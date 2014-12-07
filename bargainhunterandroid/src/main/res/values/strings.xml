@@ -10,4 +10,10 @@
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="price_filter">Price Filter</string>
+    <string name="up_to_5euros">&lt; 5 Euros</string>
+    <string name="between5_and_10_euros">5 &#45; 10 Euros</string>
+    <string name="between50_and_100_euros">80 &#45; 100 Euros</string>
+    <string name="from_100_euros">100 &#43; Euros</string>
+    <string name="no_price_filter">No Filter</string>
 </resources>
