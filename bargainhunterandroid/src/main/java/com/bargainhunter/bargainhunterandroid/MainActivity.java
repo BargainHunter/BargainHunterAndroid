@@ -1,6 +1,5 @@
 package com.bargainhunter.bargainhunterandroid;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,7 +17,7 @@ public class MainActivity extends ActionBarActivity
         StoreInfoFragment.OnFragmentInteractionListener,
         OfferListFragment.OnFragmentInteractionListener,
         OfferInfoFragment.OnFragmentInteractionListener,
-        OfferListFromStoreFragment.OnFragmentInteractionListener{
+        OfferListFromStoreFragment.OnFragmentInteractionListener {
 
     private static final String ENDPOINT = "http://bargainhunter.dyndns.org:8080/bargainhunterws";
 
@@ -126,8 +125,6 @@ public class MainActivity extends ActionBarActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(MainActivity.this, com.bargainhunter.bargainhunterandroid.Preferences.class);
-            startActivity(intent);
             return true;
         }
 
