@@ -3,13 +3,15 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.13.0'
+        classpath 'com.android.tools.build:gradle:0.14.2'
     }
 }
 apply plugin: 'com.android.application'
 
 repositories {
     jcenter()
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
 android {
@@ -28,6 +30,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+
     buildTypes {
         release {
             runProguard false
@@ -42,4 +45,6 @@ dependencies {
     compile 'com.android.support:gridlayout-v7:21.0.2'
     compile 'com.android.support:support-v4:21.0.2'
     compile 'com.squareup.retrofit:retrofit:1.7.1'
+    compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+//    compile 'com.github.satyan:sugar:1.3'
 }

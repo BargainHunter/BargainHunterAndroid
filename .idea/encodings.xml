@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
+  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
+    <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/DTOs/BranchDTO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/DTOs/BranchDTO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/DTOs/OfferDTO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/DTOs/OfferDTO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/DTOs/OfferSubcategoryDTO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/DTOs/SearchInRadiusDTO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/DTOs/SearchInRadiusDTO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/DTOs/StoreDTO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/DTOs/StoreDTO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/entities/Branch.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/entities/Offer.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/entities/Store.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/sugarEntities/Offer.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/sugarEntities/Store.java" charset="UTF-8" />
+  </component>
 </project>

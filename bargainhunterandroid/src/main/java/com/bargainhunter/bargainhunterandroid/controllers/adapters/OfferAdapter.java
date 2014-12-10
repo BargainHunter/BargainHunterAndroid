@@ -1,5 +1,4 @@
 package com.bargainhunter.bargainhunterandroid.controllers.adapters;
-import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,7 +10,9 @@ import android.widget.TextView;
 import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 
-public class OfferAdapter extends ArrayAdapter<Offer>{
+import java.util.List;
+
+public class OfferAdapter extends ArrayAdapter<Offer> {
     private Context context;
     private List<Offer> offers;
 
@@ -19,7 +20,6 @@ public class OfferAdapter extends ArrayAdapter<Offer>{
         super(context, resource, offers);
         this.context = context;
         this.offers = offers;
-        ;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class OfferAdapter extends ArrayAdapter<Offer>{
 
         Offer offer = offers.get(position);
         TextView tv = (TextView) view.findViewById(R.id.offerTitle);
-        tv.setText(offer.getTitle());
+        tv.setText(offer.title);
 
         return view;
     }

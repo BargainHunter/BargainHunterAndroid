@@ -1,42 +1,37 @@
-package com.bargainhunter.bargainhunterandroid;
+package com.bargainhunter.bargainhunterandroid.ui.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.*;
-import com.bargainhunter.bargainhunterandroid.DAOs.OfferAPI;
+import com.activeandroid.query.Select;
+import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
+import com.bargainhunter.bargainhunterandroid.R;
+import com.bargainhunter.bargainhunterandroid.controllers.LocationController;
 import com.bargainhunter.bargainhunterandroid.controllers.adapters.OfferAdapter;
+import com.bargainhunter.bargainhunterandroid.models.Coordinates;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 import java.util.List;
+
 /**
  * A fragment representing a list of Items.
- * <p />
+ * <p/>
  * Large screen devices (such as tablets) are supported by replacing the ListView
  * with a GridView.
- * <p />
+ * <p/>
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class OfferListFromStoreFragment extends ListFragment implements AbsListView.OnItemClickListener {
+public class OfferListFragment extends ListFragment implements AbsListView.OnItemClickListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_STORE_ID = "store_id";
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private static final String ARG_ENDPOINT="endpoint";
-
-    private String mStoreId;
-    private int mSectionNumber;
-    private String mEndpoint;
 
     List<Offer> offerList;
-
+    private int mSectionNumber;
+    private Coordinates phoneLoc;
+    private LocationController controller;
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -50,61 +45,73 @@ public class OfferListFromStoreFragment extends ListFragment implements AbsListV
      */
     private ListAdapter mAdapter;
 
-    public static OfferListFromStoreFragment newInstance(int sectionNumber, String endpoint, String storeId) {
-        OfferListFromStoreFragment fragment = new OfferListFromStoreFragment();
+    /**
+     * Mandatory empty constructor for the fragment manager to instantiate the
+     * fragment (e.g. upon screen orientation changes).
+     */
+    public OfferListFragment() {
+    }
+
+    public static OfferListFragment newInstance(int sectionNumber) {
+        OfferListFragment fragment = new OfferListFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_STORE_ID, storeId);
-        args.putString(ARG_ENDPOINT, endpoint);
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
     }
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public OfferListFromStoreFragment() {
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
-            mStoreId = getArguments().getString(ARG_STORE_ID);
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
-            mEndpoint = getArguments().getString(ARG_ENDPOINT);
         }
-        requestData();
+
+        offerList = new Select().from(Offer.class).execute();
     }
 
-    private void requestData() {
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(mEndpoint)
-                .build();
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.price_list, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
-        //implement the api interface
-        OfferAPI api = adapter.create(OfferAPI.class);
-
-        //connect to server and user getOffer.
-        api.getOffersFromStore(Long.valueOf(mStoreId).longValue(), new Callback<List<Offer>>() {
-
-            //Here i can save my data if the connection was successful.
-            @Override
-            public void success(List<Offer> offers, Response response) {
-                offerList = offers;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.upto_5:
+                Toast.makeText(getActivity(), "Setting filter up to 5 euros", Toast.LENGTH_SHORT).show();
+                offerList = new Select().from(Offer.class).where("price BETWEEN ? AND ?", 0, 5).execute();
                 updateDisplay(offerList);
-            }
-
-            //Here i can handle the Retrofit error. Connection unsuccessful.
-            @Override
-            public void failure(RetrofitError error) {
-                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
+                return true;
+            case R.id.upto_10:
+                Toast.makeText(getActivity(), "Setting filter between 5-10 euros", Toast.LENGTH_SHORT).show();
+                offerList = new Select().from(Offer.class).where("price BETWEEN ? AND ?", 5, 10).execute();
+                updateDisplay(offerList);
+                return true;
+            case R.id.from_80:
+                Toast.makeText(getActivity(), "Setting filter between 80-100 euros", Toast.LENGTH_SHORT).show();
+                offerList = new Select().from(Offer.class).where("price BETWEEN ? AND ?", 80, 100).execute();
+                updateDisplay(offerList);
+                return true;
+            case R.id.from_100:
+                Toast.makeText(getActivity(), "Setting filter to 100+ euros", Toast.LENGTH_SHORT).show();
+                offerList = new Select().from(Offer.class).where("price > ?", 100).execute();
+                updateDisplay(offerList);
+                return true;
+            case R.id.no_filter:
+                Toast.makeText(getActivity(), "No Filter Active", Toast.LENGTH_SHORT).show();
+                offerList = new Select().from(Offer.class).execute();
+                updateDisplay(offerList);
+                return true;
+            default:
+                updateDisplay(offerList);
+                return super.onOptionsItemSelected(item);
+        }
     }
 
-    protected void updateDisplay(List<Offer> offerList){
+    protected void updateDisplay(List<Offer> offerList) {
         OfferAdapter adapter = new OfferAdapter(this.getActivity(), R.layout.fragment_offer_list, offerList);
         setListAdapter(adapter);
     }
@@ -120,6 +127,8 @@ public class OfferListFromStoreFragment extends ListFragment implements AbsListV
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
         mListView.setOnItemClickListener(this);
+
+        updateDisplay(offerList);
 
         return view;
     }
@@ -145,10 +154,10 @@ public class OfferListFromStoreFragment extends ListFragment implements AbsListV
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Offer offer = (Offer)(getListAdapter()).getItem(position);
-        long offerId = offer.getOfferId();
+        Offer offer = (Offer) (getListAdapter()).getItem(position);
+        long offerId = offer.offerId;
         if (null != mListener) {
-            mListener.onOfferListFromStoreFragmentInteraction(String.valueOf(offerId));
+            mListener.onOfferListFragmentInteraction(String.valueOf(offerId));
         }
     }
 
@@ -163,7 +172,6 @@ public class OfferListFromStoreFragment extends ListFragment implements AbsListV
      */
     public void setEmptyText(CharSequence emptyText) {
         View emptyView = mListView.getEmptyView();
-
         if (emptyView instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);
         }
@@ -174,13 +182,12 @@ public class OfferListFromStoreFragment extends ListFragment implements AbsListV
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        public void onOfferListFromStoreFragmentInteraction(String id);
+        public void onOfferListFragmentInteraction(String id);
     }
-
 }

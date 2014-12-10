@@ -1,4 +1,4 @@
-package com.bargainhunter.bargainhunterandroid;
+package com.bargainhunter.bargainhunterandroid.ui.fragments;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -8,13 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-import com.bargainhunter.bargainhunterandroid.DAOs.StoreAPI;
+import com.activeandroid.query.Select;
+import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
+import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.models.entities.Store;
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 
 /**
@@ -24,7 +21,6 @@ import retrofit.client.Response;
  * to handle interaction events.
  * Use the {@link StoreInfoFragment#newInstance} factory method to
  * create an instance of this fragment.
- *
  */
 public class StoreInfoFragment extends Fragment {
 
@@ -35,31 +31,30 @@ public class StoreInfoFragment extends Fragment {
 
     private String mStoreId;
     private int mSectionNumber;
-    private String mEndpoint;
+
+    private OnFragmentInteractionListener mListener;
 
     private Store store;
 
-    private OnFragmentInteractionListener mListener;
+    public StoreInfoFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
      * @param sectionNumber Parameter 1.
-     * @param storeId Parameter 2.
+     * @param storeId       Parameter 2.
      * @return A new instance of fragment StoreInfoFragment.
      */
-    public static StoreInfoFragment newInstance(int sectionNumber, String storeId, String endpoint) {
+    public static StoreInfoFragment newInstance(int sectionNumber, String storeId) {
         StoreInfoFragment fragment = new StoreInfoFragment();
         Bundle args = new Bundle();
         args.putString(ARG_STORE_ID, storeId);
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        args.putString(ARG_ENDPOINT, endpoint);
         fragment.setArguments(args);
         return fragment;
-    }
-    public StoreInfoFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -69,61 +64,32 @@ public class StoreInfoFragment extends Fragment {
         if (getArguments() != null) {
             mStoreId = getArguments().getString(ARG_STORE_ID);
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
-            mEndpoint = getArguments().getString(ARG_ENDPOINT);
         }
 
-        requestData();
+        store = new Select().from(Store.class).where("store_id = ?", mStoreId).executeSingle();
     }
-
-    //Call Retrofit to fetch data from server
-    //and store data to an offer object.
-    private void requestData() {
-
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(mEndpoint)
-                .build();
-
-        //implement the api interface
-        StoreAPI api = adapter.create(StoreAPI.class);
-
-        //connect to server and user getOffer.
-        api.getStore(Long.valueOf(mStoreId).longValue(), new Callback<Store>() {
-
-            //Here i can save my data if the connection was successful.
-            @Override
-            public void success(Store arg0, Response response) {
-                store = arg0;
-                updateDisplay(store);
-            }
-
-            //Here i can handle the Retrofit error. Connection unsuccessful.
-            @Override
-            public void failure(RetrofitError arg0) {
-                Toast.makeText(getActivity(), arg0.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
 
     //Updates the display!
-    private void updateDisplay(Store store) {
+    private void updateDisplay(View view, Store store) {
+        TextView storeNameView = (TextView) view.findViewById(R.id.storeNameView);
+        storeNameView.setText(store.storeName);
 
-        TextView storeNameView = (TextView) getView().findViewById(R.id.storeNameView);
-        storeNameView.setText(store.getStoreName());
+        TextView cityView = (TextView) view.findViewById(R.id.cityView);
+        cityView.setText(store.city);
 
-        TextView cityView = (TextView) getView().findViewById(R.id.cityView);
-        cityView.setText(store.getCity());
-
-        TextView addressView = (TextView) getView().findViewById(R.id.addressView);
-        addressView.setText(String.valueOf(store.getAddress()) + " " + String.valueOf(store.getAddressNo()));
+        TextView addressView = (TextView) view.findViewById(R.id.addressView);
+        addressView.setText(store.address + " " + store.addressNo);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_store_info, container, false);
+
+        updateDisplay(view, store);
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_store_info, container, false);
+        return view;
     }
 
     @Override
@@ -150,7 +116,7 @@ public class StoreInfoFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.

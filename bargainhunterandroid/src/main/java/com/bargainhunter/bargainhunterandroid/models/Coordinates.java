@@ -1,19 +1,10 @@
-package com.bargainhunter.bargainhunterandroid.gps;
+package com.bargainhunter.bargainhunterandroid.models;
 
 /**
- * Created by vasovourka on 11/9/14.
+ * Created by vasovourka on 11/8/14.
  */
-public class MockLocations {
-    private String fullAdress;
+public class Coordinates {
     private double latitude, longitude;
-
-    public String getFullAdress() {
-        return fullAdress;
-    }
-
-    public void setFullAdress(String fullAdress) {
-        this.fullAdress = fullAdress;
-    }
 
     public double getLatitude() {
         return latitude;
@@ -30,6 +21,4 @@ public class MockLocations {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
-
-
 }

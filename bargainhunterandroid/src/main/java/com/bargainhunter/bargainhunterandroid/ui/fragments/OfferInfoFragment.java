@@ -1,4 +1,4 @@
-package com.bargainhunter.bargainhunterandroid;
+package com.bargainhunter.bargainhunterandroid.ui.fragments;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -8,13 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-import com.bargainhunter.bargainhunterandroid.DAOs.OfferAPI;
+import com.activeandroid.query.Select;
+import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
+import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 
 /**
@@ -24,23 +21,23 @@ import retrofit.client.Response;
  * to handle interaction events.
  * Use the {@link OfferInfoFragment#newInstance} factory method to
  * create an instance of this fragment.
- *
  */
 public class OfferInfoFragment extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_OFFER_ID = "param1";
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private static final String ARG_ENDPOINT = "endpoint";
-
 
     private String mOfferId;
     private int mSectionNumber;
-    private String mEndpoint;
 
     private Offer offer;
 
     private OnFragmentInteractionListener mListener;
+
+    public OfferInfoFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -49,17 +46,13 @@ public class OfferInfoFragment extends Fragment {
      * @param offerId Parameter 1.
      * @return A new instance of fragment OfferInfoFragment.
      */
-    public static OfferInfoFragment newInstance(int sectionNumber, String offerId, String endpoint) {
+    public static OfferInfoFragment newInstance(int sectionNumber, String offerId) {
         OfferInfoFragment fragment = new OfferInfoFragment();
         Bundle args = new Bundle();
         args.putString(ARG_OFFER_ID, offerId);
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        args.putString(ARG_ENDPOINT, endpoint);
         fragment.setArguments(args);
         return fragment;
-    }
-    public OfferInfoFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -69,62 +62,33 @@ public class OfferInfoFragment extends Fragment {
         if (getArguments() != null) {
             mOfferId = getArguments().getString(ARG_OFFER_ID);
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
-            mEndpoint = getArguments().getString(ARG_ENDPOINT);
         }
 
-        requestData();
+        offer = new Select().from(Offer.class).where("offer_id = ?", mOfferId).executeSingle();
     }
-
-    //Call Retrofit to fetch data from server
-    //and store data to an offer object.
-    private void requestData() {
-
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(mEndpoint)
-                .build();
-
-        //implement the api interface
-        OfferAPI api = adapter.create(OfferAPI.class);
-
-        //connect to server and user getOffer.
-        api.getOffer(Long.valueOf(mOfferId).longValue(), new Callback<Offer>() {
-
-            //Here i can save my data if the connection was successful.
-            @Override
-            public void success(Offer arg0, Response response) {
-                offer = arg0;
-                updateDisplay(offer);
-
-            }
-
-            //Here i can handle the Retrofit error. Connection unsuccessful.
-            @Override
-            public void failure(RetrofitError arg0) {
-
-                Toast.makeText(getActivity(),arg0.getMessage(),Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
 
     //Updates the display!
-    private void updateDisplay(Offer offer) {
+    private void updateDisplay(View view, Offer offer) {
 
-        TextView titleView = (TextView) getView().findViewById(R.id.titleView);
-        titleView.setText(offer.getTitle());
+        TextView titleView = (TextView) view.findViewById(R.id.titleView);
+        titleView.setText(offer.title);
 
-        TextView descriptionView = (TextView) getView().findViewById(R.id.descriptionView);
-        descriptionView.setText(offer.getDescription());
+        TextView descriptionView = (TextView) view.findViewById(R.id.descriptionView);
+        descriptionView.setText(offer.description);
 
-        TextView priceView = (TextView) getView().findViewById(R.id.priceView);
-        priceView.setText(String.valueOf(offer.getPrice()));
+        TextView priceView = (TextView) view.findViewById(R.id.priceView);
+        priceView.setText(String.valueOf(offer.price));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_offer_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_offer_info, container, false);
+
+        updateDisplay(view, offer);
+
+        return view;
     }
 
     @Override
@@ -151,7 +115,7 @@ public class OfferInfoFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.

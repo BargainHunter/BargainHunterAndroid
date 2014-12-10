@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.bargainhunter.bargainhunterandroid.StoreListFragment">
+    tools:context="com.bargainhunter.bargainhunterandroid.ui.fragments.StoreListFragment">
 
     <ListView
         android:id="@android:id/list"

@@ -1,5 +1,6 @@
-package com.bargainhunter.bargainhunterandroid;
+package com.bargainhunter.bargainhunterandroid.ui.activities;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,7 +10,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import com.bargainhunter.bargainhunterandroid.R;
+import com.bargainhunter.bargainhunterandroid.ui.fragments.*;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
@@ -18,13 +20,6 @@ public class MainActivity extends ActionBarActivity
         OfferListFragment.OnFragmentInteractionListener,
         OfferInfoFragment.OnFragmentInteractionListener,
         OfferListFromStoreFragment.OnFragmentInteractionListener {
-
-    private static final String ENDPOINT = "http://bargainhunter.dyndns.org:8080/bargainhunterws";
-
-    /**
-     * Represents radius in (km). //TODO: change the value from settings
-     */
-    private static final double RADIUS = 100.0;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -35,6 +30,7 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,9 +53,7 @@ public class MainActivity extends ActionBarActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         // Change to Map fragment.
-        Fragment fragment = OfferListFragment.newInstance(sectionNumber, ENDPOINT, RADIUS);
-//        Fragment fragment = StoreInfoFragment.newInstance(sectionNumber, "1", ENDPOINT);
-//        Fragment fragment = OfferInfoFragment.newInstance(sectionNumber, "1", ENDPOINT);
+        Fragment fragment = OfferListFragment.newInstance(sectionNumber);
 //        Fragment fragment =  MapFragment.newInstance(sectionNumber);
 
         switch (sectionNumber) {
@@ -67,10 +61,10 @@ public class MainActivity extends ActionBarActivity
 //                fragment = MapFragment.newInstance(sectionNumber);
                 break;
             case 2:
-                fragment = OfferListFragment.newInstance(sectionNumber, ENDPOINT, RADIUS);
+                fragment = OfferListFragment.newInstance(sectionNumber);
                 break;
             case 3:
-                fragment = StoreListFragment.newInstance(sectionNumber, ENDPOINT, RADIUS);
+                fragment = StoreListFragment.newInstance(sectionNumber);
                 break;
         }
         Fragment emptyFragment = new Fragment();
@@ -125,7 +119,7 @@ public class MainActivity extends ActionBarActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent intent = new Intent (MainActivity.this, Preferences.class);
+            Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
             startActivity(intent);
             return true;
         }
@@ -135,10 +129,9 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onStoreListFragmentInteraction(String storeId) {
-
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment storeInfoFragment = StoreInfoFragment.newInstance(1, storeId, ENDPOINT);
-        Fragment offerListFromStoreFragment = OfferListFromStoreFragment.newInstance(2, ENDPOINT, storeId);
+        Fragment storeInfoFragment = StoreInfoFragment.newInstance(1, storeId);
+        Fragment offerListFromStoreFragment = OfferListFromStoreFragment.newInstance(2, storeId);
 
         fragmentManager.beginTransaction()
                 .replace(R.id.firstFragmentContainer, storeInfoFragment)
@@ -154,7 +147,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onOfferListFragmentInteraction(String offerId) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment offerInfoFragment = OfferInfoFragment.newInstance(1, offerId, ENDPOINT);
+        Fragment offerInfoFragment = OfferInfoFragment.newInstance(1, offerId);
 
         fragmentManager.beginTransaction()
                 .replace(R.id.firstFragmentContainer, offerInfoFragment)
@@ -169,7 +162,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onOfferListFromStoreFragmentInteraction(String offerId) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment offerInfoFragment = OfferInfoFragment.newInstance(2, offerId, ENDPOINT);
+        Fragment offerInfoFragment = OfferInfoFragment.newInstance(2, offerId);
         Fragment blankFragment = new Fragment();
         fragmentManager.beginTransaction()
                 .replace(R.id.firstFragmentContainer, offerInfoFragment)
@@ -177,44 +170,4 @@ public class MainActivity extends ActionBarActivity
                 .addToBackStack(null)
                 .commit();
     }
-
-//    /**
-//     * A placeholder fragment containing a simple view.
-//     */
-//    public static class PlaceholderFragment extends Fragment {
-//        /**
-//         * The fragment argument representing the section number for this
-//         * fragment.
-//         */
-//        private static final String ARG_SECTION_NUMBER = "section_number";
-//
-//        /**
-//         * Returns a new instance of this fragment for the given section
-//         * number.
-//         */
-//        public static PlaceholderFragment newInstance(int sectionNumber) {
-//            PlaceholderFragment fragment = new PlaceholderFragment();
-//            Bundle args = new Bundle();
-//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//            fragment.setArguments(args);
-//            return fragment;
-//        }
-//
-//        public PlaceholderFragment() {
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-//            return rootView;
-//        }
-//
-//        @Override
-//        public void onAttach(Activity activity) {
-//            super.onAttach(activity);
-//            ((MainActivity) activity).onSectionAttached(
-//                    getArguments().getInt(ARG_SECTION_NUMBER));
-//        }
-//    }
 }
