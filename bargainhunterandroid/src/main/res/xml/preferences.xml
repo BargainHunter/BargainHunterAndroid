@@ -2,10 +2,15 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <CheckBoxPreference
-            android:key="first"
-            android:title="stub"
-            android:summary="stub"
-            android:defaultValue="true" />
+    <PreferenceCategory android:title="Notification Radius">
+        <com.bargainhunter.bargainhunterandroid.ui.activities.SeekBarPreference
+                android:key="notificationRadius"
+                android:title="Notification Radius"
+                android:summary="Adjust radius in which notifications are sent to you."
+                android:defaultValue="100"
+                android:text="@string/radius_unit"
+                android:max="500"
+                />
+    </PreferenceCategory>
 
 </PreferenceScreen>
