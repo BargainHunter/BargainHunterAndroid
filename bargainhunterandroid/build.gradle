@@ -16,11 +16,11 @@ repositories {
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.1.0"
+    buildToolsVersion "21.1.1"
 
     defaultConfig {
         applicationId "com.bargainhunter.bargainhunterandroid"
-        minSdkVersion 9
+        minSdkVersion 14
         targetSdkVersion 21
         versionCode 1
         versionName "0.0.2"
@@ -46,5 +46,4 @@ dependencies {
     compile 'com.android.support:support-v4:21.0.2'
     compile 'com.squareup.retrofit:retrofit:1.7.1'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
-//    compile 'com.github.satyan:sugar:1.3'
 }

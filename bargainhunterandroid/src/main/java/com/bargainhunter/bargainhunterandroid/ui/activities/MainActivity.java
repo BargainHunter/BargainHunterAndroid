@@ -67,11 +67,9 @@ public class MainActivity extends ActionBarActivity
                 fragment = StoreListFragment.newInstance(sectionNumber);
                 break;
         }
-        Fragment emptyFragment = new Fragment();
 
         fragmentManager.beginTransaction()
-                .replace(R.id.firstFragmentContainer, fragment)
-                .replace(R.id.secondFragmentContainer, emptyFragment)
+                .replace(R.id.mainContainer, fragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -131,11 +129,9 @@ public class MainActivity extends ActionBarActivity
     public void onStoreListFragmentInteraction(String storeId) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment storeInfoFragment = StoreInfoFragment.newInstance(1, storeId);
-        Fragment offerListFromStoreFragment = OfferListFromStoreFragment.newInstance(2, storeId);
 
         fragmentManager.beginTransaction()
-                .replace(R.id.firstFragmentContainer, storeInfoFragment)
-                .replace(R.id.secondFragmentContainer, offerListFromStoreFragment)
+                .replace(R.id.mainContainer, storeInfoFragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -150,7 +146,7 @@ public class MainActivity extends ActionBarActivity
         Fragment offerInfoFragment = OfferInfoFragment.newInstance(1, offerId);
 
         fragmentManager.beginTransaction()
-                .replace(R.id.firstFragmentContainer, offerInfoFragment)
+                .replace(R.id.mainContainer, offerInfoFragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -163,10 +159,8 @@ public class MainActivity extends ActionBarActivity
     public void onOfferListFromStoreFragmentInteraction(String offerId) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment offerInfoFragment = OfferInfoFragment.newInstance(2, offerId);
-        Fragment blankFragment = new Fragment();
         fragmentManager.beginTransaction()
-                .replace(R.id.firstFragmentContainer, offerInfoFragment)
-                .replace(R.id.secondFragmentContainer, blankFragment)
+                .replace(R.id.mainContainer, offerInfoFragment)
                 .addToBackStack(null)
                 .commit();
     }

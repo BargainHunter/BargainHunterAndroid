@@ -69,6 +69,13 @@ public class StoreInfoFragment extends Fragment {
         store = new Select().from(Store.class).where("store_id = ?", mStoreId).executeSingle();
     }
 
+    public void addOfferListFragragment() {
+        Fragment offerListFromStoreFragment = OfferListFromStoreFragment.newInstance(2, mStoreId);
+
+        getChildFragmentManager().beginTransaction().add(R.id.fragmentContainer, offerListFromStoreFragment).commit();
+        getChildFragmentManager().executePendingTransactions();
+    }
+
     //Updates the display!
     private void updateDisplay(View view, Store store) {
         TextView storeNameView = (TextView) view.findViewById(R.id.storeNameView);
@@ -79,6 +86,8 @@ public class StoreInfoFragment extends Fragment {
 
         TextView addressView = (TextView) view.findViewById(R.id.addressView);
         addressView.setText(store.address + " " + store.addressNo);
+
+        addOfferListFragragment();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.bargainhunter.bargainhunterandroid.controllers.adapters;
+package com.bargainhunter.bargainhunterandroid.adapters;
 
 import android.app.Activity;
 import android.content.Context;

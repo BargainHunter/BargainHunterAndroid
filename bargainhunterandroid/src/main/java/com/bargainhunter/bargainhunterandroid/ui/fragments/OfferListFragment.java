@@ -9,7 +9,7 @@ import com.activeandroid.query.Select;
 import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
 import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.controllers.LocationController;
-import com.bargainhunter.bargainhunterandroid.controllers.adapters.OfferAdapter;
+import com.bargainhunter.bargainhunterandroid.adapters.OfferAdapter;
 import com.bargainhunter.bargainhunterandroid.models.Coordinates;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 

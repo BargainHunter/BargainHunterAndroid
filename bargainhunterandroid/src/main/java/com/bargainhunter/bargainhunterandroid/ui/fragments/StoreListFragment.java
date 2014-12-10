@@ -11,7 +11,7 @@ import com.activeandroid.query.Select;
 import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
 import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.controllers.LocationController;
-import com.bargainhunter.bargainhunterandroid.controllers.adapters.StoreAdapter;
+import com.bargainhunter.bargainhunterandroid.adapters.StoreAdapter;
 import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 
 import java.util.List;
