@@ -43,7 +43,7 @@ public class StoreAdapter extends ArrayAdapter<Store> {
 
         Store store = storeList.get(position);
         TextView tv = (TextView) view.findViewById(R.id.storeTitle);
-        tv.setText(store.storeName);
+        tv.setText(store.getStoreName());
 
 
         TextView tv2 = (TextView) view.findViewById(R.id.storeDistance);

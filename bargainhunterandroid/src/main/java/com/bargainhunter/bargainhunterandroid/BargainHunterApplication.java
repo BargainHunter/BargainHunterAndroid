@@ -16,6 +16,7 @@ public class BargainHunterApplication extends Application {
 
         ActiveAndroid.initialize(this);
 
+        DatabaseController.updateDatabaseCategories(this);
         DatabaseController.updateDatabase(this);
     }
 

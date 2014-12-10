@@ -4,12 +4,13 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
-@Table(name = "subcategory")
+@Table(name = "OFFER_SUBCATEGORY")
 public class OfferSubcategory extends Model {
     @Column(name = "subcategory_id")
-    public Long subcategoryId;
+    private Long subcategoryId;
+
     @Column(name = "offer")
-    public Offer offer;
+    private Offer offer;
 
     public OfferSubcategory() {
         super();
@@ -19,6 +20,22 @@ public class OfferSubcategory extends Model {
         super();
 
         this.subcategoryId = subcategoryId;
+        this.offer = offer;
+    }
+
+    public Long getSubcategoryId() {
+        return subcategoryId;
+    }
+
+    public void setSubcategoryId(Long subcategoryId) {
+        this.subcategoryId = subcategoryId;
+    }
+
+    public Offer getOffer() {
+        return offer;
+    }
+
+    public void setOffer(Offer offer) {
         this.offer = offer;
     }
 }

@@ -10,8 +10,7 @@ import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 public class DistanceCalc {
     public static float calculate(Store store, Coordinates coordinates) {
 
-        float distance = 0;
-
+        float distance;
 
         Location loc1 = new Location("current location");
         loc1.setLatitude(coordinates.getLatitude());
@@ -19,14 +18,12 @@ public class DistanceCalc {
 
         Location loc2 = new Location("store location");
 
-        loc2.setLatitude(store.latitude);
-        loc2.setLongitude(store.longitude);
+        loc2.setLatitude(store.getLatitude());
+        loc2.setLongitude(store.getLongitude());
 
         distance = loc1.distanceTo(loc2);
 
 
         return distance;
     }
-
-
 }

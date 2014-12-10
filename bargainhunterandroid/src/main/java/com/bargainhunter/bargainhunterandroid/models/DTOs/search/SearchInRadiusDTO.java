@@ -1,4 +1,4 @@
-package com.bargainhunter.bargainhunterandroid.models.DTOs;
+package com.bargainhunter.bargainhunterandroid.models.DTOs.search;
 
 import java.io.Serializable;
 import java.util.HashSet;

@@ -71,13 +71,13 @@ public class OfferInfoFragment extends Fragment {
     private void updateDisplay(View view, Offer offer) {
 
         TextView titleView = (TextView) view.findViewById(R.id.titleView);
-        titleView.setText(offer.title);
+        titleView.setText(offer.getTitle());
 
         TextView descriptionView = (TextView) view.findViewById(R.id.descriptionView);
-        descriptionView.setText(offer.description);
+        descriptionView.setText(offer.getDescription());
 
         TextView priceView = (TextView) view.findViewById(R.id.priceView);
-        priceView.setText(String.valueOf(offer.price));
+        priceView.setText(offer.getPrice().toString());
     }
 
     @Override

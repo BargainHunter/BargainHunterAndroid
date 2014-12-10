@@ -155,7 +155,7 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Offer offer = (Offer) (getListAdapter()).getItem(position);
-        long offerId = offer.offerId;
+        long offerId = offer.getOfferId();
         if (null != mListener) {
             mListener.onOfferListFragmentInteraction(String.valueOf(offerId));
         }

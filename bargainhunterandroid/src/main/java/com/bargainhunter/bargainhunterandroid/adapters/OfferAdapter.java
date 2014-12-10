@@ -29,7 +29,7 @@ public class OfferAdapter extends ArrayAdapter<Offer> {
 
         Offer offer = offers.get(position);
         TextView tv = (TextView) view.findViewById(R.id.offerTitle);
-        tv.setText(offer.title);
+        tv.setText(offer.getTitle());
 
         return view;
     }

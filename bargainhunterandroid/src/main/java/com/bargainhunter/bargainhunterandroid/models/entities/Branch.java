@@ -9,7 +9,7 @@ import java.util.List;
 @Table(name = "BRANCH")
 public class Branch extends Model {
     @Column(name = "branch_id")
-    public Long branchId;
+    private Long branchId;
 
     public Branch() {
         super();
@@ -21,11 +21,19 @@ public class Branch extends Model {
         this.branchId = branchId;
     }
 
-    public List<Store> stores() {
+    public Long getBranchId() {
+        return branchId;
+    }
+
+    public void setBranchId(Long branchId) {
+        this.branchId = branchId;
+    }
+
+    public List<Store> getStores() {
         return getMany(Store.class, "branch");
     }
 
-    public List<Offer> offers() {
+    public List<Offer> getOffers() {
         return getMany(Offer.class, "branch");
     }
 }

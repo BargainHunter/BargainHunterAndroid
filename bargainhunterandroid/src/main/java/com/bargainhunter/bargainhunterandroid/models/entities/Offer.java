@@ -9,17 +9,18 @@ import java.util.List;
 @Table(name = "OFFER")
 public class Offer extends Model {
     @Column(name = "offer_id")
-    public Long offerId;
+    private Long offerId;
     @Column(name = "title")
-    public String title;
+    private String title;
     @Column(name = "description")
-    public String description;
+    private String description;
     @Column(name = "price")
-    public Double price;
+    private Double price;
     @Column(name = "old_price")
-    public Double oldPrice;
+    private Double oldPrice;
+
     @Column(name = "branch")
-    public Branch branch;
+    private Branch branch;
 
     public Offer() {
         super();
@@ -36,7 +37,55 @@ public class Offer extends Model {
         this.branch = branch;
     }
 
-    public List<OfferSubcategory> subcategories() {
+    public Long getOfferId() {
+        return offerId;
+    }
+
+    public void setOfferId(Long offerId) {
+        this.offerId = offerId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Double getOldPrice() {
+        return oldPrice;
+    }
+
+    public void setOldPrice(Double oldPrice) {
+        this.oldPrice = oldPrice;
+    }
+
+    public Branch getBranch() {
+        return branch;
+    }
+
+    public void setBranch(Branch branch) {
+        this.branch = branch;
+    }
+
+    public List<OfferSubcategory> getSubcategories() {
         return getMany(OfferSubcategory.class, "offer");
     }
 }

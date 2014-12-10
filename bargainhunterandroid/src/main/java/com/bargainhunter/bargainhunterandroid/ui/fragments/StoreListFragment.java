@@ -126,7 +126,7 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Store store = (Store) (getListAdapter()).getItem(position);
-        long storeId = store.storeId;
+        long storeId = store.getStoreId();
         if (null != mListener) {
             mListener.onStoreListFragmentInteraction(String.valueOf(storeId));
         }

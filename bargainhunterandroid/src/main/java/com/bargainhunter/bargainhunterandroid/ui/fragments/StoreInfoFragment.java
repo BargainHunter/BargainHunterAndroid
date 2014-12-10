@@ -79,13 +79,13 @@ public class StoreInfoFragment extends Fragment {
     //Updates the display!
     private void updateDisplay(View view, Store store) {
         TextView storeNameView = (TextView) view.findViewById(R.id.storeNameView);
-        storeNameView.setText(store.storeName);
+        storeNameView.setText(store.getStoreName());
 
         TextView cityView = (TextView) view.findViewById(R.id.cityView);
-        cityView.setText(store.city);
+        cityView.setText(store.getCity());
 
         TextView addressView = (TextView) view.findViewById(R.id.addressView);
-        addressView.setText(store.address + " " + store.addressNo);
+        addressView.setText(store.getAddress() + " " + store.getAddressNo());
 
         addOfferListFragragment();
     }

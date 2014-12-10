@@ -7,21 +7,22 @@ import com.activeandroid.annotation.Table;
 @Table(name = "STORE")
 public class Store extends Model {
     @Column(name = "store_id")
-    public Long storeId;
+    private Long storeId;
     @Column(name = "store_name")
-    public String storeName;
+    private String storeName;
     @Column(name = "city")
-    public String city;
+    private String city;
     @Column(name = "address")
-    public String address;
+    private String address;
     @Column(name = "address_no")
-    public String addressNo;
+    private String addressNo;
     @Column(name = "latitude")
-    public Double latitude;
+    private Double latitude;
     @Column(name = "longitude")
-    public Double longitude;
+    private Double longitude;
+
     @Column(name = "branch")
-    public Branch branch;
+    private Branch branch;
 
     public Store() {
         super();
@@ -37,6 +38,70 @@ public class Store extends Model {
         this.addressNo = addressNo;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.branch = branch;
+    }
+
+    public Long getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Long storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getAddressNo() {
+        return addressNo;
+    }
+
+    public void setAddressNo(String addressNo) {
+        this.addressNo = addressNo;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Branch getBranch() {
+        return branch;
+    }
+
+    public void setBranch(Branch branch) {
         this.branch = branch;
     }
 }

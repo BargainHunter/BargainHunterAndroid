@@ -70,7 +70,7 @@ public class OfferListFromStoreFragment extends ListFragment implements AbsListV
         }
 
         Store store = new Select().from(Store.class).where("store_id = ?", mStoreId).executeSingle();
-        offerList = store.branch.offers();
+        offerList = store.getBranch().getOffers();
     }
 
     protected void updateDisplay(List<Offer> offerList) {
@@ -116,7 +116,7 @@ public class OfferListFromStoreFragment extends ListFragment implements AbsListV
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Offer offer = (Offer) (getListAdapter()).getItem(position);
-        long offerId = offer.offerId;
+        long offerId = offer.getOfferId();
         if (null != mListener) {
             mListener.onOfferListFromStoreFragmentInteraction(String.valueOf(offerId));
         }

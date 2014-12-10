@@ -3,11 +3,12 @@ package com.bargainhunter.bargainhunterandroid.controllers;
 import android.content.Context;
 import android.widget.Toast;
 import com.bargainhunter.bargainhunterandroid.models.Coordinates;
-import com.bargainhunter.bargainhunterandroid.models.DTOs.*;
-import com.bargainhunter.bargainhunterandroid.models.entities.Branch;
-import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
-import com.bargainhunter.bargainhunterandroid.models.entities.OfferSubcategory;
-import com.bargainhunter.bargainhunterandroid.models.entities.Store;
+import com.bargainhunter.bargainhunterandroid.models.DTOs.categories.CategoriesDTO;
+import com.bargainhunter.bargainhunterandroid.models.DTOs.categories.CategoryDTO;
+import com.bargainhunter.bargainhunterandroid.models.DTOs.categories.SubcategoryDTO;
+import com.bargainhunter.bargainhunterandroid.models.DTOs.search.*;
+import com.bargainhunter.bargainhunterandroid.models.entities.*;
+import com.bargainhunter.bargainhunterandroid.restAPIs.ICategoryAPI;
 import com.bargainhunter.bargainhunterandroid.restAPIs.ISearchAPI;
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -17,17 +18,52 @@ import retrofit.client.Response;
 public class DatabaseController {
     private static final String mEndpoint = "http://a4i.dyndns.org:8080/";
 
+    public static void updateDatabaseCategories(final Context context) {
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(mEndpoint)
+                .build();
+
+        ICategoryAPI api = adapter.create(ICategoryAPI.class);
+
+        api.getAllCategories(new Callback<CategoriesDTO>() {
+            @Override
+            public void success(CategoriesDTO categoriesDTO, Response response) {
+                for (CategoryDTO categoryDTO : categoriesDTO.getCategories()) {
+                    Category category = new Category(
+                            categoryDTO.getCategoryId(),
+                            categoryDTO.getDescription()
+                    );
+
+                    category.save();
+
+                    for (SubcategoryDTO subcategoryDTO : categoryDTO.getSubcategories()) {
+                        Subcategory subcategory = new Subcategory(
+                                subcategoryDTO.getSubcategoryId(),
+                                subcategoryDTO.getDescription(),
+                                category
+                        );
+
+                        subcategory.save();
+                    }
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     public static void updateDatabase(final Context context) {
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(mEndpoint)
                 .build();
 
-        //implement the api interface
         ISearchAPI api = adapter.create(ISearchAPI.class);
 
         Coordinates phoneLoc = new LocationController().findCoordinates(context);
 
-        //connect to server and user getOffer.
         api.getAllBranchesWithStoresAndOffersInRadius(
                 phoneLoc.getLatitude(),
                 phoneLoc.getLongitude(),
@@ -82,8 +118,8 @@ public class DatabaseController {
                     }
 
                     @Override
-                    public void failure(RetrofitError arg0) {
-                        Toast.makeText(context, arg0.getMessage(), Toast.LENGTH_LONG).show();
+                    public void failure(RetrofitError error) {
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
     }
