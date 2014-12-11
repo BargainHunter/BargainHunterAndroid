@@ -46,4 +46,5 @@ dependencies {
     compile 'com.android.support:support-v4:21.0.2'
     compile 'com.squareup.retrofit:retrofit:1.7.1'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:4.2'
 }
