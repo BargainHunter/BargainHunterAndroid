@@ -2,6 +2,9 @@ package com.bargainhunter.bargainhunterandroid.ui.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.*;
 import android.widget.*;
@@ -73,43 +76,70 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.price_list, menu);
+        inflater.inflate(R.menu.filter_action, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.upto_5:
-                Toast.makeText(getActivity(), "Setting filter up to 5 euros", Toast.LENGTH_SHORT).show();
-                offerList = new Select().from(Offer.class).where("price BETWEEN ? AND ?", 0, 5).execute();
-                updateDisplay(offerList);
-                return true;
-            case R.id.upto_10:
-                Toast.makeText(getActivity(), "Setting filter between 5-10 euros", Toast.LENGTH_SHORT).show();
-                offerList = new Select().from(Offer.class).where("price BETWEEN ? AND ?", 5, 10).execute();
-                updateDisplay(offerList);
-                return true;
-            case R.id.from_80:
-                Toast.makeText(getActivity(), "Setting filter between 80-100 euros", Toast.LENGTH_SHORT).show();
-                offerList = new Select().from(Offer.class).where("price BETWEEN ? AND ?", 80, 100).execute();
-                updateDisplay(offerList);
-                return true;
-            case R.id.from_100:
-                Toast.makeText(getActivity(), "Setting filter to 100+ euros", Toast.LENGTH_SHORT).show();
-                offerList = new Select().from(Offer.class).where("price > ?", 100).execute();
-                updateDisplay(offerList);
-                return true;
-            case R.id.no_filter:
-                Toast.makeText(getActivity(), "No Filter Active", Toast.LENGTH_SHORT).show();
-                offerList = new Select().from(Offer.class).execute();
-                updateDisplay(offerList);
+            case R.id.price_filter:
+                showDialog();
                 return true;
             default:
-                updateDisplay(offerList);
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    void showDialog() {
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("filter_dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DialogFragment newFragment = FilterDialogFragment.newInstance(1);
+        newFragment.show(ft, "filter_dialog");
+    }
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.upto_5:
+//                Toast.makeText(getActivity(), "Setting filter up to 5 euros", Toast.LENGTH_SHORT).show();
+//                offerList = new Select().from(Offer.class).where("price BETWEEN ? AND ?", 0, 5).execute();
+//                updateDisplay(offerList);
+//                return true;
+//            case R.id.upto_10:
+//                Toast.makeText(getActivity(), "Setting filter between 5-10 euros", Toast.LENGTH_SHORT).show();
+//                offerList = new Select().from(Offer.class).where("price BETWEEN ? AND ?", 5, 10).execute();
+//                updateDisplay(offerList);
+//                return true;
+//            case R.id.from_80:
+//                Toast.makeText(getActivity(), "Setting filter between 80-100 euros", Toast.LENGTH_SHORT).show();
+//                offerList = new Select().from(Offer.class).where("price BETWEEN ? AND ?", 80, 100).execute();
+//                updateDisplay(offerList);
+//                return true;
+//            case R.id.from_100:
+//                Toast.makeText(getActivity(), "Setting filter to 100+ euros", Toast.LENGTH_SHORT).show();
+//                offerList = new Select().from(Offer.class).where("price > ?", 100).execute();
+//                updateDisplay(offerList);
+//                return true;
+//            case R.id.no_filter:
+//                Toast.makeText(getActivity(), "No Filter Active", Toast.LENGTH_SHORT).show();
+//                offerList = new Select().from(Offer.class).execute();
+//                updateDisplay(offerList);
+//                return true;
+//            default:
+//                updateDisplay(offerList);
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
 
     protected void updateDisplay(List<Offer> offerList) {
         OfferAdapter adapter = new OfferAdapter(this.getActivity(), R.layout.fragment_offer_list, offerList);

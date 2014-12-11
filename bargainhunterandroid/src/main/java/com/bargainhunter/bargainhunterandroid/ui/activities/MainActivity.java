@@ -19,7 +19,8 @@ public class MainActivity extends ActionBarActivity
         StoreInfoFragment.OnFragmentInteractionListener,
         OfferListFragment.OnFragmentInteractionListener,
         OfferInfoFragment.OnFragmentInteractionListener,
-        OfferListFromStoreFragment.OnFragmentInteractionListener {
+        OfferListFromStoreFragment.OnFragmentInteractionListener,
+        FilterDialogFragment.OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -163,5 +164,10 @@ public class MainActivity extends ActionBarActivity
                 .replace(R.id.mainContainer, offerInfoFragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

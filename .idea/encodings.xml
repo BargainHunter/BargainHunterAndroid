@@ -4,8 +4,6 @@
     <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/DTOs/categories/CategoriesDTO.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/DTOs/categories/CategoryDTO.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/DTOs/categories/SubcategoryDTO.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/DTOs/category/CategoryDTO.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/DTOs/category/SubcategoryDTO.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/DTOs/search/BranchDTO.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/DTOs/search/OfferDTO.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/bargainhunterandroid/src/main/java/com/bargainhunter/bargainhunterandroid/models/DTOs/search/OfferSubcategoryDTO.java" charset="UTF-8" />
