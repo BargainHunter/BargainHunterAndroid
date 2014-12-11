@@ -26,6 +26,33 @@ public class StoreListFragmentTest extends ActivityInstrumentationTestCase2<Main
         solo.assertCurrentActivity("check on first activity", MainActivity.class);
         solo.clickOnImageButton(0);
         solo.clickOnText("Stores");
+    }
 
+    public void testOfferList() throws Exception {
+        solo.assertCurrentActivity("check on first activity", MainActivity.class);
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Offers");
+    }
+
+    public void testMap() throws Exception {
+        solo.assertCurrentActivity("check on first activity", MainActivity.class);
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Map");
+        }
+
+    public void testOfferListThenStoreList() throws Exception {
+        solo.assertCurrentActivity("check on first activity", MainActivity.class);
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Offers");
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Stores");
+    }
+
+    public void testStoreListThenOfferList() throws Exception {
+        solo.assertCurrentActivity("check on first activity", MainActivity.class);
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Stores");
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Offers");
     }
 }
