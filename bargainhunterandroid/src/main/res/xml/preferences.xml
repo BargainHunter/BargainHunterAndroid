@@ -7,9 +7,9 @@
                 android:key="notificationRadius"
                 android:title="Notification Radius"
                 android:summary="Adjust radius in which notifications are sent to you."
-                android:defaultValue="100"
+                android:defaultValue="50"
                 android:text="@string/radius_unit"
-                android:max="500"
+                android:max="100"
                 />
     </PreferenceCategory>
 
