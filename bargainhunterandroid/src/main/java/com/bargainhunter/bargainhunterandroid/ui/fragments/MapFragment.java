@@ -53,13 +53,13 @@ private int mSectionNumber;
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-           mSectionNumber=getArguments().getInt(ARG_SECTION_NUMBER);
-        }
-    }
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        if (getArguments() != null) {
+//           mSectionNumber=getArguments().getInt(ARG_SECTION_NUMBER);
+//        }
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -112,7 +112,7 @@ private int mSectionNumber;
 
             // Creating a criteria object to retrieve provider
             Criteria criteria = new Criteria();
-
+            criteria.setAccuracy(Criteria.ACCURACY_FINE);
             String provider = locationManager.getBestProvider(criteria, true);
 
             // Getting Current Location
@@ -128,7 +128,7 @@ private int mSectionNumber;
 
                 map.addMarker(new MarkerOptions().position(myPosition).title("Phone Location").snippet("lat:" +
                         latitude + "\n" + "long:" + longitude));
-
+                map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("home"));
 
             }
         }
