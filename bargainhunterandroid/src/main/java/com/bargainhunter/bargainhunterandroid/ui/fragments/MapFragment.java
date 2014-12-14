@@ -73,10 +73,6 @@ public class MapFragment extends Fragment {
            mSectionNumber=getArguments().getInt(ARG_SECTION_NUMBER);
         }
         storelist = new Select().from(Store.class).execute();
-        for (Store tempStore : storelist)
-        {
-            Toast.makeText(getActivity(),tempStore.getId().toString(),Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override
