@@ -14,11 +14,15 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import com.activeandroid.query.Select;
 import com.bargainhunter.bargainhunterandroid.R;
+import com.bargainhunter.bargainhunterandroid.controllers.LocationController;
 import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.*;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -29,15 +33,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MapFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MapFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class MapFragment extends Fragment {
+
+public class MapFragment extends Fragment implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        Geofence{
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
@@ -45,14 +47,11 @@ public class MapFragment extends Fragment {
     private int mSectionNumber;
     private OnFragmentInteractionListener mListener;
     private List<Store> storelist = new ArrayList<>();
+    private GoogleMap map;
+    private LatLng myPosition;
+    SupportMapFragment fragment;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
 
-     * @return A new instance of fragment MapFragment.
-     */
     // TODO: Rename and change types and number of parameters
     public static MapFragment newInstance(int sectionNumber) {
         MapFragment fragment = new MapFragment();
@@ -102,7 +101,7 @@ public class MapFragment extends Fragment {
 //                    + " must implement OnFragmentInteractionListener");
 //        }
     }
-    SupportMapFragment fragment;
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -113,8 +112,7 @@ public class MapFragment extends Fragment {
             fm.beginTransaction().replace(R.id.map_container, fragment).commit();
         }
     }
-    GoogleMap map;
-    LatLng myPosition;
+
     @Override
     public void onResume() {
         super.onResume();
@@ -160,22 +158,32 @@ public class MapFragment extends Fragment {
 
     }
 
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public String getRequestId() {
+        return null;
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
 //    @Override
 //    public void onDetach() {
 //        super.onDetach();
 //        mListener = null;
 //    }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
