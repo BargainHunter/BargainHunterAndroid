@@ -1,6 +1,9 @@
 package com.bargainhunter.bargainhunterandroid.ui.fragments;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -11,12 +14,20 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+import com.activeandroid.query.Select;
 import com.bargainhunter.bargainhunterandroid.R;
+import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,9 +40,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_SECTION_NUMBER = "section_number";
-private int mSectionNumber;
- private OnFragmentInteractionListener mListener;
+    private int mSectionNumber;
+    private OnFragmentInteractionListener mListener;
+    private List<Store> storelist = new ArrayList<>();
 
     /**
      * Use this factory method to create a new instance of
@@ -59,6 +72,7 @@ private int mSectionNumber;
         if (getArguments() != null) {
            mSectionNumber=getArguments().getInt(ARG_SECTION_NUMBER);
         }
+        storelist = new Select().from(Store.class).execute();
     }
 
     @Override
@@ -128,7 +142,18 @@ private int mSectionNumber;
 
                 map.addMarker(new MarkerOptions().position(myPosition).title("Phone Location").snippet("lat:" +
                         latitude + "\n" + "long:" + longitude));
-                map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("home"));
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition,17));
+
+                Drawable iconDrawable = getResources().getDrawable(R.drawable.shop_icon);
+                Bitmap iconBmp = ((BitmapDrawable) iconDrawable).getBitmap();
+
+                for (Store store : storelist)
+                {
+                    map.addMarker(new MarkerOptions()
+                            .position(new LatLng(store.getLatitude(), store.getLongitude()))
+                            .title(store.getStoreName())
+                            .icon(BitmapDescriptorFactory.fromBitmap(iconBmp)));
+                }
 
             }
         }
