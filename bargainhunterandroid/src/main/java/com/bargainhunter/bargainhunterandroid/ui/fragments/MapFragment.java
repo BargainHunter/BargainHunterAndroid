@@ -53,13 +53,13 @@ private int mSectionNumber;
         // Required empty public constructor
     }
 
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//           mSectionNumber=getArguments().getInt(ARG_SECTION_NUMBER);
-//        }
-//    }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+           mSectionNumber=getArguments().getInt(ARG_SECTION_NUMBER);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
