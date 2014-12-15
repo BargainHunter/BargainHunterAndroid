@@ -43,7 +43,23 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+                android:name=".ui.activities.ProximityActivity"
+                android:label="@string/app_name" >
+            <intent-filter >
+                <action android:name="com.bargainhunter.activity.proximity"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
+        <activity
+                android:name=".ui.activities.NotificationView"
+                android:label="@string/app_name" >
+
+            <intent-filter >
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <activity android:name=".ui.activities.PreferencesActivity"/>
         <meta-data

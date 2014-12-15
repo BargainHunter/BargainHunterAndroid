@@ -1,7 +1,12 @@
 package com.bargainhunter.bargainhunterandroid.ui.fragments;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
@@ -10,6 +15,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,16 +23,19 @@ import android.view.ViewGroup;
 import com.activeandroid.query.Select;
 import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.controllers.LocationController;
+import com.bargainhunter.bargainhunterandroid.models.entities.Branch;
 import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.*;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -34,10 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MapFragment extends Fragment implements
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        Geofence{
+public class MapFragment extends Fragment {
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -50,7 +56,10 @@ public class MapFragment extends Fragment implements
     private GoogleMap map;
     private LatLng myPosition;
     SupportMapFragment fragment;
-
+    LocationManager locationManager;
+    PendingIntent pendingIntent;
+    SharedPreferences sharedPreferences;
+    int locationCount = 0;
 
     // TODO: Rename and change types and number of parameters
     public static MapFragment newInstance(int sectionNumber) {
@@ -69,7 +78,7 @@ public class MapFragment extends Fragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-           mSectionNumber=getArguments().getInt(ARG_SECTION_NUMBER);
+            mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
         }
         storelist = new Select().from(Store.class).execute();
     }
@@ -120,7 +129,7 @@ public class MapFragment extends Fragment implements
             map = fragment.getMap();
             map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             map.setMyLocationEnabled(true);
-            LocationManager locationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
+            locationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
 
             // Creating a criteria object to retrieve provider
             Criteria criteria = new Criteria();
@@ -140,44 +149,76 @@ public class MapFragment extends Fragment implements
 
                 map.addMarker(new MarkerOptions().position(myPosition).title("Phone Location").snippet("lat:" +
                         latitude + "\n" + "long:" + longitude));
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition,17));
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, 17));
 
                 Drawable iconDrawable = getResources().getDrawable(R.drawable.shop_icon);
                 Bitmap iconBmp = ((BitmapDrawable) iconDrawable).getBitmap();
+                LatLng point;
+                /*Store testStore = new Store((long)8,"Mikel","Thessaloniki","Papanastasiou","56",40.612390, 22.964106, new Branch((long)1));
+                storelist.add(testStore);
+                testStore = new Store((long)9,"Mikel2","Thessaloniki","Papanastasiou","56",40.612571, 22.964959, new Branch((long)1));
+                storelist.add(testStore);*/
+                for (Store store : storelist) {
+                        point = new LatLng(store.getLatitude(),store.getLongitude());
+                        // Drawing marker on the map
+                        drawMarker(store,iconBmp);
+                        // Drawing circle on the map
+                        drawCircle(point);
+                    // This intent will call the activity ProximityActivity
+                    Intent proximityIntent = new Intent("com.bargainhunter.activity.proximity");
 
-                for (Store store : storelist)
-                {
-                    map.addMarker(new MarkerOptions()
-                            .position(new LatLng(store.getLatitude(), store.getLongitude()))
-                            .title(store.getStoreName())
-                            .icon(BitmapDescriptorFactory.fromBitmap(iconBmp)));
+                    // Passing latitude to the PendingActivity
+                    proximityIntent.putExtra("lat",point.latitude);
+
+                    // Passing longitude to the PendingActivity
+                    proximityIntent.putExtra("lng", point.longitude);
+
+                    // Creating a pending intent which will be invoked by LocationManager when the specified region is
+                    // entered or exited
+                    pendingIntent = PendingIntent.getActivity(getActivity().getBaseContext(), 0, proximityIntent,PendingIntent.FLAG_ONE_SHOT);
+
+                    // Setting proximity alert
+                    // The pending intent will be invoked when the device enters or exits the region 100 meters
+                    // away from the marked point
+                    // The -1 indicates that, the monitor will not be expired
+                    locationManager.addProximityAlert(point.latitude, point.longitude, 100, -1, pendingIntent);
+                    }
                 }
-
+                }
             }
-        }
 
+
+    private void drawCircle(LatLng point){
+        // Instantiating CircleOptions to draw a circle around the marker
+        CircleOptions circleOptions = new CircleOptions();
+
+        // Specifying the center of the circle
+        circleOptions.center(point);
+
+        // Radius of the circle
+        circleOptions.radius(150);
+
+        // Border color of the circle
+        circleOptions.strokeColor(Color.BLACK);
+
+        // Border width of the circle
+        circleOptions.strokeWidth(1);
+
+        // Adding the circle to the GoogleMap
+        map.addCircle(circleOptions);
     }
 
-    @Override
-    public void onConnected(Bundle bundle) {
+    private void drawMarker(Store store, Bitmap iconBmp){
+        // Creating an instance of MarkerOptions
+        MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(store.getLatitude(), store.getLongitude()))
+                .title(store.getStoreName())
+                .snippet(store.getAddress() + " " + store.getAddressNo() + "\n\n"
+                        + store.getLatitude() + " " + store.getLongitude())
+                .icon(BitmapDescriptorFactory.fromBitmap(iconBmp));
+        // Adding marker on the Google Map
+        map.addMarker(markerOptions);
 
     }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public String getRequestId() {
-        return null;
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-    }
-
 //    @Override
 //    public void onDetach() {
 //        super.onDetach();
