@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@android:id/widget_frame"
                 android:layout_width="fill_parent"
@@ -24,13 +24,6 @@
             android:gravity="right" >
     </TextView>
 
-    <TextView
-            android:id="@+id/seekBarPrefUnitsLeft"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/seekBarPrefValue" >
-    </TextView>
-
     <LinearLayout
             android:id="@+id/seekBarPrefBarContainer"
             android:layout_width="fill_parent"
@@ -40,7 +33,7 @@
             android:orientation="horizontal" >
 
         <SeekBar
-                android:id="@+id/seekBarPrefSeekBar"
+                android:id="@+id/seekBarPreference"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
     </LinearLayout>

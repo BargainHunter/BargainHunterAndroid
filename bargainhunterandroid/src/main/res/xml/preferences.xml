@@ -6,10 +6,14 @@
         <com.bargainhunter.bargainhunterandroid.ui.activities.SeekBarPreference
                 android:key="notificationRadius"
                 android:title="Notification Radius"
-                android:summary="Adjust radius in which notifications are sent to you."
                 android:defaultValue="50"
-                android:text="@string/radius_unit"
                 android:max="100"
+                />
+        <EditTextPreference
+                android:title="Notification Radius"
+                android:key="editText"
+                android:hint="Choose the radius of your notifications"
+                android:numeric="integer"
                 />
     </PreferenceCategory>
 

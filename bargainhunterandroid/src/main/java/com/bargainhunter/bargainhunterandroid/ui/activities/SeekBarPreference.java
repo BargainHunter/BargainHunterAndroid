@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.bargainhunter.bargainhunterandroid.R;
 
 /**
- * Created by Veruz on 10/12/2014.
+ * Created by Veruz on 9/12/2014.
  */
 public class SeekBarPreference extends Preference implements OnSeekBarChangeListener {
 
@@ -82,7 +82,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
     /**
      * Update a SeekBarPreference view with our current state
      */
-    protected void updateView(@NonNull View view) {
+    protected void updateView(View view) {
 
         try {
             mStatusText = (TextView) view.findViewById(R.id.seekBarPrefValue);
