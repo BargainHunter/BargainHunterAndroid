@@ -2,10 +2,12 @@ package com.bargainhunter.bargainhunterandroid.ui.fragments;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +19,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import com.activeandroid.query.Select;
 import com.bargainhunter.bargainhunterandroid.R;
+import com.bargainhunter.bargainhunterandroid.directions.IRoutingListener;
+import com.bargainhunter.bargainhunterandroid.directions.Route;
+import com.bargainhunter.bargainhunterandroid.directions.Routing;
 import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,6 +30,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +43,7 @@ import java.util.List;
  * Use the {@link MapFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements IRoutingListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
@@ -114,7 +120,7 @@ public class MapFragment extends Fragment {
         }
     }
     GoogleMap map;
-    LatLng myPosition;
+    LatLng myPosition,storePosition;
     @Override
     public void onResume() {
         super.onResume();
@@ -123,7 +129,27 @@ public class MapFragment extends Fragment {
             map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             map.setMyLocationEnabled(true);
             LocationManager locationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
+            LocationListener locationListener=new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    Toast.makeText(getActivity(),"location has changed", Toast.LENGTH_LONG).show();
+                }
 
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+
+                }
+            };
             // Creating a criteria object to retrieve provider
             Criteria criteria = new Criteria();
             criteria.setAccuracy(Criteria.ACCURACY_FINE);
@@ -133,6 +159,8 @@ public class MapFragment extends Fragment {
             Location location = locationManager.getLastKnownLocation(provider);
 
             if (location != null) {
+
+                Toast.makeText( getActivity() ,"lat: "+location.getLatitude(), Toast.LENGTH_LONG).show();
 
                 double latitude = location.getLatitude();
 
@@ -153,11 +181,41 @@ public class MapFragment extends Fragment {
                             .position(new LatLng(store.getLatitude(), store.getLongitude()))
                             .title(store.getStoreName())
                             .icon(BitmapDescriptorFactory.fromBitmap(iconBmp)));
+                    if( store.getAddress().toString().equals("Tsimiski") ){
+                        storePosition = new LatLng(store.getLatitude(),store.getLongitude());
+                        Toast.makeText(getActivity(),store.getStoreName().toString()+":"+store.getAddress(),Toast.LENGTH_LONG).show();
+                    }
                 }
+
+            } else {
+
+                Toast.makeText(getActivity(),"location is null",Toast.LENGTH_LONG).show();
 
             }
         }
+        Routing routing=new Routing(Routing.TravelMode.WALKING);
+        routing.registerListener(this);
+        routing.execute(myPosition,storePosition);
 
+    }
+
+    @Override
+    public void onRoutingFailure() {
+
+    }
+
+    @Override
+    public void onRoutingStart() {
+
+    }
+
+    @Override
+    public void onRoutingSuccess(PolylineOptions mPolyOptions, Route route) {
+        PolylineOptions polyoptions = new PolylineOptions();
+        polyoptions.color(Color.BLUE);
+        polyoptions.width(10);
+        polyoptions.addAll(mPolyOptions.getPoints());
+        map.addPolyline(polyoptions);
     }
 
 //    @Override
