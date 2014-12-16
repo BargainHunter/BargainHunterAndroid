@@ -23,6 +23,7 @@ public class GoogleParser extends JsonConnection{
         super(url);
     }
 
+    //TODO: change JSON parsing code using Jackson or any other framework
     public Route parse() throws IOException {
 
 
@@ -110,7 +111,7 @@ public class GoogleParser extends JsonConnection{
         return sBuf.toString();
     }
 
-
+    //TODO: change this polyline decoder using Google Maps Android utility library
     private List<LatLng> decodePolyLine(final String poly) {
         int len = poly.length();
         int index = 0;
