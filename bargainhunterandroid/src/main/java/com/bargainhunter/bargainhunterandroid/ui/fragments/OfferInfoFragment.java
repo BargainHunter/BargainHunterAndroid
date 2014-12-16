@@ -78,6 +78,22 @@ public class OfferInfoFragment extends Fragment {
 
         TextView priceView = (TextView) view.findViewById(R.id.priceView);
         priceView.setText(offer.getPrice().toString());
+
+        TextView colorLabel = (TextView) view.findViewById(R.id.colorLabel);
+        double perc = (offer.getOldPrice()-offer.getPrice())/offer.getOldPrice();
+        double perc30 = 0.3;
+        double perc20 = 0.2;
+        if( perc >= perc30 ) {
+            colorLabel.setText("HOT Deal!");
+            colorLabel.setBackgroundResource(R.drawable.title_red);
+        }else if (perc >=perc20 ) {
+            colorLabel.setText("Great Deal");
+            colorLabel.setBackgroundResource(R.drawable.title_orange);
+
+        }else{
+            colorLabel.setText("Good Deal");
+            colorLabel.setBackgroundResource(R.drawable.title_green);
+        }
     }
 
     @Override

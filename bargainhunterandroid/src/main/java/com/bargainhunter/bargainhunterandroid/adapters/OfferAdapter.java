@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
@@ -29,7 +30,22 @@ public class OfferAdapter extends ArrayAdapter<Offer> {
 
         Offer offer = offers.get(position);
         TextView tv = (TextView) view.findViewById(R.id.offerTitle);
+
         tv.setText(offer.getTitle());
+        ImageView iv = null;
+        double perc = (offer.getOldPrice()-offer.getPrice())/offer.getOldPrice();
+        double perc30 = 0.3;
+        double perc20 = 0.2;
+        if( perc >= perc30 ) {
+            iv = (ImageView) view.findViewById(R.id.item_icon);
+            iv.setImageDrawable(view.getResources().getDrawable(R.drawable.red));
+        }else if (perc >=perc20 ) {
+            iv = (ImageView) view.findViewById(R.id.item_icon);
+            iv.setImageDrawable(view.getResources().getDrawable(R.drawable.orange));
+        }else{
+            iv = (ImageView) view.findViewById(R.id.item_icon);
+            iv.setImageDrawable(view.getResources().getDrawable(R.drawable.green));
+        }
 
         return view;
     }

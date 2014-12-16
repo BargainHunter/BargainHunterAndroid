@@ -15,7 +15,6 @@ import com.bargainhunter.bargainhunterandroid.controllers.LocationController;
 import com.bargainhunter.bargainhunterandroid.adapters.OfferAdapter;
 import com.bargainhunter.bargainhunterandroid.models.Coordinates;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
-
 import java.util.List;
 
 /**
@@ -142,6 +141,14 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
 //    }
 
     protected void updateDisplay(List<Offer> offerList) {
+        /*List<Offer> myoffers = new ArrayList<>(offerList);
+
+        for(int i=0;i<myoffers.size();i++){
+            String newtitle = myoffers.get(i).getTitle();
+            String tempttitle = "<html><body><font color=\"red\">&#8226;</font></body></html>";
+            myoffers.get(i).setTitle(tempttitle + " " + newtitle);
+        }*/
+
         OfferAdapter adapter = new OfferAdapter(this.getActivity(), R.layout.fragment_offer_list, offerList);
         setListAdapter(adapter);
     }
