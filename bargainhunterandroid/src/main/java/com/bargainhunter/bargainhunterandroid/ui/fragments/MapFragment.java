@@ -150,7 +150,7 @@ public class MapFragment extends Fragment implements IRoutingListener{
 
                 }
             };
-            //TODO: change location tracking structure
+            //TODO:change location tracking structure
             // Creating a criteria object to retrieve provider
             Criteria criteria = new Criteria();
             criteria.setAccuracy(Criteria.ACCURACY_FINE);
