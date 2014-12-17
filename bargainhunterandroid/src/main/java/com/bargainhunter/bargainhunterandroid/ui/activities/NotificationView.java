@@ -5,9 +5,6 @@ import android.os.Bundle;
 import android.widget.TextView;
 import com.bargainhunter.bargainhunterandroid.R;
 
-/**
- * Created by zeus on 15/12/2014.
- */
 public class NotificationView extends Activity {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);

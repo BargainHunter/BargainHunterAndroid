@@ -12,11 +12,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
+import com.activeandroid.query.Select;
 import com.bargainhunter.bargainhunterandroid.R;
+import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
+import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 
-/**
- * Created by Johnny on 15/12/2014.
- */
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class ProximityActivity extends Activity {
 
     String notificationTitle;
@@ -34,13 +38,18 @@ public class ProximityActivity extends Activity {
 
         double lng = getIntent().getDoubleExtra("lng", 0);
 
+        String theStoreName = getIntent().getStringExtra("storename");
+        String theStoreAddr = getIntent().getStringExtra("storeaddr");
+        int reqCode = getIntent().getIntExtra("reqcode",0);
+
         String strLocation = Double.toString(lat)+","+Double.toString(lng);
 
+        String StoreOffers = getIntent().getStringExtra("StoreOffers");
         if(proximity_entering){
-            Toast.makeText(getBaseContext(),"Entering the region"  ,Toast.LENGTH_LONG).show();
-            notificationTitle = "Proximity - Entry";
-            notificationContent = "Entered the region:" + strLocation;
-            tickerMessage = "Entered the region:" + strLocation;
+            //Toast.makeText(getBaseContext(),"Entering the region"  ,Toast.LENGTH_LONG).show();
+            notificationTitle = "You are Near " + theStoreName + " " + theStoreAddr;
+            notificationContent = "New Offers: " + "\n" + theStoreName + " " + StoreOffers;
+            tickerMessage = "New Offers: " + theStoreName+ " " + theStoreAddr;
         }else{
             Toast.makeText(getBaseContext(),"Exiting the region"  ,Toast.LENGTH_LONG).show();
             notificationTitle = "Proximity - Exit";
@@ -60,7 +69,7 @@ public class ProximityActivity extends Activity {
 
         /** Creating different tasks for each notification. See the flag Intent.FLAG_ACTIVITY_NEW_TASK */
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),0,notificationIntent,PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),reqCode,notificationIntent,PendingIntent.FLAG_ONE_SHOT);
 
         /** Getting the System service NotificationManager */
         NotificationManager nManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -70,7 +79,7 @@ public class ProximityActivity extends Activity {
                 .setWhen(System.currentTimeMillis())
                 .setContentText(notificationContent)
                 .setContentTitle(notificationTitle)
-                .setSmallIcon(R.drawable.ic_launcher)
+                .setSmallIcon(R.drawable.shop_icon)
                 .setAutoCancel(true)
                 .setTicker(tickerMessage)
                 .setContentIntent(pendingIntent)

@@ -1,7 +1,6 @@
 package com.bargainhunter.bargainhunterandroid.ui.fragments;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,22 +14,15 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.activeandroid.query.Select;
 import com.bargainhunter.bargainhunterandroid.R;
-import com.bargainhunter.bargainhunterandroid.controllers.LocationController;
-import com.bargainhunter.bargainhunterandroid.models.entities.Branch;
+import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.*;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -65,7 +57,7 @@ public class MapFragment extends Fragment {
     public static MapFragment newInstance(int sectionNumber) {
         MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER,sectionNumber);
+        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
     }
@@ -114,7 +106,7 @@ public class MapFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-       FragmentManager fm = getChildFragmentManager();
+        FragmentManager fm = getChildFragmentManager();
         fragment = (SupportMapFragment) fm.findFragmentById(R.id.map_container);
         if (fragment == null) {
             fragment = SupportMapFragment.newInstance();
@@ -147,48 +139,60 @@ public class MapFragment extends Fragment {
 
                 myPosition = new LatLng(latitude, longitude);
 
-                map.addMarker(new MarkerOptions().position(myPosition).title("Phone Location").snippet("lat:" +
-                        latitude + "\n" + "long:" + longitude));
+               /* map.addMarker(new MarkerOptions().position(myPosition).title("Phone Location").snippet("lat:" +
+                        latitude + "\n" + "long:" + longitude));*/
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, 17));
 
                 Drawable iconDrawable = getResources().getDrawable(R.drawable.shop_icon);
                 Bitmap iconBmp = ((BitmapDrawable) iconDrawable).getBitmap();
                 LatLng point;
+                List<Offer> tempOffers;
+                int reqCode = 1;
+                String stringOffers = "";
                 /*Store testStore = new Store((long)8,"Mikel","Thessaloniki","Papanastasiou","56",40.612390, 22.964106, new Branch((long)1));
                 storelist.add(testStore);
                 testStore = new Store((long)9,"Mikel2","Thessaloniki","Papanastasiou","56",40.612571, 22.964959, new Branch((long)1));
                 storelist.add(testStore);*/
                 for (Store store : storelist) {
-                        point = new LatLng(store.getLatitude(),store.getLongitude());
-                        // Drawing marker on the map
-                        drawMarker(store,iconBmp);
-                        // Drawing circle on the map
-                        drawCircle(point);
+                    tempOffers = store.getBranch().getOffers();
+                    for (Offer toffer : tempOffers) {
+                        stringOffers = stringOffers.concat(toffer.getTitle() + "\n\n");
+                    }
+                    point = new LatLng(store.getLatitude(), store.getLongitude());
+                    // Drawing marker on the map
+                    drawMarker(store, iconBmp);
+                    // Drawing circle on the map
+                    drawCircle(point);
                     // This intent will call the activity ProximityActivity
                     Intent proximityIntent = new Intent("com.bargainhunter.activity.proximity");
 
                     // Passing latitude to the PendingActivity
-                    proximityIntent.putExtra("lat",point.latitude);
+                    proximityIntent.putExtra("lat", point.latitude);
 
                     // Passing longitude to the PendingActivity
                     proximityIntent.putExtra("lng", point.longitude);
 
+                    proximityIntent.putExtra("storename", store.getStoreName());
+                    proximityIntent.putExtra("reqcode", reqCode);
+                    proximityIntent.putExtra("StoreOffers", stringOffers);
+                    proximityIntent.putExtra("storeaddr", store.getAddress() + " " + store.getAddressNo());
                     // Creating a pending intent which will be invoked by LocationManager when the specified region is
                     // entered or exited
-                    pendingIntent = PendingIntent.getActivity(getActivity().getBaseContext(), 0, proximityIntent,PendingIntent.FLAG_ONE_SHOT);
-
+                    pendingIntent = PendingIntent.getActivity(getActivity().getBaseContext(), reqCode, proximityIntent, PendingIntent.FLAG_ONE_SHOT);
                     // Setting proximity alert
                     // The pending intent will be invoked when the device enters or exits the region 100 meters
                     // away from the marked point
                     // The -1 indicates that, the monitor will not be expired
-                    locationManager.addProximityAlert(point.latitude, point.longitude, 100, -1, pendingIntent);
-                    }
-                }
+                    locationManager.addProximityAlert(point.latitude, point.longitude, 200, -1, pendingIntent);
+                    reqCode++;
+                    stringOffers = "";
                 }
             }
+        }
+    }
 
 
-    private void drawCircle(LatLng point){
+    private void drawCircle(LatLng point) {
         // Instantiating CircleOptions to draw a circle around the marker
         CircleOptions circleOptions = new CircleOptions();
 
@@ -196,7 +200,7 @@ public class MapFragment extends Fragment {
         circleOptions.center(point);
 
         // Radius of the circle
-        circleOptions.radius(150);
+        circleOptions.radius(200);
 
         // Border color of the circle
         circleOptions.strokeColor(Color.BLACK);
@@ -208,7 +212,7 @@ public class MapFragment extends Fragment {
         map.addCircle(circleOptions);
     }
 
-    private void drawMarker(Store store, Bitmap iconBmp){
+    private void drawMarker(Store store, Bitmap iconBmp) {
         // Creating an instance of MarkerOptions
         MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(store.getLatitude(), store.getLongitude()))
                 .title(store.getStoreName())
