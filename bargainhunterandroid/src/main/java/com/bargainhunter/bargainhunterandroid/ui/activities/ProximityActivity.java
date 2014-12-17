@@ -12,13 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
-import com.activeandroid.query.Select;
 import com.bargainhunter.bargainhunterandroid.R;
-import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
-import com.bargainhunter.bargainhunterandroid.models.entities.Store;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class ProximityActivity extends Activity {
@@ -40,36 +34,36 @@ public class ProximityActivity extends Activity {
 
         String theStoreName = getIntent().getStringExtra("storename");
         String theStoreAddr = getIntent().getStringExtra("storeaddr");
-        int reqCode = getIntent().getIntExtra("reqcode",0);
+        int reqCode = getIntent().getIntExtra("reqcode", 0);
 
-        String strLocation = Double.toString(lat)+","+Double.toString(lng);
+        String strLocation = Double.toString(lat) + "," + Double.toString(lng);
 
         String StoreOffers = getIntent().getStringExtra("StoreOffers");
-        if(proximity_entering){
+        if (proximity_entering) {
             //Toast.makeText(getBaseContext(),"Entering the region"  ,Toast.LENGTH_LONG).show();
             notificationTitle = "You are Near " + theStoreName + " " + theStoreAddr;
             notificationContent = "New Offers: " + "\n" + theStoreName + " " + StoreOffers;
-            tickerMessage = "New Offers: " + theStoreName+ " " + theStoreAddr;
-        }else{
-            Toast.makeText(getBaseContext(),"Exiting the region"  ,Toast.LENGTH_LONG).show();
+            tickerMessage = "New Offers: " + theStoreName + " " + theStoreAddr;
+        } else {
+            Toast.makeText(getBaseContext(), "Exiting the region", Toast.LENGTH_LONG).show();
             notificationTitle = "Proximity - Exit";
             notificationContent = "Exited the region:" + strLocation;
             tickerMessage = "Exited the region:" + strLocation;
         }
 
-        Intent notificationIntent = new Intent(getApplicationContext(),NotificationView.class);
+        Intent notificationIntent = new Intent(getApplicationContext(), NotificationView.class);
 
         /** Adding content to the notificationIntent, which will be displayed on
          * viewing the notification
          */
-        notificationIntent.putExtra("content", notificationContent );
+        notificationIntent.putExtra("content", notificationContent);
 
         /** This is needed to make this intent different from its previous intents */
-        notificationIntent.setData(Uri.parse("tel:/"+ (int)System.currentTimeMillis()));
+        notificationIntent.setData(Uri.parse("tel:/" + (int) System.currentTimeMillis()));
 
         /** Creating different tasks for each notification. See the flag Intent.FLAG_ACTIVITY_NEW_TASK */
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),reqCode,notificationIntent,PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), reqCode, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
 
         /** Getting the System service NotificationManager */
         NotificationManager nManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -92,7 +86,7 @@ public class ProximityActivity extends Activity {
          * The first argument ensures that each notification is having a unique id
          * If two notifications share same notification id, then the last notification replaces the first notification
          * */
-        nManager.notify((int)System.currentTimeMillis(), notification);
+        nManager.notify((int) System.currentTimeMillis(), notification);
 
         /** Finishes the execution of this activity */
         finish();

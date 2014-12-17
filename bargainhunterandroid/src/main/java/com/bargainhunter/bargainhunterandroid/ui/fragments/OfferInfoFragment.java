@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.activeandroid.query.Select;
-import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
 import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
+import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
 
 
 /**

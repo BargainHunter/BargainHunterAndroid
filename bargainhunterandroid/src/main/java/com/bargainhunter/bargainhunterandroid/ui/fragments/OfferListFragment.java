@@ -9,12 +9,12 @@ import android.support.v4.app.ListFragment;
 import android.view.*;
 import android.widget.*;
 import com.activeandroid.query.Select;
-import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
 import com.bargainhunter.bargainhunterandroid.R;
-import com.bargainhunter.bargainhunterandroid.controllers.LocationController;
 import com.bargainhunter.bargainhunterandroid.adapters.OfferAdapter;
+import com.bargainhunter.bargainhunterandroid.controllers.LocationController;
 import com.bargainhunter.bargainhunterandroid.models.Coordinates;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
+import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
 
 import java.util.List;
 

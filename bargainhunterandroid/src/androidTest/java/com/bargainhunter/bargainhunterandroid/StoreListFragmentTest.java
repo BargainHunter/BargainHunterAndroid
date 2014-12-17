@@ -18,11 +18,11 @@ public class StoreListFragmentTest extends ActivityInstrumentationTestCase2<Main
         super(MainActivity.class);
     }
 
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
-    public void testStoreList() throws Exception{
+    public void testStoreList() throws Exception {
         solo.assertCurrentActivity("check on first activity", MainActivity.class);
         solo.clickOnImageButton(0);
         solo.clickOnText("Stores");
@@ -38,7 +38,7 @@ public class StoreListFragmentTest extends ActivityInstrumentationTestCase2<Main
         solo.assertCurrentActivity("check on first activity", MainActivity.class);
         solo.clickOnImageButton(0);
         solo.clickOnText("Map");
-        }
+    }
 
     public void testOfferListThenStoreList() throws Exception {
         solo.assertCurrentActivity("check on first activity", MainActivity.class);

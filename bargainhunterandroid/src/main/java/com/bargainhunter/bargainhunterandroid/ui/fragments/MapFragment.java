@@ -31,11 +31,7 @@ import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CircleOptions;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,22 +50,25 @@ public class MapFragment extends Fragment implements IRoutingListener {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     LatLng storePosition;
-    private int mSectionNumber;
-    private OnFragmentInteractionListener mListener;
-    private List<Store> storelist = new ArrayList<>();
-    private GoogleMap map;
-    private LatLng myPosition;
     SupportMapFragment fragment;
     LocationManager locationManager;
     PendingIntent pendingIntent;
     SharedPreferences sharedPreferences;
     int locationCount = 0;
+    private int mSectionNumber;
+    private OnFragmentInteractionListener mListener;
+    private List<Store> storelist = new ArrayList<>();
+    private GoogleMap map;
+    private LatLng myPosition;
+
+    public MapFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-
      * @return A new instance of fragment MapFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -79,10 +78,6 @@ public class MapFragment extends Fragment implements IRoutingListener {
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public MapFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -197,9 +192,10 @@ public class MapFragment extends Fragment implements IRoutingListener {
                 storelist.add(testStore);*/
                 for (Store store : storelist) {
                     tempOffers = store.getBranch().getOffers();
-                    if( store.getAddress().toString().equals("Tsimiski") ){
-                         storePosition = new LatLng(store.getLatitude(),store.getLongitude());
-                        Toast.makeText(getActivity(),store.getStoreName().toString()+":"+store.getAddress(),Toast.LENGTH_LONG).show();}
+                    if (store.getAddress().toString().equals("Tsimiski")) {
+                        storePosition = new LatLng(store.getLatitude(), store.getLongitude());
+                        Toast.makeText(getActivity(), store.getStoreName().toString() + ":" + store.getAddress(), Toast.LENGTH_LONG).show();
+                    }
                     for (Offer toffer : tempOffers) {
                         stringOffers = stringOffers.concat(toffer.getTitle() + "\n\n");
                     }
@@ -235,11 +231,11 @@ public class MapFragment extends Fragment implements IRoutingListener {
             } else {
 
                 Toast.makeText(getActivity(), "location is null", Toast.LENGTH_LONG).show();
+            }
+            Routing routing = new Routing(Routing.TravelMode.WALKING);
+            routing.registerListener(this);
+            routing.execute(myPosition, storePosition);
         }
-        Routing routing = new Routing(Routing.TravelMode.WALKING);
-        routing.registerListener(this);
-        routing.execute(myPosition, storePosition);
-    }
 
     }
 

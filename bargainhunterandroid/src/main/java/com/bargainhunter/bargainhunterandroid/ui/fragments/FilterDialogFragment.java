@@ -1,14 +1,13 @@
 package com.bargainhunter.bargainhunterandroid.ui.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import com.bargainhunter.bargainhunterandroid.R;
 
 
@@ -19,7 +18,6 @@ import com.bargainhunter.bargainhunterandroid.R;
  * to handle interaction events.
  * Use the {@link FilterDialogFragment#newInstance} factory method to
  * create an instance of this fragment.
- *
  */
 public class FilterDialogFragment extends DialogFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,6 +26,10 @@ public class FilterDialogFragment extends DialogFragment {
     private int mSectionNumber;
 
     private OnFragmentInteractionListener mListener;
+
+    public FilterDialogFragment() {
+        // Required empty public constructor
+    }
 
     public static FilterDialogFragment newInstance() {
         FilterDialogFragment f = new FilterDialogFragment();
@@ -40,9 +42,6 @@ public class FilterDialogFragment extends DialogFragment {
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
-    }
-    public FilterDialogFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -102,7 +101,7 @@ public class FilterDialogFragment extends DialogFragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.

@@ -16,11 +16,34 @@ import java.util.List;
 /**
  * Created by vasovourka on 12/16/14.
  */
-public class GoogleParser extends JsonConnection{
+public class GoogleParser extends JsonConnection {
     private int distance;
 
-    public GoogleParser(String url){
+    public GoogleParser(String url) {
         super(url);
+    }
+
+    private static String convertStreamToString(final InputStream input) {
+        if (input == null) return null;
+
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+        final StringBuilder sBuf = new StringBuilder();
+
+        String line = null;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sBuf.append(line);
+            }
+        } catch (IOException e) {
+            Log.e("Routing Error", e.getMessage());
+        } finally {
+            try {
+                input.close();
+            } catch (IOException e) {
+                Log.e("Routing Error", e.getMessage());
+            }
+        }
+        return sBuf.toString();
     }
 
     //TODO: change JSON parsing code using Jackson or any other framework
@@ -28,7 +51,7 @@ public class GoogleParser extends JsonConnection{
 
 
         // turn the stream into a string
-        final String result =convertStreamToString(this.getInputStream());
+        final String result = convertStreamToString(this.getInputStream());
         if (result == null) return null;
 
         //Create an empty route
@@ -86,29 +109,6 @@ public class GoogleParser extends JsonConnection{
             return null;
         }
         return route;
-    }
-
-    private static String convertStreamToString(final InputStream input) {
-        if (input == null) return null;
-
-        final BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-        final StringBuilder sBuf = new StringBuilder();
-
-        String line = null;
-        try {
-            while ((line = reader.readLine()) != null) {
-                sBuf.append(line);
-            }
-        } catch (IOException e) {
-            Log.e("Routing Error", e.getMessage());
-        } finally {
-            try {
-                input.close();
-            } catch (IOException e) {
-                Log.e("Routing Error", e.getMessage());
-            }
-        }
-        return sBuf.toString();
     }
 
     //TODO: change this polyline decoder using Google Maps Android utility library

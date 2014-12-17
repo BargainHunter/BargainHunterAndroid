@@ -12,13 +12,14 @@ import com.bargainhunter.bargainhunterandroid.R;
  */
 
 
-public class PreferencesActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
+public class PreferencesActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -48,8 +49,8 @@ public class PreferencesActivity extends PreferenceActivity implements SharedPre
             setPreferenceScreen(null);
             addPreferencesFromResource(R.xml.preferences);
 
-        }else if("notificationRadius".equals(key)) {
-            String val = "" + sharedPreferences.getInt("notificationRadius",  50);
+        } else if ("notificationRadius".equals(key)) {
+            String val = "" + sharedPreferences.getInt("notificationRadius", 50);
             if (val == null || val.trim().equals("")) {
                 val = "" + R.string.default_radius; // <-- our default value
             }

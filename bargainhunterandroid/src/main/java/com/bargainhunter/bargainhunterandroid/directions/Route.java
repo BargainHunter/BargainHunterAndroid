@@ -9,8 +9,8 @@ import java.util.List;
  * Created by vasovourka on 12/16/14.
  */
 public class Route {
-    private String name;
     private final List<LatLng> points;//every point is direction included in step array in json
+    private String name;
     private List<Segment> segments;//every segments in steps
     private String copyright;
     private String warning;
@@ -50,12 +50,6 @@ public class Route {
         this.distanceText = distanceText;
     }
 
-    public void setSegments(List<Segment> segments) {
-        this.segments = segments;
-    }
-
-
-
     public void addPoint(final LatLng p) {
         points.add(p);
     }
@@ -76,54 +70,56 @@ public class Route {
         return segments;
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    public void setSegments(List<Segment> segments) {
+        this.segments = segments;
     }
 
     public String getName() {
         return name;
     }
 
-
-    public void setCopyright(String copyright) {
-        this.copyright = copyright;
+    public void setName(final String name) {
+        this.name = name;
     }
-
 
     public String getCopyright() {
         return copyright;
     }
 
-    public void setWarning(String warning) {
-        this.warning = warning;
+    public void setCopyright(String copyright) {
+        this.copyright = copyright;
     }
 
     public String getWarning() {
         return warning;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setWarning(String warning) {
+        this.warning = warning;
     }
 
     public String getCountry() {
         return country;
     }
 
-    public void setLength(int length) {
-        this.length = length;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public int getLength() {
         return length;
     }
 
-    public void setPolyline(String polyline) {
-        this.polyline = polyline;
+    public void setLength(int length) {
+        this.length = length;
     }
 
     public String getPolyline() {
         return polyline;
+    }
+
+    public void setPolyline(String polyline) {
+        this.polyline = polyline;
     }
 
 }
