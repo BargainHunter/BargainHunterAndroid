@@ -4,25 +4,28 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 xmlns:android="http://schemas.android.com/apk/res/android"
-                android:weightSum="1">
+                android:weightSum="1"
+                android:id="@+id/filter_row">
     <TextView
-            android:id="@+id/filterTitle"
+            android:id="@+id/childTextView"
             android:layout_width="fill_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/material_blue_grey_950"
-            android:gravity="center"
-            android:layout_marginLeft="3dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            />
+            android:focusable="false"/>
+
     <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New CheckBox"
             android:id="@+id/checkBox"
-            android:layout_alignTop="@+id/filterTitle" android:layout_alignRight="@+id/filterTitle"
-            android:layout_alignEnd="@+id/filterTitle" android:layout_alignBottom="@+id/filterTitle"/>
-
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:layout_alignTop="@+id/childTextView"
+            android:layout_alignRight="@+id/childTextView"
+            android:layout_alignEnd="@+id/childTextView"
+            android:layout_alignBottom="@+id/childTextView"/>
 
 </RelativeLayout>
+        <!--checkbox TODO-->

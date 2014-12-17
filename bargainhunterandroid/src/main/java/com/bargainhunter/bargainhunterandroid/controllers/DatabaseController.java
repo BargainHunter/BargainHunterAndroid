@@ -16,7 +16,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class DatabaseController {
-    private static final String mEndpoint = "http://bargainhunter.dyndns.org:8080/bargainhunterws/";
+    private static final String mEndpoint = "http://bargainhunter.dyndns.org:8080/bargainhunterws";
 
     public static void updateDatabaseCategories(final Context context) {
         RestAdapter adapter = new RestAdapter.Builder()

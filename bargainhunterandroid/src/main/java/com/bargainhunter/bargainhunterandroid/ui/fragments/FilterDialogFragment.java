@@ -9,7 +9,18 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.*;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ExpandableListView;
+import android.widget.Toast;
 import com.bargainhunter.bargainhunterandroid.R;
+import com.bargainhunter.bargainhunterandroid.adapters.ExpandableListAdapter;
+import com.bargainhunter.bargainhunterandroid.models.entities.ListChildItem;
+import com.bargainhunter.bargainhunterandroid.models.entities.ListParentItem;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -26,6 +37,16 @@ public class FilterDialogFragment extends DialogFragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     private int mSectionNumber;
+
+    // all data for displaying
+    private ArrayList<ListParentItem> mParent;
+
+    // the expandablelistview and the adapter to manipulate data
+    private ExpandableListAdapter mListAdapter;
+    private ExpandableListView mExpandableListView;
+
+    // check states!
+    HashMap<Integer, boolean[]> mChildCheckStates;
 
     private OnFragmentInteractionListener mListener;
 
@@ -70,14 +91,109 @@ public class FilterDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_filter_dialog, container, false);
+        View view = inflater.inflate(R.layout.fragment_filter_dialog, container, false);
+
+        // Title of the dialog
+        getDialog().setTitle("Chose Filters");
+
+        mExpandableListView = (ExpandableListView) view.findViewById(R.id.expandableListView);
+        prepareListData();
+        mListAdapter = new ExpandableListAdapter(getActivity(), mParent);
+        mExpandableListView.setAdapter(mListAdapter);
+
+        mExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                mParent = mListAdapter.getListDataParent();             // get all parents from adapter
+                mChildCheckStates = mListAdapter.getChildCheckStates(); // get all states from adapter
+                boolean selectedGroupChildrenCheckStates[] = mChildCheckStates.get(groupPosition); // get selected group's children states!
+                ListParentItem priceFilterParent = mParent.get(0);          // the first Parent
+
+                /********************************   First Parent (Price Filter)   ********************************/
+                if (mParent.get(groupPosition) == priceFilterParent) {      // if user click the first Parent (Price Filter)
+                    List<ListChildItem> children = mParent.get(groupPosition).getChildren(); //all children of the first parent
+                    ListChildItem defaultChild = mParent.get(groupPosition).getChildren().get(0); // get the No Filter child
+
+                    ListChildItem child = mParent.get(groupPosition).getChildren().get(childPosition); // the selected child
+                    CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkBox); //the checkbox of the selected child
+
+                    if (child != defaultChild) {        // if the selected child is not the No Filter
+                        selectedGroupChildrenCheckStates[0]=false; // set No Filter state to false !
+                        mListAdapter.setChildCheckStates(selectedGroupChildrenCheckStates, groupPosition); // important! set states to change child view!!
+                        checkBox.toggle();          // change selected child checkbox status
+                        int count = 0;              // counts the number of children (except default) check state is false
+                        for (int i = 1 ; i < selectedGroupChildrenCheckStates.length ; i++) {
+                            if (!selectedGroupChildrenCheckStates[i])
+                                count += 1;
+                        }
+                        if (count == (selectedGroupChildrenCheckStates.length - 1)) {  // if all children are false
+                            selectedGroupChildrenCheckStates[0]=true; // set No Filter state to true !
+                            mListAdapter.setChildCheckStates(selectedGroupChildrenCheckStates, groupPosition); // important! set states to change child view!!
+                        }
+                    }
+                    if (child == defaultChild) {        // if the selected child is the default (No Filter)
+                        checkBox.toggle();              // change checked state of No Filter child
+                        if (checkBox.isChecked()) {     // if No Filter child is checked
+                            for (int i = 1 ; i < selectedGroupChildrenCheckStates.length; i++) {
+                                selectedGroupChildrenCheckStates[i] = false ;   // change the rest children to false
+                                mListAdapter.setChildCheckStates(selectedGroupChildrenCheckStates, groupPosition); // important! set states to change child view!!
+                            }
+                        } else {                        // if No Filter child is not checked
+                            int count = 0;              // counts the number of children (except default) check state is false
+                            for (int i = 1 ; i < selectedGroupChildrenCheckStates.length; i++) {
+                                if (!selectedGroupChildrenCheckStates[i])
+                                    count += 1;
+                            }
+                            if (count == (selectedGroupChildrenCheckStates.length - 1))     // if all children are false
+                                checkBox.toggle();                                          // keeps the No Filter child state to true
+                        }
+                    }
+                }
+                /******************************** End of First Parent (Price Filter) ********************************/
+
+                return true;
+            }
+        });
+
+        Button mCancelButton = (Button) view.findViewById(R.id.cancelButton);
+        mCancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDialog().dismiss();
+            }
+        });
+
+        Button mConfirmButton = (Button) view.findViewById(R.id.confirmButton);
+        mConfirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: app logic gia to confirm
+            }
+        });
+
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    private void prepareListData() {
+        mParent = new ArrayList<>();
+
+        //adding child data
+        ArrayList<ListChildItem> children = new ArrayList<>();
+        children.add(new ListChildItem("No Filter", true, new CheckBox(getActivity())));
+        children.add(new ListChildItem("> 5 EUR", false, new CheckBox(getActivity())));
+        children.add(new ListChildItem("5 - 10 EUR", false, new CheckBox(getActivity())));
+        children.add(new ListChildItem("10 - 80 EUR", false, new CheckBox(getActivity())));
+        children.add(new ListChildItem("80 - 100 EUR", false, new CheckBox(getActivity())));
+        children.add(new ListChildItem("100 + EUR", false, new CheckBox(getActivity())));
+
+        //adding parent data
+        mParent.add(new ListParentItem("Price List", children));
     }
 
     @Override
@@ -108,8 +224,6 @@ public class FilterDialogFragment extends DialogFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
-
 }
