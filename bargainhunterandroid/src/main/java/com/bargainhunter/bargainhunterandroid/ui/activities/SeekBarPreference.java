@@ -156,7 +156,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
     }
 
     /**
-     * make sure that the seekbar is disabled if the preference is disabled
+     * making sure that the seekbar is disabled if the preference is disabled
      */
     @Override
     public void setEnabled(boolean enabled) {

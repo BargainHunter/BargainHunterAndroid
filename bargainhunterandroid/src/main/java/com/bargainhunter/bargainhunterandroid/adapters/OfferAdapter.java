@@ -33,13 +33,20 @@ public class OfferAdapter extends ArrayAdapter<Offer> {
 
         tv.setText(offer.getTitle());
         ImageView iv = null;
+        /**
+         * Sets a symbol next to the listed Offer that changes accordingly with
+         * the discount of the Bargain in question.
+         * perc = Percentage of how much cheaper the Item in question is
+         * percHot = threshold for a deal to be considered Hot
+         * percGreat = threshold for a deal to be considered great or above average
+         */
         double perc = (offer.getOldPrice()-offer.getPrice())/offer.getOldPrice();
-        double perc30 = 0.3;
-        double perc20 = 0.2;
-        if( perc >= perc30 ) {
+        double percHot = 0.3;
+        double percGreat = 0.2;
+        if( perc >= percHot ) {
             iv = (ImageView) view.findViewById(R.id.item_icon);
             iv.setImageDrawable(view.getResources().getDrawable(R.drawable.red));
-        }else if (perc >=perc20 ) {
+        }else if (perc >=percGreat ) {
             iv = (ImageView) view.findViewById(R.id.item_icon);
             iv.setImageDrawable(view.getResources().getDrawable(R.drawable.orange));
         }else{

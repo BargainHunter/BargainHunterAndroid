@@ -31,9 +31,13 @@ public class PreferencesActivity extends PreferenceActivity implements SharedPre
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         /**
-         * we need this to sync the seekbar with the editText
-         * when the value in the seekbar changes it will automatically change it in the
+         * We need this to sync the seekBar with the editTextPreference as the values
+         * cannot be accessed without SharedPreferences
+         * When the value in the seekBar changes it will automatically change it in the
          * editText and vice versa
+         * The user is currently only allowed to enter positive integers in the editText
+         * In case the user enters a radius over the maximum allowed distance the seekBar
+         * will show the maximum distance instead.
          */
         if ("editText".equals(key)) {
             String val = sharedPreferences.getString("editText", "50");
@@ -41,10 +45,11 @@ public class PreferencesActivity extends PreferenceActivity implements SharedPre
                 val = "" + R.string.default_radius; // <-- our default value
             }
 
-            //setting value to the other key
+            //setting the changed value to the other key in this case from the editText to the seekBar
             sharedPreferences.edit().putInt("notificationRadius", Integer.parseInt(val)).commit();
 
-            //resetting screen
+            //resetting screen, because it wouldn't update otherwise unless
+            //you return to the previous screen and access this screen again
             setPreferenceScreen(null);
             addPreferencesFromResource(R.xml.preferences);
 
@@ -54,7 +59,7 @@ public class PreferencesActivity extends PreferenceActivity implements SharedPre
                 val = "" + R.string.default_radius; // <-- our default value
             }
 
-            //setting value to the other key
+            //setting the changed value to the other key
             sharedPreferences.edit().putString("editText", val).commit();
 
             //resetting screen

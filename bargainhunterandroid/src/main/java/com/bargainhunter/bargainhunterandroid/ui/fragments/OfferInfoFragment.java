@@ -13,7 +13,6 @@ import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
 import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -80,13 +79,21 @@ public class OfferInfoFragment extends Fragment {
         priceView.setText(offer.getPrice().toString());
 
         TextView colorLabel = (TextView) view.findViewById(R.id.colorLabel);
+
+        /**
+         * Sets a TextView at the bottom of the Fragment that changes accordingly with
+         * the discount of the Bargain in question .
+         * perc = Percentage of how much cheaper the Item in question is
+         * percHot = threshold for a deal to be considered Hot
+         * percGreat = threshold for a deal to be considered great or above average
+         */
         double perc = (offer.getOldPrice()-offer.getPrice())/offer.getOldPrice();
-        double perc30 = 0.3;
-        double perc20 = 0.2;
-        if( perc >= perc30 ) {
+        double percHot = 0.3;
+        double percGreat = 0.2;
+        if( perc >= percHot ) {
             colorLabel.setText("HOT Deal!");
             colorLabel.setBackgroundResource(R.drawable.title_red);
-        }else if (perc >=perc20 ) {
+        }else if (perc >=percGreat ) {
             colorLabel.setText("Great Deal");
             colorLabel.setBackgroundResource(R.drawable.title_orange);
 
@@ -95,6 +102,8 @@ public class OfferInfoFragment extends Fragment {
             colorLabel.setBackgroundResource(R.drawable.title_green);
         }
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
