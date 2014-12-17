@@ -22,6 +22,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import com.activeandroid.query.Select;
 import com.bargainhunter.bargainhunterandroid.R;
+import com.bargainhunter.bargainhunterandroid.directions.IRoutingListener;
+import com.bargainhunter.bargainhunterandroid.directions.Route;
+import com.bargainhunter.bargainhunterandroid.directions.Routing;
+import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -193,6 +197,9 @@ public class MapFragment extends Fragment implements IRoutingListener {
                 storelist.add(testStore);*/
                 for (Store store : storelist) {
                     tempOffers = store.getBranch().getOffers();
+                    if( store.getAddress().toString().equals("Tsimiski") ){
+                         storePosition = new LatLng(store.getLatitude(),store.getLongitude());
+                        Toast.makeText(getActivity(),store.getStoreName().toString()+":"+store.getAddress(),Toast.LENGTH_LONG).show();}
                     for (Offer toffer : tempOffers) {
                         stringOffers = stringOffers.concat(toffer.getTitle() + "\n\n");
                     }
@@ -253,6 +260,7 @@ public class MapFragment extends Fragment implements IRoutingListener {
         polyoptions.width(10);
         polyoptions.addAll(mPolyOptions.getPoints());
         map.addPolyline(polyoptions);
+    }
 
     private void drawCircle(LatLng point) {
         // Instantiating CircleOptions to draw a circle around the marker
