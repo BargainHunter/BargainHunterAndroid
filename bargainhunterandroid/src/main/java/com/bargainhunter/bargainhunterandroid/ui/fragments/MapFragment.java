@@ -3,7 +3,6 @@ package com.bargainhunter.bargainhunterandroid.ui.fragments;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -49,12 +48,9 @@ public class MapFragment extends Fragment implements IRoutingListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
     private static final String ARG_SECTION_NUMBER = "section_number";
-    LatLng storePosition;
-    SupportMapFragment fragment;
-    LocationManager locationManager;
+    private LatLng storePosition;
+    private SupportMapFragment fragment;
     PendingIntent pendingIntent;
-    SharedPreferences sharedPreferences;
-    int locationCount = 0;
     private int mSectionNumber;
     private OnFragmentInteractionListener mListener;
     private List<Store> storelist = new ArrayList<>();
@@ -192,9 +188,9 @@ public class MapFragment extends Fragment implements IRoutingListener {
                 storelist.add(testStore);*/
                 for (Store store : storelist) {
                     tempOffers = store.getBranch().getOffers();
-                    if (store.getAddress().toString().equals("Tsimiski")) {
+                    if (store.getAddress().equals("Tsimiski")) {
                         storePosition = new LatLng(store.getLatitude(), store.getLongitude());
-                        Toast.makeText(getActivity(), store.getStoreName().toString() + ":" + store.getAddress(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), store.getStoreName() + ":" + store.getAddress(), Toast.LENGTH_LONG).show();
                     }
                     for (Offer toffer : tempOffers) {
                         stringOffers = stringOffers.concat(toffer.getTitle() + "\n\n");
