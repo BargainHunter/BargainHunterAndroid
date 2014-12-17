@@ -16,4 +16,5 @@
     <string name="between50_and_100_euros">80 &#45; 100 Euros</string>
     <string name="from_100_euros">100 &#43; Euros</string>
     <string name="no_price_filter">No Filter</string>
+    <string name="default_radius">50</string>
 </resources>

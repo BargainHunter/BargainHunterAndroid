@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,9 +19,9 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import com.activeandroid.query.Select;
 import com.bargainhunter.bargainhunterandroid.R;
-import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,18 +31,25 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class MapFragment extends Fragment {
-
-
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link MapFragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link MapFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class MapFragment extends Fragment implements IRoutingListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
     private static final String ARG_SECTION_NUMBER = "section_number";
+    LatLng storePosition;
     private int mSectionNumber;
     private OnFragmentInteractionListener mListener;
     private List<Store> storelist = new ArrayList<>();
@@ -53,6 +61,13 @@ public class MapFragment extends Fragment {
     SharedPreferences sharedPreferences;
     int locationCount = 0;
 
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+
+     * @return A new instance of fragment MapFragment.
+     */
     // TODO: Rename and change types and number of parameters
     public static MapFragment newInstance(int sectionNumber) {
         MapFragment fragment = new MapFragment();
@@ -121,8 +136,29 @@ public class MapFragment extends Fragment {
             map = fragment.getMap();
             map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             map.setMyLocationEnabled(true);
-            locationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
+            LocationManager locationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
+            LocationListener locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    Toast.makeText(getActivity(), "location has changed", Toast.LENGTH_LONG).show();
+                }
 
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+
+                }
+            };
+            //TODO:change location tracking structure
             // Creating a criteria object to retrieve provider
             Criteria criteria = new Criteria();
             criteria.setAccuracy(Criteria.ACCURACY_FINE);
@@ -132,6 +168,8 @@ public class MapFragment extends Fragment {
             Location location = locationManager.getLastKnownLocation(provider);
 
             if (location != null) {
+
+                Toast.makeText(getActivity(), "lat: " + location.getLatitude(), Toast.LENGTH_LONG).show();
 
                 double latitude = location.getLatitude();
 
@@ -187,10 +225,34 @@ public class MapFragment extends Fragment {
                     reqCode++;
                     stringOffers = "";
                 }
-            }
+            } else {
+
+                Toast.makeText(getActivity(), "location is null", Toast.LENGTH_LONG).show();
         }
+        Routing routing = new Routing(Routing.TravelMode.WALKING);
+        routing.registerListener(this);
+        routing.execute(myPosition, storePosition);
     }
 
+    }
+
+    @Override
+    public void onRoutingFailure() {
+
+    }
+
+    @Override
+    public void onRoutingStart() {
+
+    }
+
+    @Override
+    public void onRoutingSuccess(PolylineOptions mPolyOptions, Route route) {
+        PolylineOptions polyoptions = new PolylineOptions();
+        polyoptions.color(Color.BLUE);
+        polyoptions.width(10);
+        polyoptions.addAll(mPolyOptions.getPoints());
+        map.addPolyline(polyoptions);
 
     private void drawCircle(LatLng point) {
         // Instantiating CircleOptions to draw a circle around the marker
@@ -229,6 +291,16 @@ public class MapFragment extends Fragment {
 //        mListener = null;
 //    }
 
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
