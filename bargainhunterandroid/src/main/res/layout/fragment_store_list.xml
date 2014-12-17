@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.bargainhunter.bargainhunterandroid.ui.fragments.StoreListFragment">
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.bargainhunter.bargainhunterandroid.ui.fragments.StoreListFragment">
 
     <ListView
-        android:id="@android:id/list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
     <TextView
-        android:id="@+id/storeListTextView"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/material_blue_grey_950"
-        android:gravity="center"
-        android:layout_marginRight="3dp"
-        android:layout_marginLeft="3dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"/>
+            android:id="@+id/storeListTextView"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/material_blue_grey_950"
+            android:gravity="center"
+            android:layout_marginRight="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"/>
 
 </FrameLayout>

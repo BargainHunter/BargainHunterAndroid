@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,24 +13,10 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/material_blue_grey_950"
             android:gravity="center"
-            android:paddingRight="36dp"
             android:layout_marginRight="3dp"
             android:layout_marginLeft="3dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:layout_weight="0.9"
             />
-        <ImageView
-                android:id="@+id/item_icon"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/red"
-                android:layout_weight="0.1"
-                />
-
-
 
 </LinearLayout>

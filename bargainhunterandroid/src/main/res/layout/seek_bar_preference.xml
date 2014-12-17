@@ -6,14 +6,14 @@
                 android:paddingBottom="5dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="10dp"
-                android:paddingTop="5dp" >
+                android:paddingTop="5dp">
 
     <TextView
             android:id="@+id/seekBarPrefUnitsRight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true" >
+            android:layout_alignParentTop="true">
     </TextView>
 
     <TextView
@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/seekBarPrefUnitsRight"
-            android:gravity="right" >
+            android:gravity="right">
     </TextView>
 
     <LinearLayout
@@ -30,12 +30,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/seekBarPrefUnitsRight"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
         <SeekBar
                 android:id="@+id/seekBarPreference"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
     </LinearLayout>
 
 </RelativeLayout>

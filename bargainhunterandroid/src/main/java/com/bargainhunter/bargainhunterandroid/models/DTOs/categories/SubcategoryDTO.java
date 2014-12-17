@@ -6,7 +6,8 @@ public class SubcategoryDTO implements Serializable {
     private Long subcategoryId;
     private String description;
 
-    public SubcategoryDTO() {}
+    public SubcategoryDTO() {
+    }
 
     public SubcategoryDTO(Long subcategoryId, String description) {
         this.subcategoryId = subcategoryId;

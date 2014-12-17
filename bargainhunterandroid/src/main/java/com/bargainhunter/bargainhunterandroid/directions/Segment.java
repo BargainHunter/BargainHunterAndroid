@@ -17,12 +17,12 @@ public class Segment {
     public Segment() {
     }
 
-    public void setInstruction(final String turn) {
-        this.instruction = turn;
-    }
-
     public String getInstruction() {
         return instruction;
+    }
+
+    public void setInstruction(final String turn) {
+        this.instruction = turn;
     }
 
     public void setPoint(final LatLng point) {
@@ -42,19 +42,19 @@ public class Segment {
         return copy;
     }
 
-    public void setLength(final int length) {
-        this.length = length;
-    }
-
     public int getLength() {
         return length;
     }
 
-    public void setDistance(double distance) {
-        this.distance = distance;
+    public void setLength(final int length) {
+        this.length = length;
     }
 
     public double getDistance() {
         return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 }

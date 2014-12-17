@@ -11,27 +11,9 @@ import java.util.List;
 /**
  * Created by vasovourka on 12/16/14.
  */
-public class Routing extends AsyncTask<LatLng,Void,Route> {
+public class Routing extends AsyncTask<LatLng, Void, Route> {
     private List<IRoutingListener> listeners;
     private TravelMode mTravelMode;
-
-    public enum TravelMode {
-        BIKING("biking"),
-        DRIVING("driving"),
-        WALKING("walking"),
-        TRANSIT("transit");
-
-        protected String sValue;
-
-        private TravelMode(String sValue) {
-            this.sValue = sValue;
-        }
-
-        protected String getValue() {
-            return sValue;
-        }
-    }
-
 
     public Routing(TravelMode mTravelMode) {
         this.listeners = new ArrayList<IRoutingListener>();
@@ -68,13 +50,12 @@ public class Routing extends AsyncTask<LatLng,Void,Route> {
         //third parameter in Asynctask<>
         Route r = null;
         try {
-            return r=new GoogleParser(constructURL(aPoints)).parse();
+            return r = new GoogleParser(constructURL(aPoints)).parse();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return r;
     }
-
 
     protected String constructURL(LatLng... points) {
         LatLng start = points[0];
@@ -114,6 +95,23 @@ public class Routing extends AsyncTask<LatLng,Void,Route> {
             }
 
             dispatchOnSuccess(mOptions, result);
+        }
+    }
+
+    public enum TravelMode {
+        BIKING("biking"),
+        DRIVING("driving"),
+        WALKING("walking"),
+        TRANSIT("transit");
+
+        protected String sValue;
+
+        private TravelMode(String sValue) {
+            this.sValue = sValue;
+        }
+
+        protected String getValue() {
+            return sValue;
         }
     }
 

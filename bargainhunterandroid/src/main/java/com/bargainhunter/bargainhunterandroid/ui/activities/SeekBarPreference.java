@@ -20,9 +20,9 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 
     private final String TAG = getClass().getName();
 
-    private int mMaxValue      = 100;
-    private int mMinValue      = 1;
-    private int mInterval      = 1;
+    private int mMaxValue = 100;
+    private int mMinValue = 1;
+    private int mInterval = 1;
     private int mCurrentValue;
     private SeekBar mSeekBar;
 
@@ -65,14 +65,12 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
                 newContainer.addView(mSeekBar, ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
             }
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             Log.e(TAG, "Error binding view: " + ex.toString());
         }
 
         //if dependency is false from the beginning, disable the seek bar
-        if (view != null && !view.isEnabled())
-        {
+        if (view != null && !view.isEnabled()) {
             mSeekBar.setEnabled(false);
         }
 
@@ -93,8 +91,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
             mSeekBar.setProgress(mCurrentValue - mMinValue);
 
 
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             Log.e(TAG, "Error updating seek bar preference", e);
         }
 
@@ -104,15 +101,15 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         int newValue = progress + mMinValue;
 
-        if(newValue > mMaxValue)
+        if (newValue > mMaxValue)
             newValue = mMaxValue;
-        else if(newValue < mMinValue)
+        else if (newValue < mMinValue)
             newValue = mMinValue;
-        else if(mInterval != 1 && newValue % mInterval != 0)
-            newValue = Math.round(((float)newValue)/mInterval)*mInterval;
+        else if (mInterval != 1 && newValue % mInterval != 0)
+            newValue = Math.round(((float) newValue) / mInterval) * mInterval;
 
         // change rejected, revert to the previous value
-        if(!callChangeListener(newValue)){
+        if (!callChangeListener(newValue)) {
             seekBar.setProgress(mCurrentValue - mMinValue);
             return;
         }
@@ -125,7 +122,8 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
     }
 
     @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {}
+    public void onStartTrackingTouch(SeekBar seekBar) {
+    }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
@@ -133,19 +131,16 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
     }
 
 
-
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
 
-        if(restoreValue) {
+        if (restoreValue) {
             mCurrentValue = getPersistedInt(mCurrentValue);
-        }
-        else {
+        } else {
             int temp = 0;
             try {
-                temp = (Integer)defaultValue;
-            }
-            catch(Exception ex) {
+                temp = (Integer) defaultValue;
+            } catch (Exception ex) {
                 Log.e(TAG, "Invalid default value: " + defaultValue.toString());
             }
 
@@ -169,8 +164,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
         super.onDependencyChanged(dependency, disableDependent);
 
         //Disable movement of seek bar when dependency is false
-        if (mSeekBar != null)
-        {
+        if (mSeekBar != null) {
             mSeekBar.setEnabled(!disableDependent);
         }
     }
