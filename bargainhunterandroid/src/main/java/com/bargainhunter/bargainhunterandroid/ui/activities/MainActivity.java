@@ -56,7 +56,7 @@ public class MainActivity extends ActionBarActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         // Change to Map fragment.
-        // Fragment fragment = OfferListFragment.newInstance(sectionNumber);
+        //Fragment fragment = OfferListFragment.newInstance(sectionNumber);
         Fragment fragment = MapFragment.newInstance(sectionNumber);
 
         switch (sectionNumber) {
@@ -120,8 +120,9 @@ public class MainActivity extends ActionBarActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
-            startActivity(intent);
+            Intent intent = new Intent();
+            intent.setClass(MainActivity.this, PreferencesActivity.class);
+            startActivityForResult(intent, 0);
             return true;
         }
 
