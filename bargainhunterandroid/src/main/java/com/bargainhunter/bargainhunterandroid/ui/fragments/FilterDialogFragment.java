@@ -1,18 +1,13 @@
 package com.bargainhunter.bargainhunterandroid.ui.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.*;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.adapters.ExpandableListAdapter;
 import com.bargainhunter.bargainhunterandroid.models.entities.ListChildItem;
@@ -26,7 +21,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FilterDialogFragment.OnFragmentInteractionListener} interface
+ * {@link com.bargainhunter.bargainhunterandroid.ui.fragments.FilterDialogFragment.OnDialogFilterFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link FilterDialogFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -48,7 +43,7 @@ public class FilterDialogFragment extends DialogFragment {
     // check states!
     HashMap<Integer, boolean[]> mChildCheckStates;
 
-    private OnFragmentInteractionListener mListener;
+    private OnDialogFilterFragmentInteractionListener mListener;
 
     public static FilterDialogFragment newInstance() {
         FilterDialogFragment f = new FilterDialogFragment();
@@ -101,56 +96,15 @@ public class FilterDialogFragment extends DialogFragment {
         mListAdapter = new ExpandableListAdapter(getActivity(), mParent);
         mExpandableListView.setAdapter(mListAdapter);
 
+        mParent = mListAdapter.getListDataParent();             // get all parents from adapter
+        mChildCheckStates = mListAdapter.getChildCheckStates(); // get all states from adapter
+
         mExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                mParent = mListAdapter.getListDataParent();             // get all parents from adapter
-                mChildCheckStates = mListAdapter.getChildCheckStates(); // get all states from adapter
-                boolean selectedGroupChildrenCheckStates[] = mChildCheckStates.get(groupPosition); // get selected group's children states!
-                ListParentItem priceFilterParent = mParent.get(0);          // the first Parent
+                priceFilterInteraction(groupPosition, childPosition, v);
 
-                /********************************   First Parent (Price Filter)   ********************************/
-                if (mParent.get(groupPosition) == priceFilterParent) {      // if user click the first Parent (Price Filter)
-                    List<ListChildItem> children = mParent.get(groupPosition).getChildren(); //all children of the first parent
-                    ListChildItem defaultChild = mParent.get(groupPosition).getChildren().get(0); // get the No Filter child
-
-                    ListChildItem child = mParent.get(groupPosition).getChildren().get(childPosition); // the selected child
-                    CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkBox); //the checkbox of the selected child
-
-                    if (child != defaultChild) {        // if the selected child is not the No Filter
-                        selectedGroupChildrenCheckStates[0]=false; // set No Filter state to false !
-                        mListAdapter.setChildCheckStates(selectedGroupChildrenCheckStates, groupPosition); // important! set states to change child view!!
-                        checkBox.toggle();          // change selected child checkbox status
-                        int count = 0;              // counts the number of children (except default) check state is false
-                        for (int i = 1 ; i < selectedGroupChildrenCheckStates.length ; i++) {
-                            if (!selectedGroupChildrenCheckStates[i])
-                                count += 1;
-                        }
-                        if (count == (selectedGroupChildrenCheckStates.length - 1)) {  // if all children are false
-                            selectedGroupChildrenCheckStates[0]=true; // set No Filter state to true !
-                            mListAdapter.setChildCheckStates(selectedGroupChildrenCheckStates, groupPosition); // important! set states to change child view!!
-                        }
-                    }
-                    if (child == defaultChild) {        // if the selected child is the default (No Filter)
-                        checkBox.toggle();              // change checked state of No Filter child
-                        if (checkBox.isChecked()) {     // if No Filter child is checked
-                            for (int i = 1 ; i < selectedGroupChildrenCheckStates.length; i++) {
-                                selectedGroupChildrenCheckStates[i] = false ;   // change the rest children to false
-                                mListAdapter.setChildCheckStates(selectedGroupChildrenCheckStates, groupPosition); // important! set states to change child view!!
-                            }
-                        } else {                        // if No Filter child is not checked
-                            int count = 0;              // counts the number of children (except default) check state is false
-                            for (int i = 1 ; i < selectedGroupChildrenCheckStates.length; i++) {
-                                if (!selectedGroupChildrenCheckStates[i])
-                                    count += 1;
-                            }
-                            if (count == (selectedGroupChildrenCheckStates.length - 1))     // if all children are false
-                                checkBox.toggle();                                          // keeps the No Filter child state to true
-                        }
-                    }
-                }
-                /******************************** End of First Parent (Price Filter) ********************************/
-
+                mChildCheckStates = mListAdapter.getChildCheckStates();
                 return true;
             }
         });
@@ -167,17 +121,61 @@ public class FilterDialogFragment extends DialogFragment {
         mConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: app logic gia to confirm
+                if (mListener != null) {
+                    mListener.onDialogFilterFragmentInteraction(mChildCheckStates);
+                    getDialog().hide();
+                }
             }
         });
 
         return view;
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    private void priceFilterInteraction(int groupPosition, int childPosition, View v) {
+        boolean selectedGroupChildrenCheckStates[] = mChildCheckStates.get(groupPosition); // get selected group's children states!
+        ListParentItem priceFilterParent = mParent.get(0);          // the first Parent
+
+        /********************************   First Parent (Price Filter)   ********************************/
+        if (mParent.get(groupPosition) == priceFilterParent) {      // if user click the first Parent (Price Filter)
+            List<ListChildItem> children = mParent.get(groupPosition).getChildren(); //all children of the first parent
+            ListChildItem defaultChild = mParent.get(groupPosition).getChildren().get(0); // get the No Filter child
+
+            ListChildItem child = mParent.get(groupPosition).getChildren().get(childPosition); // the selected child
+            CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkBox); //the checkbox of the selected child
+
+            if (child != defaultChild) {        // if the selected child is not the No Filter
+                selectedGroupChildrenCheckStates[0] = false; // set No Filter state to false !
+                mListAdapter.setChildCheckStates(selectedGroupChildrenCheckStates, groupPosition); // important! set states to change child view!!
+                checkBox.toggle();          // change selected child checkbox status
+                int count = 0;              // counts the number of children (except default) check state is false
+                for (int i = 1; i < selectedGroupChildrenCheckStates.length; i++) {
+                    if (!selectedGroupChildrenCheckStates[i])
+                        count += 1;
+                }
+                if (count == (selectedGroupChildrenCheckStates.length - 1)) {  // if all children are false
+                    selectedGroupChildrenCheckStates[0] = true; // set No Filter state to true !
+                    mListAdapter.setChildCheckStates(selectedGroupChildrenCheckStates, groupPosition); // important! set states to change child view!!
+                }
+            }
+            if (child == defaultChild) {        // if the selected child is the default (No Filter)
+                checkBox.toggle();              // change checked state of No Filter child
+                if (checkBox.isChecked()) {     // if No Filter child is checked
+                    for (int i = 1; i < selectedGroupChildrenCheckStates.length; i++) {
+                        selectedGroupChildrenCheckStates[i] = false;   // change the rest children to false
+                        mListAdapter.setChildCheckStates(selectedGroupChildrenCheckStates, groupPosition); // important! set states to change child view!!
+                    }
+                } else {                        // if No Filter child is not checked
+                    int count = 0;              // counts the number of children (except default) check state is false
+                    for (int i = 1; i < selectedGroupChildrenCheckStates.length; i++) {
+                        if (!selectedGroupChildrenCheckStates[i])
+                            count += 1;
+                    }
+                    if (count == (selectedGroupChildrenCheckStates.length - 1))     // if all children are false
+                        checkBox.toggle();                                          // keeps the No Filter child state to true
+                }
+            }
         }
+        /******************************** End of First Parent (Price Filter) ********************************/
     }
 
     private void prepareListData() {
@@ -200,7 +198,7 @@ public class FilterDialogFragment extends DialogFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (OnDialogFilterFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -223,7 +221,7 @@ public class FilterDialogFragment extends DialogFragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Uri uri);
+    public interface OnDialogFilterFragmentInteractionListener {
+        public void onDialogFilterFragmentInteraction(HashMap<Integer, boolean[]> childCheckStates);
     }
 }

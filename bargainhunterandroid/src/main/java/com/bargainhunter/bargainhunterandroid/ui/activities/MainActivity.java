@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.ui.fragments.*;
 
+import java.util.HashMap;
+
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
         StoreListFragment.OnFragmentInteractionListener,
@@ -20,7 +22,7 @@ public class MainActivity extends ActionBarActivity
         OfferListFragment.OnFragmentInteractionListener,
         OfferInfoFragment.OnFragmentInteractionListener,
         OfferListFromStoreFragment.OnFragmentInteractionListener,
-        FilterDialogFragment.OnFragmentInteractionListener {
+        FilterDialogFragment.OnDialogFilterFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -167,7 +169,15 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void onDialogFilterFragmentInteraction(HashMap<Integer, boolean[]> childCheckStates) {
+        boolean[] priceFilters = childCheckStates.get(0);
+        if (priceFilters.length >= 0) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment offerListFragment = OfferListFragment.newInstance(1, priceFilters);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.mainContainer, offerListFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 }

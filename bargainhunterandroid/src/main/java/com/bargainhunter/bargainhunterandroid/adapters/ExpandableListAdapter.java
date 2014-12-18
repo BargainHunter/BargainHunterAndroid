@@ -1,10 +1,6 @@
 package com.bargainhunter.bargainhunterandroid.adapters;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +14,10 @@ import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.models.entities.ListChildItem;
 import com.bargainhunter.bargainhunterandroid.models.entities.ListParentItem;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     // Define activity context
@@ -29,26 +29,18 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     // Hashmap for keeping track of our checkbox check states
     private HashMap<Integer, boolean[]> mChildCheckStates;
 
-//    // Our getChildView & getGroupView use the viewholder patter
-//    // Here are the viewholders defined, the inner classes are
-//    // at the bottom
-//    private ChildViewHolder childViewHolder;
-//    private GroupViewHolder groupViewHolder;
-
     /*
-     *  For the purpose of this document, I'm only using a single
-     *	textview in the group (parent) and child, but you're limited only
-     *	by your XML view for each group item :)
-    */
+     * Text to display (group and child)
+     */
     private String groupText;
     private String childText;
 
     /*  Here's the constructor we'll use to pass in our calling
-     *  activity's context, group items, and child items
+     *  activity's context and group items
     */
+    @SuppressLint("UseSparseArrays")
     public ExpandableListAdapter(Context context,
                                           ArrayList<ListParentItem> listDataGroup) {
-
         mContext = context;
         mListDataParent = listDataGroup;
 
@@ -60,6 +52,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         return mChildCheckStates;
     }
 
+    /*
+     * Sets parent and children states
+     * We use it to FilterDialogFragment
+     */
     public void setChildCheckStates(boolean childChanges[], int groupPosition) {
         for (Map.Entry<Integer, boolean[]> entry : mChildCheckStates.entrySet()) {
             int groupPos = entry.getKey();
@@ -67,9 +63,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 mChildCheckStates.put(groupPosition,childChanges);
             }
         }
+        // with this magic method the expandable list updates, according the mChildCheckStates
         notifyDataSetChanged();
     }
 
+    /*
+     * Gets all parents and children
+     * We use it to FilterDialogFragment
+     */
     public ArrayList<ListParentItem> getListDataParent() {
         return this.mListDataParent;
     }
@@ -81,8 +82,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     /*
      * This defaults to "public object getGroup" if you auto import the methods
-     * I've always make a point to change it from "object" to whatever item
-     * I passed through the constructor
+     * We use ListParentItem to avoid unnecessary casting!
     */
     @Override
     public ListParentItem getGroup(int groupPosition) {
@@ -98,10 +98,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
 
-        GroupViewHolder groupViewHolder = new GroupViewHolder();
-        //  I passed a text string into an activity holding a getter/setter
-        //  which I passed in through "ExpListGroupItems".
-        //  Here is where I call the getter to get that text
+        GroupViewHolder groupViewHolder;
+
         groupText = getGroup(groupPosition).getParentName();
 
         if (convertView == null) {
@@ -121,6 +119,28 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             groupViewHolder = (GroupViewHolder) convertView.getTag();
         }
 
+        /*
+         * Initialize mChildCheckStates before expanding of group to avoid null pointer exception
+         * initialization according if there is a child with defaultValue = true (No Filter)
+         */
+        if (!isExpanded) {
+            boolean getChecked[] = new boolean[getChildrenCount(groupPosition)];
+
+            for (int i = 0 ; i < getChecked.length ; i++) {
+                if (mListDataParent.get(groupPosition).getChildren().get(i).isDefaultValue()) {
+                    getChecked[i] = true;
+                    ((CheckBox) mListDataParent.get(groupPosition).getChildren().get(i).getObject()).setChecked(true);
+                }
+                else {
+                    getChecked[i] = false;
+                    ((CheckBox) mListDataParent.get(groupPosition).getChildren().get(i).getObject()).setChecked(false);
+                }
+            }
+
+            // add getChecked[] to the mChildCheckStates hashmap using mGroupPosition as the key
+            mChildCheckStates.put(groupPosition, getChecked);
+        }
+
         groupViewHolder.mGroupText.setText(groupText);
 
         return convertView;
@@ -133,8 +153,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     /*
      * This defaults to "public object getChild" if you auto import the methods
-     * I've always make a point to change it from "object" to whatever item
-     * I passed through the constructor
+     * We use ListChildItem to avoid unnecessary casting!
     */
     @Override
     public ListChildItem getChild(int groupPosition, int childPosition) {
@@ -148,15 +167,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-
         final int mGroupPosition = groupPosition;
         final int mChildPosition = childPosition;
 
         ChildViewHolder childViewHolder = new ChildViewHolder();
 
-        //  I passed a text string into an activity holding a getter/setter
-        //  which I passed in through "ExpListChildItems".
-        //  Here is where I call the getter to get that text
         childText = getChild(mGroupPosition, mChildPosition).getChildName();
 
         if (convertView == null) {
@@ -184,7 +199,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         childViewHolder.mChildText.setText(childText);
 
 		/*
-		 * You have to set the onCheckChangedListener to null
+		 * We have to set the onCheckChangedListener to null
 		 * before restoring check states because each call to
 		 * "setChecked" is accompanied by a call to the
 		 * onCheckChangedListener
@@ -210,7 +225,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 			 * contain the value of the parent view (group) of this child (aka, the key),
 			 * (aka, the key), then initialize getChecked[] as a new boolean array
 			 *  and set it's size to the total number of children associated with
-			 *  the parent group
+			 *  the parent group.
+			 *  initialization is done according defaultValue of group's children
 			*/
             boolean getChecked[] = new boolean[getChildrenCount(mGroupPosition)];
 
@@ -252,6 +268,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         return convertView;
     }
 
+    /*
+     * Must return true to let listener of FilterDialogFragment, work
+     */
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
@@ -263,12 +282,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     public final class GroupViewHolder {
-
         TextView mGroupText;
     }
 
     public final class ChildViewHolder {
-
         TextView mChildText;
         CheckBox mCheckBox;
     }

@@ -9,13 +9,14 @@ import android.support.v4.app.ListFragment;
 import android.view.*;
 import android.widget.*;
 import com.activeandroid.query.Select;
-import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
 import com.bargainhunter.bargainhunterandroid.R;
-import com.bargainhunter.bargainhunterandroid.controllers.LocationController;
 import com.bargainhunter.bargainhunterandroid.adapters.OfferAdapter;
+import com.bargainhunter.bargainhunterandroid.controllers.LocationController;
 import com.bargainhunter.bargainhunterandroid.models.Coordinates;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
+import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,12 +31,15 @@ import java.util.List;
 public class OfferListFragment extends ListFragment implements AbsListView.OnItemClickListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final String ARG_PRICE_FILTERS = "";
 
-    List<Offer> offerList;
+    private List<Offer> offerList;
     private int mSectionNumber;
     private Coordinates phoneLoc;
     private LocationController controller;
     private OnFragmentInteractionListener mListener;
+    private boolean mPriceFilters[];
+    private DialogFragment dialogFragment;
 
     /**
      * The fragment's ListView/GridView.
@@ -57,8 +61,19 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
 
     public static OfferListFragment newInstance(int sectionNumber) {
         OfferListFragment fragment = new OfferListFragment();
+        boolean priceFilters[] = null;
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        args.putBooleanArray(ARG_PRICE_FILTERS, priceFilters);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static OfferListFragment newInstance(int sectionNumber, boolean priceFilters[]) {
+        OfferListFragment fragment = new OfferListFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        args.putBooleanArray(ARG_PRICE_FILTERS, priceFilters);
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,15 +84,22 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
         setHasOptionsMenu(true);
         if (getArguments() != null) {
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+            // if newInstance(secNum, priceFilter) called
+            if (getArguments().getBooleanArray(ARG_PRICE_FILTERS) != null)
+                mPriceFilters = getArguments().getBooleanArray(ARG_PRICE_FILTERS);
         }
 
-        offerList = new Select().from(Offer.class).execute();
+        if (mPriceFilters != null) {
+            applyPriceFilters();
+        } else {
+            offerList = new Select().from(Offer.class).execute();
+        }
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.filter_action, menu);
-        super.onCreateOptionsMenu(menu, inflater);
+            inflater.inflate(R.menu.filter_action, menu);
+            super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -96,50 +118,57 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
         // in a transaction.  We also want to remove any currently showing
         // dialog, so make our own transaction and take care of that here.
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("filter_dialog");
-        if (prev != null) {
-            ft.remove(prev);
+        Fragment filterDialog = getFragmentManager().findFragmentByTag("filter_dialog");
+        if (filterDialog != null) {
+            ft.remove(filterDialog);
         }
         ft.addToBackStack(null);
 
-        // Create and show the dialog.
-        DialogFragment newFragment = FilterDialogFragment.newInstance(1);
-        newFragment.show(ft, "filter_dialog");
+        dialogFragment = FilterDialogFragment.newInstance(1);
+        dialogFragment.show(ft, "filter_dialog");
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.upto_5:
-//                Toast.makeText(getActivity(), "Setting filter up to 5 euros", Toast.LENGTH_SHORT).show();
-//                offerList = new Select().from(Offer.class).where("price BETWEEN ? AND ?", 0, 5).execute();
-//                updateDisplay(offerList);
-//                return true;
-//            case R.id.upto_10:
-//                Toast.makeText(getActivity(), "Setting filter between 5-10 euros", Toast.LENGTH_SHORT).show();
-//                offerList = new Select().from(Offer.class).where("price BETWEEN ? AND ?", 5, 10).execute();
-//                updateDisplay(offerList);
-//                return true;
-//            case R.id.from_80:
-//                Toast.makeText(getActivity(), "Setting filter between 80-100 euros", Toast.LENGTH_SHORT).show();
-//                offerList = new Select().from(Offer.class).where("price BETWEEN ? AND ?", 80, 100).execute();
-//                updateDisplay(offerList);
-//                return true;
-//            case R.id.from_100:
-//                Toast.makeText(getActivity(), "Setting filter to 100+ euros", Toast.LENGTH_SHORT).show();
-//                offerList = new Select().from(Offer.class).where("price > ?", 100).execute();
-//                updateDisplay(offerList);
-//                return true;
-//            case R.id.no_filter:
-//                Toast.makeText(getActivity(), "No Filter Active", Toast.LENGTH_SHORT).show();
-//                offerList = new Select().from(Offer.class).execute();
-//                updateDisplay(offerList);
-//                return true;
-//            default:
-//                updateDisplay(offerList);
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
+    private void applyPriceFilters() {
+        offerList = new ArrayList<>();
+        List<Offer> offerListToAdd;
+
+        if (mPriceFilters[0]) {
+            offerListToAdd = new Select().from(Offer.class).execute();
+            for (Offer offer : offerListToAdd){
+                offerList.add(offer);
+            }
+        }
+        if (mPriceFilters[1]) {
+            offerListToAdd = new Select().from(Offer.class).where("price BETWEEN ? AND ?", 0, 5).execute();
+            for (Offer offer : offerListToAdd){
+                offerList.add(offer);
+            }
+        }
+        if (mPriceFilters[2]) {
+            offerListToAdd = new Select().from(Offer.class).where("price BETWEEN ? AND ?", 5, 10).execute();
+            for (Offer offer : offerListToAdd){
+                offerList.add(offer);
+            }
+        }
+        if (mPriceFilters[3]) {
+            offerListToAdd = new Select().from(Offer.class).where("price BETWEEN ? AND ?", 10, 80).execute();
+            for (Offer offer : offerListToAdd){
+                offerList.add(offer);
+            }
+        }
+        if (mPriceFilters[4]) {
+            offerListToAdd = new Select().from(Offer.class).where("price BETWEEN ? AND ?", 80, 100).execute();
+            for (Offer offer : offerListToAdd){
+                offerList.add(offer);
+            }
+        }
+        if (mPriceFilters[5]) {
+            offerListToAdd = new Select().from(Offer.class).where("price > ?", 100).execute();
+            for (Offer offer : offerListToAdd){
+                offerList.add(offer);
+            }
+        }
+    }
 
     protected void updateDisplay(List<Offer> offerList) {
         OfferAdapter adapter = new OfferAdapter(this.getActivity(), R.layout.fragment_offer_list, offerList);
