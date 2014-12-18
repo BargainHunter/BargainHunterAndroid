@@ -1,4 +1,4 @@
-package com.bargainhunter.bargainhunterandroid.models.entities;
+package com.bargainhunter.bargainhunterandroid.models.components;
 
 import java.util.ArrayList;
 

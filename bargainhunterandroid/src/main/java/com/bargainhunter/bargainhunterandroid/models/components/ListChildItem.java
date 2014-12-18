@@ -1,4 +1,4 @@
-package com.bargainhunter.bargainhunterandroid.models.entities;
+package com.bargainhunter.bargainhunterandroid.models.components;
 
 public class ListChildItem {
     private String childName;

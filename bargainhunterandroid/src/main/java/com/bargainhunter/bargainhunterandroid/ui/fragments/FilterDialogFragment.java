@@ -10,8 +10,8 @@ import android.widget.CheckBox;
 import android.widget.ExpandableListView;
 import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.adapters.ExpandableListAdapter;
-import com.bargainhunter.bargainhunterandroid.models.entities.ListChildItem;
-import com.bargainhunter.bargainhunterandroid.models.entities.ListParentItem;
+import com.bargainhunter.bargainhunterandroid.models.components.ListChildItem;
+import com.bargainhunter.bargainhunterandroid.models.components.ListParentItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
