@@ -21,7 +21,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
     private final String TAG = getClass().getName();
 
     private int mMaxValue = 100;
-    private int mMinValue = 1;
+    private int mMinValue = 0;
     private int mInterval = 1;
     private int mCurrentValue;
     private SeekBar mSeekBar;
@@ -117,7 +117,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
         // change accepted, store it
         mCurrentValue = newValue;
         mStatusText.setText(String.valueOf(newValue));
-        persistInt(newValue);
+
 
     }
 
@@ -127,6 +127,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+        persistInt(mCurrentValue);
         notifyChanged();
     }
 
