@@ -31,7 +31,7 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     private int mSectionNumber;
-    private List<Store> stores;
+    protected List<Store> stores;
     private OnFragmentInteractionListener mListener;
 
     /**
