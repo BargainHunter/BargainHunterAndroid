@@ -2,10 +2,11 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="Store Radius in which you receive Notifications">
+    <PreferenceCategory android:title="Notification Radius">
         <com.bargainhunter.bargainhunterandroid.ui.activities.SeekBarPreference
                 android:key="notificationRadius"
                 android:title="Notification Radius"
+                android:summary="Store Radius in which you receive Notifications"
                 android:defaultValue="50"
                 android:max="100"
                 />
@@ -18,13 +19,12 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Favorite Settings">
-        <CheckBoxPreference
+        <SwitchPreference
                 android:key="favorite_toggle"
-                android:title="Turn on Favorites?"
+                android:title="Favorites"
                 android:summaryOn="Favorites Enabled"
                 android:summaryOff="Favorites Disabled"
-                android:defaultValue="True"
-            />
+                android:defaultValue="true" />
     </PreferenceCategory>
 
 </PreferenceScreen>

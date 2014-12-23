@@ -60,6 +60,21 @@ public class FavoriteFragment extends Fragment{
             }
         });
 
+        TextView tv2 = (TextView) mView.findViewById(R.id.offerTextView);
+        tv2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                Fragment offerFavoriteFragment = OfferFavoriteFragment.newInstance(10);
+
+                fragmentManager.beginTransaction()
+                        .replace(container.getId(), offerFavoriteFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
         return mView;
     }
 

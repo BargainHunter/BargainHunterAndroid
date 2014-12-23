@@ -33,7 +33,7 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String ARG_PRICE_FILTERS = "";
 
-    private List<Offer> offerList;
+    protected List<Offer> offerList;
     private int mSectionNumber;
     private Coordinates phoneLoc;
     private LocationController controller;
