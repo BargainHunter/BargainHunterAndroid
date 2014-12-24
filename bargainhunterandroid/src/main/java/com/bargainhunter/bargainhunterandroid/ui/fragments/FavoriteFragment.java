@@ -31,6 +31,8 @@ public class FavoriteFragment extends Fragment{
         return fragment;
     }
 
+    //TODO on click blue
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

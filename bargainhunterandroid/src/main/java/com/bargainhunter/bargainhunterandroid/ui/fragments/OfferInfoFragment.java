@@ -1,17 +1,20 @@
 package com.bargainhunter.bargainhunterandroid.ui.fragments;
 
 import android.app.Activity;
+import android.database.Cursor;
+import android.database.sqlite.*;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.activeandroid.query.Select;
 import com.bargainhunter.bargainhunterandroid.R;
+import com.bargainhunter.bargainhunterandroid.controllers.LocalDBController;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +36,8 @@ public class OfferInfoFragment extends Fragment {
     private Offer offer;
 
     private OnFragmentInteractionListener mListener;
+
+    private LocalDBController ctrl;
 
     public OfferInfoFragment() {
         // Required empty public constructor
@@ -57,6 +62,10 @@ public class OfferInfoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
+
+        ctrl = LocalDBController.getInstance(getView().getContext());
 
         if (getArguments() != null) {
             mOfferId = getArguments().getString(ARG_OFFER_ID);
@@ -126,6 +135,42 @@ public class OfferInfoFragment extends Fragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.favorite_action, menu);
+        ImageView iv = (ImageView) getView().findViewById(R.id.favorite);
+        //TODO: result analogous with SQL result
+        Cursor resultSet = ctrl.getReadableDatabase().rawQuery("Select id from FavOffers WHERE id = " + offer.getOfferId(), null);
+        resultSet.moveToFirst();
+        if(resultSet.getCount()==0) {
+            iv.setImageDrawable(getView().getResources().getDrawable(R.drawable.favourites));
+        }else{
+            iv.setImageDrawable(getView().getResources().getDrawable(R.drawable.red));
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        ImageView iv = (ImageView) getView().findViewById(R.id.favorite);
+        switch (item.getItemId()) {
+            case R.id.favorite:
+                //TODO: enter offer into favorite table
+                Cursor resultSet = ctrl.getReadableDatabase().rawQuery("Select id from FavOffers WHERE id = " + offer.getOfferId(), null);
+                resultSet.moveToFirst();
+                if(resultSet.getCount()==0) {
+                    ctrl.getReadableDatabase().execSQL("Insert into FavOffers VALUES("+offer.getOfferId()+")");
+                    iv.setImageDrawable(getView().getResources().getDrawable(R.drawable.red));
+                }else{
+                    ctrl.getReadableDatabase().execSQL("DELETE FROM FavOffers WHERE id="+offer.getOfferId());
+                    iv.setImageDrawable(getView().getResources().getDrawable(R.drawable.favourites));
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
