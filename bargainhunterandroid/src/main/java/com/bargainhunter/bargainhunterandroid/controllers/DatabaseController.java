@@ -67,7 +67,7 @@ public class DatabaseController {
         api.getAllBranchesWithStoresAndOffersInRadius(
                 phoneLoc.getLatitude(),
                 phoneLoc.getLongitude(),
-                100D,
+                100000D,
                 new Callback<SearchInRadiusDTO>() {
                     @Override
                     public void success(SearchInRadiusDTO searchInRadiusDTO, Response response) {
