@@ -22,6 +22,7 @@ public class MainActivity extends ActionBarActivity
         OfferListFragment.OnFragmentInteractionListener,
         OfferInfoFragment.OnFragmentInteractionListener,
         OfferListFromStoreFragment.OnFragmentInteractionListener,
+        FavoriteFragment.OnFragmentInteractionListener,
         FilterDialogFragment.OnDialogFilterFragmentInteractionListener {
 
     /**
@@ -56,12 +57,12 @@ public class MainActivity extends ActionBarActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         // Change to Map fragment.
-        Fragment fragment = OfferListFragment.newInstance(sectionNumber);
-        //Fragment fragment = MapFragment.newInstance(sectionNumber);
+        //Fragment fragment = OfferListFragment.newInstance(sectionNumber);
+        Fragment fragment = MapFragment.newInstance(sectionNumber);
 
         switch (sectionNumber) {
             case 1:
-                fragment = OfferListFragment.newInstance(sectionNumber);
+                fragment = MapFragment.newInstance(sectionNumber);
                 break;
             case 2:
                 fragment = OfferListFragment.newInstance(sectionNumber);
@@ -92,7 +93,7 @@ public class MainActivity extends ActionBarActivity
                 mTitle = getString(R.string.title_section3);
                 break;
             case 4:
-                mTitle = "Favorites";
+                mTitle = getString(R.string.title_section4);
                 break;
         }
     }
@@ -174,6 +175,10 @@ public class MainActivity extends ActionBarActivity
                 .replace(R.id.mainContainer, offerInfoFragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onFavoriteFragmentInteraction(Uri uri) {
     }
 
     @Override

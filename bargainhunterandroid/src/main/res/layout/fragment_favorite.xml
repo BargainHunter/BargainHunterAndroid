@@ -19,6 +19,11 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"/>
 
+    <View
+    android:layout_width="fill_parent"
+    android:layout_height="2dp"
+    android:background="@android:color/darker_gray"/>
+
     <TextView
             android:id="@+id/offerTextView"
             android:text="Favorite Offers"
