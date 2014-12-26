@@ -16,7 +16,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class DatabaseController {
-    private static final String mEndpoint = "http://bargainhunter.dyndns.org:8080/bargainhunterws";
+    private static final String mEndpoint = "http://bargainhunter.dyndns.org:8080";
 
     public static void updateDatabaseCategories(final Context context) {
         RestAdapter adapter = new RestAdapter.Builder()
@@ -67,7 +67,7 @@ public class DatabaseController {
         api.getAllBranchesWithStoresAndOffersInRadius(
                 phoneLoc.getLatitude(),
                 phoneLoc.getLongitude(),
-                100D,
+                100000D,
                 new Callback<SearchInRadiusDTO>() {
                     @Override
                     public void success(SearchInRadiusDTO searchInRadiusDTO, Response response) {
