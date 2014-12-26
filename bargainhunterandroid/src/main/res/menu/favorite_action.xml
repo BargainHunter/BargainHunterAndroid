@@ -6,7 +6,8 @@
           android:orderInCategory="100"
           android:visible="true"
           android:title=""
-          android:icon="@drawable/favourites"
+          android:icon="@drawable/btn_star_big_off_disable"
           app:showAsAction="always">
     </item>
+
 </menu>

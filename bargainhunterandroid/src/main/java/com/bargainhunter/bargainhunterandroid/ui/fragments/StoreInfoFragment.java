@@ -1,15 +1,15 @@
 package com.bargainhunter.bargainhunterandroid.ui.fragments;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.TextView;
 import com.activeandroid.query.Select;
 import com.bargainhunter.bargainhunterandroid.R;
+import com.bargainhunter.bargainhunterandroid.controllers.LocalDBController;
 import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
 
@@ -28,6 +28,8 @@ public class StoreInfoFragment extends Fragment {
     private static final String ARG_STORE_ID = "param1";
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String ARG_ENDPOINT = "endpoint";
+
+    private LocalDBController ctrl;
 
     private String mStoreId;
     private int mSectionNumber;
@@ -60,6 +62,9 @@ public class StoreInfoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
+        ctrl = LocalDBController.getInstance(getActivity().getBaseContext());
 
         if (getArguments() != null) {
             mStoreId = getArguments().getString(ARG_STORE_ID);
@@ -111,6 +116,46 @@ public class StoreInfoFragment extends Fragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.favorite_action, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu (Menu menu){
+        //TODO: result analogous with SQL result
+        Cursor resultSet = ctrl.getReadableDatabase().rawQuery("Select id from FavStores WHERE id = " + store.getStoreId(), null);
+        resultSet.moveToFirst();
+        if(resultSet.getCount()==0) {
+            menu.getItem(menu.size()-1).setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_off_disable));
+            //iv.setImageDrawable(getView().getResources().getDrawable(R.drawable.favourites));
+        }else{
+            menu.getItem(menu.size()-1).setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_on));
+            //iv.setImageDrawable(getView().getResources().getDrawable(R.drawable.red));
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.favorite:
+                //TODO: enter offer into favorite table
+                Cursor resultSet = ctrl.getReadableDatabase().rawQuery("Select id from FavStores WHERE id = " + store.getStoreId(), null);
+                resultSet.moveToFirst();
+                if(resultSet.getCount()==0) {
+                    ctrl.getReadableDatabase().execSQL("INSERT INTO FavStores VALUES("+store.getStoreId()+")");
+                    item.setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_on));
+                }else{
+                    ctrl.getReadableDatabase().execSQL("DELETE FROM FavStores WHERE id="+store.getStoreId());
+                    item.setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_off_disable));
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

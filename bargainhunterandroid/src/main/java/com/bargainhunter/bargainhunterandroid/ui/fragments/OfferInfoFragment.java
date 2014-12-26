@@ -65,7 +65,7 @@ public class OfferInfoFragment extends Fragment {
         setHasOptionsMenu(true);
 
 
-        ctrl = LocalDBController.getInstance(getView().getContext());
+        ctrl = LocalDBController.getInstance(getActivity().getBaseContext());
 
         if (getArguments() != null) {
             mOfferId = getArguments().getString(ARG_OFFER_ID);
@@ -141,32 +141,36 @@ public class OfferInfoFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.favorite_action, menu);
-        ImageView iv = (ImageView) getView().findViewById(R.id.favorite);
-        //TODO: result analogous with SQL result
-        Cursor resultSet = ctrl.getReadableDatabase().rawQuery("Select id from FavOffers WHERE id = " + offer.getOfferId(), null);
-        resultSet.moveToFirst();
-        if(resultSet.getCount()==0) {
-            iv.setImageDrawable(getView().getResources().getDrawable(R.drawable.favourites));
-        }else{
-            iv.setImageDrawable(getView().getResources().getDrawable(R.drawable.red));
-        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
+    public void onPrepareOptionsMenu (Menu menu){
+        //TODO: result analogous with SQL result
+        Cursor resultSet = ctrl.getReadableDatabase().rawQuery("Select id from FavOffers WHERE id = " + offer.getOfferId(), null);
+        resultSet.moveToFirst();
+        if(resultSet.getCount()==0) {
+            menu.getItem(menu.size()-1).setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_off_disable));
+            //iv.setImageDrawable(getView().getResources().getDrawable(R.drawable.favourites));
+        }else{
+            menu.getItem(menu.size()-1).setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_on));
+            //iv.setImageDrawable(getView().getResources().getDrawable(R.drawable.red));
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        ImageView iv = (ImageView) getView().findViewById(R.id.favorite);
         switch (item.getItemId()) {
             case R.id.favorite:
                 //TODO: enter offer into favorite table
                 Cursor resultSet = ctrl.getReadableDatabase().rawQuery("Select id from FavOffers WHERE id = " + offer.getOfferId(), null);
                 resultSet.moveToFirst();
                 if(resultSet.getCount()==0) {
-                    ctrl.getReadableDatabase().execSQL("Insert into FavOffers VALUES("+offer.getOfferId()+")");
-                    iv.setImageDrawable(getView().getResources().getDrawable(R.drawable.red));
+                    ctrl.getReadableDatabase().execSQL("INSERT INTO FavOffers VALUES("+offer.getOfferId()+")");
+                    item.setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_on));
                 }else{
                     ctrl.getReadableDatabase().execSQL("DELETE FROM FavOffers WHERE id="+offer.getOfferId());
-                    iv.setImageDrawable(getView().getResources().getDrawable(R.drawable.favourites));
+                    item.setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_off_disable));
                 }
                 return true;
             default:

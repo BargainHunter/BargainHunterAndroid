@@ -68,7 +68,7 @@ public class FavoriteFragment extends Fragment{
             public void onClick(View v) {
 
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                Fragment offerFavoriteFragment = OfferFavoriteFragment.newInstance(10);
+                Fragment offerFavoriteFragment = OfferFavoriteFragment.newInstance(1);
 
                 fragmentManager.beginTransaction()
                         .replace(container.getId(), offerFavoriteFragment)

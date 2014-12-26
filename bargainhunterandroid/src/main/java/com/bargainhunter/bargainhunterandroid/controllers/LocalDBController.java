@@ -1,7 +1,7 @@
 package com.bargainhunter.bargainhunterandroid.controllers;
 
 /**
- * Created by user on 24/12/2014.
+ * Created by veruz on 24/12/2014.
  */
 
 
@@ -31,18 +31,14 @@ public class LocalDBController extends SQLiteOpenHelper {
         // Create table querys
         private static final String QUERY_CREATE_TABLE_ONE = String.format(
                 "CREATE TABLE IF NOT EXISTS %s (" +
-                        "`%s` INTEGER primary key autoincrement, " +
-                        "`%s` INTEGER, " +
-                        "`%s` INTEGER, " +
+                        "`%s` INTEGER primary key autoincrement " +
                         ");",
                 TABLE_ONE,
                 "id");
 
         private static final String QUERY_CREATE_TABLE_TWO = String.format(
                 "CREATE TABLE IF NOT EXISTS %s (" +
-                        "`%s` INTEGER primary key autoincrement, " +
-                        "`%s` INTEGER, " +
-                        "`%s` INTEGER, " +
+                        "`%s` INTEGER primary key autoincrement " +
                         ");",
                 TABLE_TWO,
                 "id");
