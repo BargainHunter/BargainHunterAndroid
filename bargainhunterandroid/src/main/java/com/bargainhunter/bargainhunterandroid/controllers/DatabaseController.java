@@ -55,14 +55,12 @@ public class DatabaseController {
         });
     }
 
-    public static void updateDatabase(final Context context) {
+    public static void updateDatabase(final Context context, Coordinates phoneLoc) {
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(mEndpoint)
                 .build();
 
         ISearchAPI api = adapter.create(ISearchAPI.class);
-
-        Coordinates phoneLoc = new LocationController().findCoordinates(context);
 
         api.getAllBranchesWithStoresAndOffersInRadius(
                 phoneLoc.getLatitude(),
