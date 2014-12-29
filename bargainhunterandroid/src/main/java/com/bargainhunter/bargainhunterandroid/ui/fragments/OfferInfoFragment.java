@@ -2,13 +2,12 @@ package com.bargainhunter.bargainhunterandroid.ui.fragments;
 
 import android.app.Activity;
 import android.database.Cursor;
-import android.database.sqlite.*;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.*;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.activeandroid.query.Select;
 import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.controllers.LocalDBController;
@@ -138,11 +137,20 @@ public class OfferInfoFragment extends Fragment {
         }
     }
 
+    /**
+     *Creates the initial options menu with Favorite Icon on the actionbar of the fragment
+     */
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.favorite_action, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
+
+    /**
+     * If the offer hasn't been added to the favorites table beforehand it wil default to OFF
+     * In case the offer in question had been added to the favorites table beforehand, the icon is set to ON
+     */
 
     @Override
     public void onPrepareOptionsMenu (Menu menu){
@@ -158,6 +166,13 @@ public class OfferInfoFragment extends Fragment {
         }
     }
 
+    /**
+     * Once the user selects the Favorite icon, the offer ID will be saved to local table while
+     * the icon will change to ON and a toast confirming the action will be displayed.
+     * An already favorited offer will simply be removed from the table with an appropriate change
+     * of icon and toast.
+     */
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -168,9 +183,11 @@ public class OfferInfoFragment extends Fragment {
                 if(resultSet.getCount()==0) {
                     ctrl.getReadableDatabase().execSQL("INSERT INTO FavOffers VALUES("+offer.getOfferId()+")");
                     item.setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_on));
+                    Toast.makeText(getActivity(),"Added to Favorites",Toast.LENGTH_SHORT).show();
                 }else{
                     ctrl.getReadableDatabase().execSQL("DELETE FROM FavOffers WHERE id="+offer.getOfferId());
                     item.setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_off_disable));
+                    Toast.makeText(getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             default:

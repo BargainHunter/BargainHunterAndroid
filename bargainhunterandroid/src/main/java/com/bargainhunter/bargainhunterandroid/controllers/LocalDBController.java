@@ -1,9 +1,5 @@
 package com.bargainhunter.bargainhunterandroid.controllers;
 
-/**
- * Created by veruz on 24/12/2014.
- */
-
 
 import java.util.HashMap;
 
@@ -11,7 +7,16 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/**
+ * Created by Veruz on 21/12/2014.
+ */
 public class LocalDBController extends SQLiteOpenHelper {
+
+
+    /**
+     * Controller responsible for setting up the local Database and Tables which will be used to
+     * save the ID's of favorite Stores and Offers on the user's phone.
+     */
 
 
         // Instances
