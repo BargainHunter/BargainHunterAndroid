@@ -22,7 +22,8 @@ public class MainActivity extends ActionBarActivity
         OfferListFragment.OnFragmentInteractionListener,
         OfferInfoFragment.OnFragmentInteractionListener,
         OfferListFromStoreFragment.OnFragmentInteractionListener,
-        FilterDialogFragment.OnDialogFilterFragmentInteractionListener {
+        FilterDialogFragment.OnDialogFilterFragmentInteractionListener,
+        CategoryGridViewFragment.OnCategoryGridViewFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -57,14 +58,16 @@ public class MainActivity extends ActionBarActivity
 
         // Change to Map fragment.
         //Fragment fragment = OfferListFragment.newInstance(sectionNumber);
-        Fragment fragment = MapFragment.newInstance(sectionNumber);
+//        Fragment fragment = MapFragment.newInstance(sectionNumber);
+        Fragment fragment = new Fragment();
 
         switch (sectionNumber) {
             case 1:
-                fragment = MapFragment.newInstance(sectionNumber);
+                fragment = CategoryGridViewFragment.newInstance(sectionNumber);
+//                fragment = MapFragment.newInstance(sectionNumber);
                 break;
             case 2:
-                fragment = OfferListFragment.newInstance(sectionNumber);
+//                fragment = OfferListFragment.newInstance(sectionNumber);
                 break;
             case 3:
                 fragment = StoreListFragment.newInstance(sectionNumber);
@@ -170,15 +173,25 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
-    public void onDialogFilterFragmentInteraction(HashMap<Integer, boolean[]> childCheckStates) {
+    public void onDialogFilterFragmentInteraction(HashMap<Integer, boolean[]> childCheckStates, String categoryId) {
         boolean[] priceFilters = childCheckStates.get(0);
         if (priceFilters.length >= 0) {
             FragmentManager fragmentManager = getSupportFragmentManager();
-            Fragment offerListFragment = OfferListFragment.newInstance(1, priceFilters);
+            Fragment offerListFragment = OfferListFragment.newInstance(1, categoryId, priceFilters);
             fragmentManager.beginTransaction()
                     .replace(R.id.mainContainer, offerListFragment)
                     .addToBackStack(null)
                     .commit();
         }
+    }
+
+    @Override
+    public void OnCategoryGridViewFragmentInteractionListener(String categoryId) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment offerListFragment = OfferListFragment.newInstance(2, categoryId);
+        fragmentManager.beginTransaction()
+                .replace(R.id.mainContainer, offerListFragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

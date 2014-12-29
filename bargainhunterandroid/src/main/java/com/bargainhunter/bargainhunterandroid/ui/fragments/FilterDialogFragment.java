@@ -30,8 +30,10 @@ import java.util.List;
 public class FilterDialogFragment extends DialogFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final String ARG_CATEGORY_ID = "category_id";
 
     private int mSectionNumber;
+    private String mCategoryId;
 
     // all data for displaying
     private ArrayList<ListParentItem> mParent;
@@ -45,15 +47,11 @@ public class FilterDialogFragment extends DialogFragment {
 
     private OnDialogFilterFragmentInteractionListener mListener;
 
-    public static FilterDialogFragment newInstance() {
-        FilterDialogFragment f = new FilterDialogFragment();
-        return f;
-    }
-
-    public static FilterDialogFragment newInstance(int sectionNumber) {
+    public static FilterDialogFragment newInstance(int sectionNumber, String categoryId) {
         FilterDialogFragment fragment = new FilterDialogFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        args.putString(ARG_CATEGORY_ID, categoryId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -79,6 +77,7 @@ public class FilterDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+            mCategoryId = getArguments().getString(ARG_CATEGORY_ID);
         }
     }
 
@@ -122,7 +121,7 @@ public class FilterDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
-                    mListener.onDialogFilterFragmentInteraction(mChildCheckStates);
+                    mListener.onDialogFilterFragmentInteraction(mChildCheckStates, mCategoryId);
                     getDialog().hide();
                 }
             }
@@ -222,6 +221,6 @@ public class FilterDialogFragment extends DialogFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnDialogFilterFragmentInteractionListener {
-        public void onDialogFilterFragmentInteraction(HashMap<Integer, boolean[]> childCheckStates);
+        public void onDialogFilterFragmentInteraction(HashMap<Integer, boolean[]> childCheckStates, String categoryId);
     }
 }

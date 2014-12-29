@@ -13,7 +13,10 @@ import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.adapters.OfferAdapter;
 import com.bargainhunter.bargainhunterandroid.controllers.LocationController;
 import com.bargainhunter.bargainhunterandroid.models.Coordinates;
+import com.bargainhunter.bargainhunterandroid.models.entities.Category;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
+import com.bargainhunter.bargainhunterandroid.models.entities.OfferSubcategory;
+import com.bargainhunter.bargainhunterandroid.models.entities.Subcategory;
 import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
 
 import java.util.ArrayList;
@@ -32,14 +35,17 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String ARG_PRICE_FILTERS = "";
+    private static final String ARG_CATEGORY_ID = "";
+    private static int instanceUsed;
 
     private List<Offer> offerList;
     private int mSectionNumber;
     private Coordinates phoneLoc;
     private LocationController controller;
     private OnFragmentInteractionListener mListener;
-    private boolean mPriceFilters[];
+    private boolean[] mPriceFilters;
     private DialogFragment dialogFragment;
+    private String mCategoryId;
 
     /**
      * The fragment's ListView/GridView.
@@ -59,21 +65,23 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
     public OfferListFragment() {
     }
 
-    public static OfferListFragment newInstance(int sectionNumber) {
+    public static OfferListFragment newInstance(int sectionNumber, String categoryId) {
+        instanceUsed = 1;
         OfferListFragment fragment = new OfferListFragment();
-        boolean priceFilters[] = null;
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        args.putBooleanArray(ARG_PRICE_FILTERS, priceFilters);
+        args.putString(ARG_CATEGORY_ID, categoryId);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static OfferListFragment newInstance(int sectionNumber, boolean priceFilters[]) {
+    public static OfferListFragment newInstance(int sectionNumber, String categoryId, boolean priceFilters[]) {
+        instanceUsed = 2;
         OfferListFragment fragment = new OfferListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         args.putBooleanArray(ARG_PRICE_FILTERS, priceFilters);
+        args.putString(ARG_CATEGORY_ID, categoryId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -83,16 +91,80 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (getArguments() != null) {
-            mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
-            // if newInstance(secNum, priceFilter) called
-            if (getArguments().getBooleanArray(ARG_PRICE_FILTERS) != null)
-                mPriceFilters = getArguments().getBooleanArray(ARG_PRICE_FILTERS);
+            switch (instanceUsed) {
+                case 1:
+                    mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+                    mCategoryId = getArguments().getString(ARG_CATEGORY_ID);
+                    break;
+                case 2:
+                    mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+                    mCategoryId = getArguments().getString(ARG_CATEGORY_ID);
+                    mPriceFilters = getArguments().getBooleanArray(ARG_PRICE_FILTERS);
+            }
         }
+
+        initializeOfferList();
 
         if (mPriceFilters != null) {
             applyPriceFilters();
-        } else {
-            offerList = new Select().from(Offer.class).execute();
+        }
+    }
+
+    // initializes offer list according what category the user choose, from grid view.
+    private void initializeOfferList() {
+        offerList = new ArrayList<>();
+        // get the category with this id
+        Category category = new Select().from(Category.class)
+                .where("category_id = ?", mCategoryId)
+                .executeSingle();
+        // get the list of subcategories, of this category
+        List<Subcategory> subcategories = category.getSubcategories();
+
+        for(Subcategory subcategory : subcategories){
+            Long subcategoryId = subcategory.getSubcategoryId();
+            List<OfferSubcategory> offerSubcategories = new Select()
+                    .from(OfferSubcategory.class)
+                    .where("subcategory_id = ?", subcategoryId)
+                    .execute();
+            for ( OfferSubcategory offerSubcategory : offerSubcategories) {
+                if (!offerList.contains(offerSubcategory.getOffer()))
+                    offerList.add(offerSubcategory.getOffer());
+            }
+        }
+    }
+
+    private void applyPriceFilters() {
+        List<Offer> offerListToAdd;
+
+        if (mPriceFilters[1]) {
+            for (Offer offer : offerList){
+                if (!((offer.getPrice()>=0) && (offer.getPrice()<=5)))
+                    offerList.remove(offer);
+            }
+        }
+        if (mPriceFilters[2]) {
+            for (Offer offer : offerList){
+                if (!((offer.getPrice()>5) && (offer.getPrice()<=10)))
+                    offerList.remove(offer);
+            }
+        }
+        if (mPriceFilters[3]) {
+            for (Offer offer : offerList){
+                if (!((offer.getPrice()>10) && (offer.getPrice()<=80)))
+                    offerList.remove(offer);
+            }
+        }
+        if (mPriceFilters[4]) {
+            for (Offer offer : offerList){
+                if (!((offer.getPrice()>80) && (offer.getPrice()<=100)))
+                    offerList.remove(offer);
+            }
+        }
+        if (mPriceFilters[5]) {
+            for (Offer offer : offerList){
+                if (!(offer.getPrice()>100))
+                    offerList.remove(offer);
+            }
         }
     }
 
@@ -124,51 +196,11 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
         }
         ft.addToBackStack(null);
 
-        dialogFragment = FilterDialogFragment.newInstance(1);
+        dialogFragment = FilterDialogFragment.newInstance(2, mCategoryId);
         dialogFragment.show(ft, "filter_dialog");
     }
 
-    private void applyPriceFilters() {
-        offerList = new ArrayList<>();
-        List<Offer> offerListToAdd;
 
-        if (mPriceFilters[0]) {
-            offerListToAdd = new Select().from(Offer.class).execute();
-            for (Offer offer : offerListToAdd){
-                offerList.add(offer);
-            }
-        }
-        if (mPriceFilters[1]) {
-            offerListToAdd = new Select().from(Offer.class).where("price BETWEEN ? AND ?", 0, 5).execute();
-            for (Offer offer : offerListToAdd){
-                offerList.add(offer);
-            }
-        }
-        if (mPriceFilters[2]) {
-            offerListToAdd = new Select().from(Offer.class).where("price BETWEEN ? AND ?", 5, 10).execute();
-            for (Offer offer : offerListToAdd){
-                offerList.add(offer);
-            }
-        }
-        if (mPriceFilters[3]) {
-            offerListToAdd = new Select().from(Offer.class).where("price BETWEEN ? AND ?", 10, 80).execute();
-            for (Offer offer : offerListToAdd){
-                offerList.add(offer);
-            }
-        }
-        if (mPriceFilters[4]) {
-            offerListToAdd = new Select().from(Offer.class).where("price BETWEEN ? AND ?", 80, 100).execute();
-            for (Offer offer : offerListToAdd){
-                offerList.add(offer);
-            }
-        }
-        if (mPriceFilters[5]) {
-            offerListToAdd = new Select().from(Offer.class).where("price > ?", 100).execute();
-            for (Offer offer : offerListToAdd){
-                offerList.add(offer);
-            }
-        }
-    }
 
     protected void updateDisplay(List<Offer> offerList) {
         OfferAdapter adapter = new OfferAdapter(this.getActivity(), R.layout.fragment_offer_list, offerList);
