@@ -12,7 +12,7 @@
             android:id="@+id/seekBarPrefUnitsRight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="  Km"
+            android:text="  m"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true">
     </TextView>
