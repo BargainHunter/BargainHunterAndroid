@@ -6,15 +6,25 @@
         <com.bargainhunter.bargainhunterandroid.ui.activities.SeekBarPreference
                 android:key="notificationRadius"
                 android:title="Notification Radius"
+                android:summary="Store Radius in which you receive Notifications"
                 android:defaultValue="50"
                 android:max="100"
                 />
         <EditTextPreference
-                android:title="Notification Radius"
+                android:title="Enter Notification Radius"
                 android:key="editText"
                 android:hint="Choose the radius of your notifications"
                 android:numeric="integer"
                 />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Favorite Settings">
+        <SwitchPreference
+                android:key="favorite_toggle"
+                android:title="Favorites"
+                android:summaryOn="Favorites Enabled"
+                android:summaryOff="Favorites Disabled"
+                android:defaultValue="true" />
     </PreferenceCategory>
 
 </PreferenceScreen>

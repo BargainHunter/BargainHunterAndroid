@@ -31,26 +31,26 @@ import java.util.List;
 public class OfferListFragment extends ListFragment implements AbsListView.OnItemClickListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private static final String ARG_PRICE_FILTERS = "";
+    protected static final String ARG_PRICE_FILTERS = "";
 
-    private List<Offer> offerList;
+    protected List<Offer> offerList;
     private int mSectionNumber;
     private Coordinates phoneLoc;
     private LocationController controller;
     private OnFragmentInteractionListener mListener;
-    private boolean mPriceFilters[];
+    protected boolean mPriceFilters[];
     private DialogFragment dialogFragment;
 
     /**
      * The fragment's ListView/GridView.
      */
-    private AbsListView mListView;
+    protected AbsListView mListView;
 
     /**
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ListAdapter mAdapter;
+    protected ListAdapter mAdapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -92,8 +92,13 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
         if (mPriceFilters != null) {
             applyPriceFilters();
         } else {
-            offerList = new Select().from(Offer.class).execute();
+            loadOfferList();
         }
+    }
+
+    //to  allow override
+    public void loadOfferList(){
+        offerList = new Select().from(Offer.class).execute();
     }
 
     @Override
@@ -128,7 +133,7 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
         dialogFragment.show(ft, "filter_dialog");
     }
 
-    private void applyPriceFilters() {
+    protected void applyPriceFilters() {
         offerList = new ArrayList<>();
         List<Offer> offerListToAdd;
 
