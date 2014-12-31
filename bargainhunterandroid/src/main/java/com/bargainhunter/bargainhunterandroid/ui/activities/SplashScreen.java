@@ -57,7 +57,6 @@ public class SplashScreen extends Activity {
             //Initialize the TextView and ProgressBar instances - IMPORTANT: call findViewById() from viewSwitcher.
             textView = (TextView) viewSwitcher.findViewById(R.id.splashScreenTextView);
             progressBar = (ProgressBar) viewSwitcher.findViewById(R.id.progressBar);
-//            progressBar.setMax(200);
 
             progressBar.setIndeterminate(true);
             //Set ViewSwitcher instance as the current View.
@@ -76,38 +75,17 @@ public class SplashScreen extends Activity {
 
                     //Initialize an integer (to know if stores are loaded)
                     int storeCount = new Select().from(Store.class).count();
-                    int progressCount = 0;
                     while(storeCount==0) {
-                        //Wait 200 milliseconds
-                        this.wait(200);
-
                         //Is there any store?
                         storeCount = new Select().from(Store.class).count();
-
-                        progressCount++;
-                        //Set the current progress.
-//                        progressBar.setProgress(progressCount*20);
                     }
-//                    progressBar.setProgress(200);
                 }
             }
-            catch (InterruptedException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
             return null;
-        }
-
-        //Update the progress
-        @Override
-        protected void onProgressUpdate(Integer... values)
-        {
-//            // will update the "progress" propriety of progressBar until it reaches progress
-//            ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", values[0]);
-//            animation.setDuration(200); // 0.5 second
-//            animation.setInterpolator(new DecelerateInterpolator());
-//            animation.start();
-
         }
 
         //after executing the code in the thread

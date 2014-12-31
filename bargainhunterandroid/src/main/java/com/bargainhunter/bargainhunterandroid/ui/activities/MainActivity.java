@@ -56,21 +56,17 @@ public class MainActivity extends ActionBarActivity
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        // Change to Map fragment.
-        //Fragment fragment = OfferListFragment.newInstance(sectionNumber);
-//        Fragment fragment = MapFragment.newInstance(sectionNumber);
         Fragment fragment = new Fragment();
 
         switch (sectionNumber) {
             case 1:
                 fragment = CategoryGridViewFragment.newInstance(sectionNumber);
-//                fragment = MapFragment.newInstance(sectionNumber);
                 break;
             case 2:
-//                fragment = OfferListFragment.newInstance(sectionNumber);
+                fragment = StoreListFragment.newInstance(sectionNumber);
                 break;
             case 3:
-                fragment = StoreListFragment.newInstance(sectionNumber);
+                fragment = MapFragment.newInstance(sectionNumber);
                 break;
         }
 

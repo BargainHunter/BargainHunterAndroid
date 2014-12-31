@@ -2,9 +2,9 @@
 <resources>
 
     <string name="app_name">Bargain Hunter</string>
-    <string name="title_section1">Map</string>
-    <string name="title_section2">Offers</string>
-    <string name="title_section3">Stores</string>
+    <string name="title_section1">Offers</string>
+    <string name="title_section2">Stores</string>
+    <string name="title_section3">Map</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>

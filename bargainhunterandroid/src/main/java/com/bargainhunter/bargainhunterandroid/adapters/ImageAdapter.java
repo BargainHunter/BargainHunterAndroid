@@ -51,9 +51,9 @@ public class ImageAdapter extends BaseAdapter {
                     .findViewById(R.id.grid_item_image);
 
             if (categoryDescription.equals("Ηλεκτρονικά")) {
-                imageView.setImageResource(R.drawable.square_button);
+                imageView.setImageResource(R.drawable.electronics);
             } else if (categoryDescription.equals("Τρόφημα")) {
-                imageView.setImageResource(R.drawable.square_button);
+                imageView.setImageResource(R.drawable.food);
             }
         } else {
             gridView = (View) convertView;

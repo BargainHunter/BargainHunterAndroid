@@ -34,8 +34,8 @@ import java.util.List;
 public class OfferListFragment extends ListFragment implements AbsListView.OnItemClickListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private static final String ARG_PRICE_FILTERS = "";
-    private static final String ARG_CATEGORY_ID = "";
+    private static final String ARG_PRICE_FILTERS = "price_filters";
+    private static final String ARG_CATEGORY_ID = "category_id";
     private static int instanceUsed;
 
     private List<Offer> offerList;
@@ -134,37 +134,42 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
     }
 
     private void applyPriceFilters() {
-        List<Offer> offerListToAdd;
+        List<Offer> offerListToAdd = new ArrayList<>();
 
         if (mPriceFilters[1]) {
             for (Offer offer : offerList){
-                if (!((offer.getPrice()>=0) && (offer.getPrice()<=5)))
-                    offerList.remove(offer);
+                if (((offer.getPrice()>=0) && (offer.getPrice()<=5)))
+                    offerListToAdd.add(offer);
             }
         }
         if (mPriceFilters[2]) {
             for (Offer offer : offerList){
-                if (!((offer.getPrice()>5) && (offer.getPrice()<=10)))
-                    offerList.remove(offer);
+                if (((offer.getPrice()>5) && (offer.getPrice()<=10)))
+                    offerListToAdd.add(offer);
             }
         }
         if (mPriceFilters[3]) {
             for (Offer offer : offerList){
-                if (!((offer.getPrice()>10) && (offer.getPrice()<=80)))
-                    offerList.remove(offer);
+                if (((offer.getPrice()>10) && (offer.getPrice()<=80)))
+                    offerListToAdd.add(offer);
             }
         }
         if (mPriceFilters[4]) {
             for (Offer offer : offerList){
-                if (!((offer.getPrice()>80) && (offer.getPrice()<=100)))
-                    offerList.remove(offer);
+                if (((offer.getPrice()>80) && (offer.getPrice()<=100)))
+                    offerListToAdd.add(offer);
             }
         }
         if (mPriceFilters[5]) {
             for (Offer offer : offerList){
-                if (!(offer.getPrice()>100))
-                    offerList.remove(offer);
+                if ((offer.getPrice()>100))
+                    offerListToAdd.add(offer);
             }
+        }
+
+        if (!mPriceFilters[0]) {
+            offerList = new ArrayList<>();
+            offerList = offerListToAdd;
         }
     }
 
