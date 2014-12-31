@@ -64,12 +64,12 @@ public class OfferFavoriteFragment extends OfferListFragment {
         if (mPriceFilters != null) {
             applyPriceFilters();
         } else {
-            loadOfferList();
+            initializeOfferList();
         }
     }
 
     @Override
-    public void loadOfferList(){
+    public void initializeOfferList(){
         ctrl = LocalDBController.getInstance(getActivity().getBaseContext());
 
         Cursor resultSet = ctrl.getReadableDatabase().rawQuery("Select id from FavOffers ORDER BY id" , null);
@@ -183,7 +183,7 @@ public class OfferFavoriteFragment extends OfferListFragment {
 
     @Override
     public void onResume() {
-        loadOfferList();
+        initializeOfferList();
         updateDisplay(offerList);
         super.onResume();
     }

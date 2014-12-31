@@ -23,7 +23,6 @@ public class MainActivity extends ActionBarActivity
         OfferInfoFragment.OnFragmentInteractionListener,
         OfferListFromStoreFragment.OnFragmentInteractionListener,
         FavoriteFragment.OnFragmentInteractionListener,
-        FilterDialogFragment.OnDialogFilterFragmentInteractionListener {
         FilterDialogFragment.OnDialogFilterFragmentInteractionListener,
         CategoryGridViewFragment.OnCategoryGridViewFragmentInteractionListener {
 
@@ -196,7 +195,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void OnCategoryGridViewFragmentInteractionListener(String categoryId) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment offerListFragment = OfferListFragment.newInstance(2, categoryId);
+        Fragment offerListFragment = OfferListFragment.newInstance(1, categoryId);
         fragmentManager.beginTransaction()
                 .replace(R.id.mainContainer, offerListFragment)
                 .addToBackStack(null)
