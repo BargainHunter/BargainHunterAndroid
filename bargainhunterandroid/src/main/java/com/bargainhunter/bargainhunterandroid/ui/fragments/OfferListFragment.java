@@ -34,29 +34,30 @@ import java.util.List;
 public class OfferListFragment extends ListFragment implements AbsListView.OnItemClickListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_SECTION_NUMBER = "section_number";
+    protected static final String ARG_PRICE_FILTERS = "";
     private static final String ARG_PRICE_FILTERS = "price_filters";
     private static final String ARG_CATEGORY_ID = "category_id";
     private static int instanceUsed;
 
-    private List<Offer> offerList;
+    protected List<Offer> offerList;
     private int mSectionNumber;
     private Coordinates phoneLoc;
     private LocationController controller;
     private OnFragmentInteractionListener mListener;
-    private boolean[] mPriceFilters;
+    protected boolean mPriceFilters[];
     private DialogFragment dialogFragment;
     private String mCategoryId;
 
     /**
      * The fragment's ListView/GridView.
      */
-    private AbsListView mListView;
+    protected AbsListView mListView;
 
     /**
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ListAdapter mAdapter;
+    protected ListAdapter mAdapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -107,69 +108,6 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
 
         if (mPriceFilters != null) {
             applyPriceFilters();
-        }
-    }
-
-    // initializes offer list according what category the user choose, from grid view.
-    private void initializeOfferList() {
-        offerList = new ArrayList<>();
-        // get the category with this id
-        Category category = new Select().from(Category.class)
-                .where("category_id = ?", mCategoryId)
-                .executeSingle();
-        // get the list of subcategories, of this category
-        List<Subcategory> subcategories = category.getSubcategories();
-
-        for(Subcategory subcategory : subcategories){
-            Long subcategoryId = subcategory.getSubcategoryId();
-            List<OfferSubcategory> offerSubcategories = new Select()
-                    .from(OfferSubcategory.class)
-                    .where("subcategory_id = ?", subcategoryId)
-                    .execute();
-            for ( OfferSubcategory offerSubcategory : offerSubcategories) {
-                if (!offerList.contains(offerSubcategory.getOffer()))
-                    offerList.add(offerSubcategory.getOffer());
-            }
-        }
-    }
-
-    private void applyPriceFilters() {
-        List<Offer> offerListToAdd = new ArrayList<>();
-
-        if (mPriceFilters[1]) {
-            for (Offer offer : offerList){
-                if (((offer.getPrice()>=0) && (offer.getPrice()<=5)))
-                    offerListToAdd.add(offer);
-            }
-        }
-        if (mPriceFilters[2]) {
-            for (Offer offer : offerList){
-                if (((offer.getPrice()>5) && (offer.getPrice()<=10)))
-                    offerListToAdd.add(offer);
-            }
-        }
-        if (mPriceFilters[3]) {
-            for (Offer offer : offerList){
-                if (((offer.getPrice()>10) && (offer.getPrice()<=80)))
-                    offerListToAdd.add(offer);
-            }
-        }
-        if (mPriceFilters[4]) {
-            for (Offer offer : offerList){
-                if (((offer.getPrice()>80) && (offer.getPrice()<=100)))
-                    offerListToAdd.add(offer);
-            }
-        }
-        if (mPriceFilters[5]) {
-            for (Offer offer : offerList){
-                if ((offer.getPrice()>100))
-                    offerListToAdd.add(offer);
-            }
-        }
-
-        if (!mPriceFilters[0]) {
-            offerList = new ArrayList<>();
-            offerList = offerListToAdd;
         }
     }
 

@@ -22,6 +22,8 @@ public class MainActivity extends ActionBarActivity
         OfferListFragment.OnFragmentInteractionListener,
         OfferInfoFragment.OnFragmentInteractionListener,
         OfferListFromStoreFragment.OnFragmentInteractionListener,
+        FavoriteFragment.OnFragmentInteractionListener,
+        FilterDialogFragment.OnDialogFilterFragmentInteractionListener {
         FilterDialogFragment.OnDialogFilterFragmentInteractionListener,
         CategoryGridViewFragment.OnCategoryGridViewFragmentInteractionListener {
 
@@ -68,6 +70,9 @@ public class MainActivity extends ActionBarActivity
             case 3:
                 fragment = MapFragment.newInstance(sectionNumber);
                 break;
+            case 4:
+                fragment = FavoriteFragment.newInstance(sectionNumber);
+                break;
         }
 
         fragmentManager.beginTransaction()
@@ -86,6 +91,9 @@ public class MainActivity extends ActionBarActivity
                 break;
             case 3:
                 mTitle = getString(R.string.title_section3);
+                break;
+            case 4:
+                mTitle = getString(R.string.title_section4);
                 break;
         }
     }
@@ -166,6 +174,10 @@ public class MainActivity extends ActionBarActivity
                 .replace(R.id.mainContainer, offerInfoFragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onFavoriteFragmentInteraction(Uri uri) {
     }
 
     @Override
