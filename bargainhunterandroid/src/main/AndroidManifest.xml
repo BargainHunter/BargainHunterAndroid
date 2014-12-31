@@ -47,16 +47,6 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAkh4HeYPAPknWfj3t9trbHceCfATtrhvw" />
 
-        <activity
-                android:name="com.bargainhunter.bargainhunterandroid.ui.activities.LoginActivity"
-                android:label="@string/title_activity_login"
-                android:windowSoftInputMode="adjustResize|stateHidden" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <!-- Splash screen -->
         <activity
             android:name="com.bargainhunter.bargainhunterandroid.ui.activities.SplashScreen"
@@ -94,7 +84,16 @@
             </intent-filter>
         </activity>
         <activity android:name="com.bargainhunter.bargainhunterandroid.ui.activities.PreferencesActivity" />
+        <activity
+            android:name="com.bargainhunter.bargainhunterandroid.ui.activities.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
