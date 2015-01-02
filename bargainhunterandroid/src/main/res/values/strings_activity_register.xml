@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_register">Registration</string>
+
+    <string name="first_name">Fist Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="promt_register">Create Account</string>
+</resources>

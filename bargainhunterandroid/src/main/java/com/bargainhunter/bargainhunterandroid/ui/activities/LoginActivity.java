@@ -27,6 +27,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.bargainhunter.bargainhunterandroid.models.User;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
@@ -109,9 +110,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  attemptLogin();
-                Intent intent = new Intent(LoginActivity.this,SplashScreen.class);
-                LoginActivity.this.startActivity(intent);
+                attemptLogin();
+
             }
         });
 
@@ -119,6 +119,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         mProgressView = findViewById(R.id.login_progress);
 //        mEmailLoginFormView = findViewById(R.id.email_login_form);
 //        mSignOutButtons = findViewById(R.id.plus_sign_out_buttons);
+
+        
     }
 
     private void populateAutoComplete() {
@@ -173,6 +175,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
+            // TODO: create rest adapter
+            // if every field is corrent  the login will be performed
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
@@ -186,7 +190,14 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        boolean res = true;
+        if( !(password.length() > 4)){
+            res=false;
+        }
+        if(password.isEmpty()){
+            res = false;
+        }
+        return res;
     }
 
     /**
@@ -343,7 +354,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         private final String mEmail;
         private final String mPassword;
-
+        private  String[] pieces;
+        private boolean res=true,emailInDb=false;
+        //UserLoginTask(String email, String password) {
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
@@ -361,15 +374,18 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             }
 
             for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
+               pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
                     // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
+                    emailInDb=true;
+                    res = pieces[1].equals(mPassword);
+                    return res;
                 }
             }
 
             // TODO: register the new account here.
-            return true;
+
+            return res;
         }
 
         @Override
@@ -377,12 +393,20 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             mAuthTask = null;
             showProgress(false);
 
-            if (success) {
+            if (success) { // if credentials was found in server email and password is correct
                 finish();
-            } else {
+                Intent intent = new Intent(LoginActivity.this,SplashScreen.class);
+                LoginActivity.this.startActivity(intent);
+            } else { // email is ok but password is incorrect
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
+            if (success && !emailInDb){
+                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
+                LoginActivity.this.startActivity(intent);
+            }
+
+
         }
 
         @Override
