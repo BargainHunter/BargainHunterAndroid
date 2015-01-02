@@ -210,7 +210,7 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.price_filter:
+            case R.id.filter:
                 showDialog();
                 return true;
             default:

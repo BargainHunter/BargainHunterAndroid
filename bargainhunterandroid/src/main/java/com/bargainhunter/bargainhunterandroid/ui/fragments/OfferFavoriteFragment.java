@@ -2,9 +2,7 @@ package com.bargainhunter.bargainhunterandroid.ui.fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -86,87 +84,6 @@ public class OfferFavoriteFragment extends OfferListFragment {
     }
 
     @Override
-    protected void applyPriceFilters() {
-        offerList = new ArrayList<>();
-        List<Offer> offerListToAdd = new ArrayList<>();
-
-        Cursor resultSet = ctrl.getReadableDatabase().rawQuery("Select id from FavOffers ORDER BY id" , null);
-        resultSet.moveToFirst();
-        String list = "";
-        if(resultSet.getCount()==0) {
-            // TODO print message  "no favs"
-            offerList = new ArrayList<>();
-        }else {
-            list = "(";
-            // parsing returned ids and converting them to sql list
-
-            if (resultSet.getCount() == 1)
-                list = "(" + resultSet.getLong(0) + ")";
-            else {
-                list += resultSet.getLong(0) + ",";
-                while (resultSet.moveToNext()) { // may skip first row - to_check
-                    if (!resultSet.isLast())
-                        list += resultSet.getLong(0) + ", ";
-                    else
-                        list += resultSet.getLong(0);
-                }
-                list += ")";
-
-                List<Offer> favoriteOffersList;
-                favoriteOffersList = new Select().from(Offer.class).where("offer_id IN " + list).execute();
-
-                ListParentItem parentItem = mParent.get(0);     // price filters
-                ArrayList<ListChildItem> children = parentItem.getChildren();
-
-                if (((CheckBox) children.get(0).getObject()).isChecked()) {
-                    for (Offer offer : favoriteOffersList) {
-                        offerListToAdd.add(offer);
-                    }
-                }
-
-                if (((CheckBox) children.get(1).getObject()).isChecked()) {
-                    for (Offer offer : favoriteOffersList) {
-                        if ((offer.getPrice() >= 0) && (offer.getPrice() <= 5))
-                            offerListToAdd.add(offer);
-                    }
-                }
-
-                if (((CheckBox) children.get(2).getObject()).isChecked()) {
-                    for (Offer offer : favoriteOffersList) {
-                        if ((offer.getPrice() > 5) && (offer.getPrice() <= 10))
-                            offerListToAdd.add(offer);
-                    }
-                }
-
-                if (((CheckBox) children.get(3).getObject()).isChecked()) {
-                    for (Offer offer : favoriteOffersList) {
-                        if ((offer.getPrice() > 10) && (offer.getPrice() <= 80))
-                            offerListToAdd.add(offer);
-                    }
-                }
-
-                if (((CheckBox) children.get(4).getObject()).isChecked()) {
-                    for (Offer offer : favoriteOffersList) {
-                        if ((offer.getPrice() > 80) && (offer.getPrice() <= 100))
-                            offerListToAdd.add(offer);
-                    }
-                }
-
-                if (((CheckBox) children.get(5).getObject()).isChecked()) {
-                    for (Offer offer : favoriteOffersList) {
-                        if (offer.getPrice() > 100)
-                            offerListToAdd.add(offer);
-                    }
-                }
-
-                offerList = new ArrayList<>();
-                offerList = offerListToAdd;
-            }
-        }
-    }
-
-
-    @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
@@ -184,12 +101,14 @@ public class OfferFavoriteFragment extends OfferListFragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        MenuItem item = menu.findItem(R.id.filter);
+        item.setVisible(false);
+    }
+
+    @Override
     public void onResume() {
-        initializeOfferList();
-        if (mParent != null) {
-            applyPriceFilters();
-        }
-        updateDisplay(offerList);
         super.onResume();
     }
 }
