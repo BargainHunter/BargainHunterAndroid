@@ -21,10 +21,7 @@ import com.bargainhunter.bargainhunterandroid.models.entities.OfferSubcategory;
 import com.bargainhunter.bargainhunterandroid.models.entities.Subcategory;
 import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A fragment representing a list of Items.
@@ -78,6 +75,7 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
         this.mParent = parentItems;
         initializeOfferList();
         applyPriceFilters();
+        applyCategoryFilters();
         updateDisplay(offerList);
     }
 
@@ -176,14 +174,26 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
 
         for ( int i = 1 ; i < children.size() ; i++) {                  // for every children except "No filter"
             if (((CheckBox) children.get(i).getObject()).isChecked()) { // if the checkbox is checked
-                String childName = children.get(i).getChildName();      // get the offer description
+                String childName = children.get(i).getChildName();      // get the subcategory description
+
                 for (Offer offer : offerList){                          // for every offer in the offerList
-                    if (offer.getDescription() == childName) {          // if the offer have the same description with the child name
-                        offerListToAdd.add(offer);                      // add the offer to offerListToAdd
+                    List<OfferSubcategory> offerSubcategories = offer.getSubcategories();
+                    for (OfferSubcategory offerSubcategory : offerSubcategories) {
+                        long subcategoryId = offerSubcategory.getSubcategoryId();
+                        List<Subcategory> subcategories = new Select().from(Subcategory.class)
+                                                              .where("subcategory_id = ?", subcategoryId)
+                                                              .execute();
+                        for (Subcategory subcategory : subcategories) {
+                            if (subcategory.getDescription().equals(childName)) {
+                                offerListToAdd.add(offer);
+                            }
+                        }
                     }
                 }
             }
         }
+
+
 
         if (!(((CheckBox) children.get(0).getObject()).isChecked())) {
             offerList = new ArrayList<>();
