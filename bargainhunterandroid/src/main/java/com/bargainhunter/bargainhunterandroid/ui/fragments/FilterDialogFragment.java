@@ -121,7 +121,8 @@ public class FilterDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
-                    mListener.onDialogFilterFragmentInteraction(mChildCheckStates, mCategoryId);
+                    updateCheckBoxesOfParents();
+                    mListener.onDialogFilterFragmentInteraction(mCategoryId, mParent);
                     getDialog().hide();
                 }
             }
@@ -177,6 +178,18 @@ public class FilterDialogFragment extends DialogFragment {
         /******************************** End of First Parent (Price Filter) ********************************/
     }
 
+    private void updateCheckBoxesOfParents() {
+        for (int i = 0 ; i < mParent.size() ; i++) {
+            ArrayList<ListChildItem> children = (mParent.get(i)).getChildren();
+            boolean[] checkStates = mChildCheckStates.get(i);
+            for (int j = 0 ; j < children.size() ; j++) {
+                CheckBox checkBox = new CheckBox(getActivity());
+                checkBox.setChecked(checkStates[j]);
+                mParent.get(i).getChildren().get(j).setObject(checkBox);
+            }
+        }
+    }
+
     private void prepareListData() {
         mParent = new ArrayList<>();
 
@@ -221,6 +234,7 @@ public class FilterDialogFragment extends DialogFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnDialogFilterFragmentInteractionListener {
-        public void onDialogFilterFragmentInteraction(HashMap<Integer, boolean[]> childCheckStates, String categoryId);
+        public void onDialogFilterFragmentInteraction(String categoryId,
+                                                      ArrayList<ListParentItem> parentItems);
     }
 }
