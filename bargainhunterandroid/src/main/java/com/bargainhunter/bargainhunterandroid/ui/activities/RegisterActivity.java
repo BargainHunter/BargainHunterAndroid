@@ -1,18 +1,41 @@
 package com.bargainhunter.bargainhunterandroid.ui.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import com.bargainhunter.bargainhunterandroid.R;
 
 
 public class RegisterActivity extends ActionBarActivity {
-
+    private String mEmail;
+    private String PASSWORD;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        Bundle extras = getIntent().getExtras();
+        mEmail = extras.getString("email");
+        EditText email = (EditText) findViewById(R.id.emailEditText);
+        email.setText(mEmail);
+        final EditText passworEdit = (EditText) findViewById(R.id.passwordEditText);
+        Button registerBtn = (Button) findViewById(R.id.registerButton);
+        registerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+//                Intent intent =new Intent(RegisterActivity.this,LoginActivity.class);
+//                intent.putExtra("password",passworEdit.getText().toString());
+               // RegisterActivity.this.finish;
+
+            }
+        }
+    );
     }
 
 

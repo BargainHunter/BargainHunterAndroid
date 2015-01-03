@@ -69,6 +69,13 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     private View mLoginFormView;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+
+    }
+    final private  int STATIC_INTEGER_VALUE =0;
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -120,8 +127,34 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 //        mEmailLoginFormView = findViewById(R.id.email_login_form);
 //        mSignOutButtons = findViewById(R.id.plus_sign_out_buttons);
 
-        
+        Button regisertBtn = (Button) findViewById(R.id.registerButton);
+        regisertBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
+                intent.putExtra("email",mEmailView.getText().toString());
+
+                startActivity(intent);
+                startActivityForResult(intent,1);
+            }
+        });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+//                if(requestCode == 1){
+//                if (resultCode == Activity.RESULT_OK) {
+//                    String newText = data.getStringExtra("password");
+//                    EditText passwordedit = (EditText) findViewById(R.id.passwordEditText);
+//                    passwordedit.setText(newText);
+//                }
+//
+//            }
+        Bundle extras = getIntent().getExtras();
+        String newText = extras.getString("email");
+        }
+
 
     private void populateAutoComplete() {
         getLoaderManager().initLoader(0, null, this);
@@ -182,6 +215,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             mAuthTask.execute((Void) null);
         }
     }
+
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
