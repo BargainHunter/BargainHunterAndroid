@@ -43,12 +43,6 @@ public class FavoriteFragment extends Fragment{
         super.onAttach(activity);
         ((MainActivity) activity).onSectionAttached(
                 getArguments().getInt(ARG_SECTION_NUMBER));
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
     @Override
     public void onDetach() {
@@ -66,7 +60,7 @@ public class FavoriteFragment extends Fragment{
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 Fragment storeFavoriteFragment = StoreFavoriteFragment.newInstance(4);
                 fragmentManager.beginTransaction()
-                        .replace(container.getId(), storeFavoriteFragment)
+                        .replace(container.getId(), storeFavoriteFragment, "favorite_stores_fragment")
                         .addToBackStack(null)
                         .commit();
             }
@@ -78,7 +72,7 @@ public class FavoriteFragment extends Fragment{
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 Fragment offerFavoriteFragment = OfferFavoriteFragment.newInstance(4);
                 fragmentManager.beginTransaction()
-                        .replace(container.getId(), offerFavoriteFragment)
+                        .replace(container.getId(), offerFavoriteFragment, "favorite_offers_fragment")
                         .addToBackStack(null)
                         .commit();
             }

@@ -8,10 +8,13 @@ import android.view.*;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ExpandableListView;
+import com.activeandroid.query.Select;
 import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.adapters.ExpandableListAdapter;
 import com.bargainhunter.bargainhunterandroid.models.components.ListChildItem;
 import com.bargainhunter.bargainhunterandroid.models.components.ListParentItem;
+import com.bargainhunter.bargainhunterandroid.models.entities.Category;
+import com.bargainhunter.bargainhunterandroid.models.entities.Subcategory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,7 +94,13 @@ public class FilterDialogFragment extends DialogFragment {
         getDialog().setTitle("Chose Filters");
 
         mExpandableListView = (ExpandableListView) view.findViewById(R.id.expandableListView);
+        mParent = new ArrayList<>();
+
+        // create price filters
         prepareListData();
+        // create subcategory filters
+        prepareSubcategoryListData();
+
         mListAdapter = new ExpandableListAdapter(getActivity(), mParent);
         mExpandableListView.setAdapter(mListAdapter);
 
@@ -101,7 +110,7 @@ public class FilterDialogFragment extends DialogFragment {
         mExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                priceFilterInteraction(groupPosition, childPosition, v);
+                filterInteraction(groupPosition, childPosition, v);
 
                 mChildCheckStates = mListAdapter.getChildCheckStates();
                 return true;
@@ -121,7 +130,8 @@ public class FilterDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
-                    mListener.onDialogFilterFragmentInteraction(mChildCheckStates, mCategoryId);
+                    updateCheckBoxesOfParents();
+                    mListener.onDialogFilterFragmentInteraction(mCategoryId, mParent);
                     getDialog().hide();
                 }
             }
@@ -130,11 +140,10 @@ public class FilterDialogFragment extends DialogFragment {
         return view;
     }
 
-    private void priceFilterInteraction(int groupPosition, int childPosition, View v) {
+    private void filterInteraction(int groupPosition, int childPosition, View v) {
         boolean selectedGroupChildrenCheckStates[] = mChildCheckStates.get(groupPosition); // get selected group's children states!
-        ListParentItem priceFilterParent = mParent.get(0);          // the first Parent
+        ListParentItem priceFilterParent = mParent.get(groupPosition);          // the first Parent
 
-        /********************************   First Parent (Price Filter)   ********************************/
         if (mParent.get(groupPosition) == priceFilterParent) {      // if user click the first Parent (Price Filter)
             List<ListChildItem> children = mParent.get(groupPosition).getChildren(); //all children of the first parent
             ListChildItem defaultChild = mParent.get(groupPosition).getChildren().get(0); // get the No Filter child
@@ -174,12 +183,21 @@ public class FilterDialogFragment extends DialogFragment {
                 }
             }
         }
-        /******************************** End of First Parent (Price Filter) ********************************/
+    }
+
+    private void updateCheckBoxesOfParents() {
+        for (int i = 0 ; i < mParent.size() ; i++) {
+            ArrayList<ListChildItem> children = (mParent.get(i)).getChildren();
+            boolean[] checkStates = mChildCheckStates.get(i);
+            for (int j = 0 ; j < children.size() ; j++) {
+                CheckBox checkBox = new CheckBox(getActivity());
+                checkBox.setChecked(checkStates[j]);
+                mParent.get(i).getChildren().get(j).setObject(checkBox);
+            }
+        }
     }
 
     private void prepareListData() {
-        mParent = new ArrayList<>();
-
         //adding child data
         ArrayList<ListChildItem> children = new ArrayList<>();
         children.add(new ListChildItem("No Filter", true, new CheckBox(getActivity())));
@@ -191,6 +209,21 @@ public class FilterDialogFragment extends DialogFragment {
 
         //adding parent data
         mParent.add(new ListParentItem("Price List", children));
+    }
+
+    private void prepareSubcategoryListData() {
+        //adding child data
+        Category category = new Select().from(Category.class).where("category_id = ? ", mCategoryId).executeSingle();
+        List<Subcategory> subcategories = category.getSubcategories();
+
+        ArrayList<ListChildItem> children = new ArrayList<>();
+        children.add(new ListChildItem("No Filter", true, new CheckBox(getActivity())));
+        for (Subcategory subcategory : subcategories) {
+            children.add(new ListChildItem(subcategory.getDescription(), false, new CheckBox((getActivity()))));
+        }
+
+        //adding parent data
+        mParent.add(new ListParentItem("Category List", children));
     }
 
     @Override
@@ -221,6 +254,7 @@ public class FilterDialogFragment extends DialogFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnDialogFilterFragmentInteractionListener {
-        public void onDialogFilterFragmentInteraction(HashMap<Integer, boolean[]> childCheckStates, String categoryId);
+        public void onDialogFilterFragmentInteraction(String categoryId,
+                                                      ArrayList<ListParentItem> parentItems);
     }
 }

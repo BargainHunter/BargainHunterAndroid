@@ -13,14 +13,15 @@ import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.adapters.OfferAdapter;
 import com.bargainhunter.bargainhunterandroid.controllers.LocationController;
 import com.bargainhunter.bargainhunterandroid.models.Coordinates;
+import com.bargainhunter.bargainhunterandroid.models.components.ListChildItem;
+import com.bargainhunter.bargainhunterandroid.models.components.ListParentItem;
 import com.bargainhunter.bargainhunterandroid.models.entities.Category;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 import com.bargainhunter.bargainhunterandroid.models.entities.OfferSubcategory;
 import com.bargainhunter.bargainhunterandroid.models.entities.Subcategory;
 import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * A fragment representing a list of Items.
@@ -36,17 +37,13 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
     private static final String ARG_SECTION_NUMBER = "section_number";
     protected static final String ARG_PRICE_FILTERS = "price_filters";
     private static final String ARG_CATEGORY_ID = "category_id";
-    private static int instanceUsed;
 
     protected List<Offer> offerList;
     private int mSectionNumber;
-    private Coordinates phoneLoc;
-    private LocationController controller;
     private OnFragmentInteractionListener mListener;
-    protected boolean mPriceFilters[];
-    private DialogFragment dialogFragment;
     private String mCategoryId;
 
+    protected ArrayList<ListParentItem> mParent;
     /**
      * The fragment's ListView/GridView.
      */
@@ -66,7 +63,6 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
     }
 
     public static OfferListFragment newInstance(int sectionNumber, String categoryId) {
-        instanceUsed = 1;
         OfferListFragment fragment = new OfferListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -75,15 +71,12 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
         return fragment;
     }
 
-    public static OfferListFragment newInstance(int sectionNumber, String categoryId, boolean priceFilters[]) {
-        instanceUsed = 2;
-        OfferListFragment fragment = new OfferListFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        args.putBooleanArray(ARG_PRICE_FILTERS, priceFilters);
-        args.putString(ARG_CATEGORY_ID, categoryId);
-        fragment.setArguments(args);
-        return fragment;
+    public void setParents(ArrayList<ListParentItem> parentItems) {
+        this.mParent = parentItems;
+        initializeOfferList();
+        applyPriceFilters();
+        applyCategoryFilters();
+        updateDisplay(offerList);
     }
 
     @Override
@@ -91,22 +84,15 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (getArguments() != null) {
-            switch (instanceUsed) {
-                case 1:
-                    mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
-                    mCategoryId = getArguments().getString(ARG_CATEGORY_ID);
-                    break;
-                case 2:
-                    mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
-                    mCategoryId = getArguments().getString(ARG_CATEGORY_ID);
-                    mPriceFilters = getArguments().getBooleanArray(ARG_PRICE_FILTERS);
-            }
+            mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+            mCategoryId = getArguments().getString(ARG_CATEGORY_ID);
         }
 
         initializeOfferList();
 
-        if (mPriceFilters != null) {
+        if (mParent != null) {
             applyPriceFilters();
+            applyCategoryFilters();
         }
     }
 
@@ -136,38 +122,80 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
     protected void applyPriceFilters() {
         List<Offer> offerListToAdd = new ArrayList<>();
 
-        if (mPriceFilters[1]) {
+        ListParentItem parentItem = mParent.get(0);     // price filters
+        ArrayList<ListChildItem> children = parentItem.getChildren();
+
+        if (((CheckBox) children.get(1).getObject()).isChecked()) {
             for (Offer offer : offerList){
                 if (((offer.getPrice()>=0) && (offer.getPrice()<=5)))
                     offerListToAdd.add(offer);
             }
         }
-        if (mPriceFilters[2]) {
+
+        if (((CheckBox) children.get(2).getObject()).isChecked()) {
             for (Offer offer : offerList){
                 if (((offer.getPrice()>5) && (offer.getPrice()<=10)))
                     offerListToAdd.add(offer);
             }
         }
-        if (mPriceFilters[3]) {
+
+        if (((CheckBox) children.get(3).getObject()).isChecked()) {
             for (Offer offer : offerList){
                 if (((offer.getPrice()>10) && (offer.getPrice()<=80)))
                     offerListToAdd.add(offer);
             }
         }
-        if (mPriceFilters[4]) {
+
+        if (((CheckBox) children.get(4).getObject()).isChecked()) {
             for (Offer offer : offerList){
                 if (((offer.getPrice()>80) && (offer.getPrice()<=100)))
                     offerListToAdd.add(offer);
             }
         }
-        if (mPriceFilters[5]) {
+
+        if (((CheckBox) children.get(5).getObject()).isChecked()) {
             for (Offer offer : offerList){
                 if ((offer.getPrice()>100))
                     offerListToAdd.add(offer);
             }
         }
 
-        if (!mPriceFilters[0]) {
+        if (!(((CheckBox) children.get(0).getObject()).isChecked())) {
+            offerList = new ArrayList<>();
+            offerList = offerListToAdd;
+        }
+    }
+
+    private void applyCategoryFilters() {
+        List<Offer> offerListToAdd = new ArrayList<>();                 // array list of offers to add
+
+        ListParentItem parentItem = mParent.get(1);                     // category filters
+        ArrayList<ListChildItem> children = parentItem.getChildren();   // all children of category filters
+
+        for ( int i = 1 ; i < children.size() ; i++) {                  // for every children except "No filter"
+            if (((CheckBox) children.get(i).getObject()).isChecked()) { // if the checkbox is checked
+                String childName = children.get(i).getChildName();      // get the subcategory description
+
+                for (Offer offer : offerList){                          // for every offer in the offerList
+                    List<OfferSubcategory> offerSubcategories = offer.getSubcategories();
+                    for (OfferSubcategory offerSubcategory : offerSubcategories) {
+                        long subcategoryId = offerSubcategory.getSubcategoryId();
+                        List<Subcategory> subcategories = new Select().from(Subcategory.class)
+                                                              .where("subcategory_id = ?", subcategoryId)
+                                                              .execute();
+                        for (Subcategory subcategory : subcategories) {
+                            if (subcategory.getDescription().equals(childName)) {
+                                offerListToAdd.add(offer);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+        if (!(((CheckBox) children.get(0).getObject()).isChecked())) {
             offerList = new ArrayList<>();
             offerList = offerListToAdd;
         }
@@ -182,7 +210,7 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.price_filter:
+            case R.id.filter:
                 showDialog();
                 return true;
             default:
@@ -201,7 +229,7 @@ public class OfferListFragment extends ListFragment implements AbsListView.OnIte
         }
         ft.addToBackStack(null);
 
-        dialogFragment = FilterDialogFragment.newInstance(2, mCategoryId);
+        DialogFragment dialogFragment = FilterDialogFragment.newInstance(2, mCategoryId);
         dialogFragment.show(ft, "filter_dialog");
     }
 
