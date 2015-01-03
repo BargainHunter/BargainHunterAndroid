@@ -99,7 +99,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        mEmailView.setText("foo.example.com");
+        mEmailView.setText("foo@example.com");
 
         populateAutoComplete();
 
