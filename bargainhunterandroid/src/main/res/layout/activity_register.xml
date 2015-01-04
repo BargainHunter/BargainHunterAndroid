@@ -8,55 +8,46 @@
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 tools:context="com.bargainhunter.bargainhunterandroid.ui.activities.RegisterActivity">
 
-    <EditText
+    <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="text|textPersonName"
-            android:ems="10"
-            android:id="@+id/firstNameEditText" android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" android:hint="@string/first_name"
-            android:layout_alignParentRight="true" android:layout_alignParentEnd="true"/>
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/promt_register"
-            android:id="@+id/registerButton"
-            android:layout_centerVertical="true" android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
-    <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/lastNameEditText" android:layout_below="@+id/firstNameEditText"
-            android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
-            android:hint="@string/last_name"/>
-    <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:ems="10"
-            android:id="@+id/emailEditText" android:layout_below="@+id/lastNameEditText"
-            android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
-            android:layout_alignRight="@+id/lastNameEditText" android:layout_alignEnd="@+id/lastNameEditText"
-            android:hint="@string/prompt_email"/>
-    <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/usernameEditText" android:layout_below="@+id/emailEditText" android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" android:layout_alignRight="@+id/emailEditText"
-            android:layout_alignEnd="@+id/emailEditText" android:hint="@string/username"/>
-    <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
-            android:id="@+id/passwordEditText" android:layout_below="@+id/usernameEditText"
-            android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
-            android:layout_alignRight="@+id/usernameEditText" android:layout_alignEnd="@+id/usernameEditText"
-            android:hint="@string/password"/>
+            android:id="@+id/registerProgressBar" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+            android:layout_marginTop="44dp" android:visibility="gone"/>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true" android:layout_alignParentStart="true" android:id="@+id/registerForm">
+        <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:inputType="text|textPersonName" android:ems="10" android:id="@+id/firstNameEditText"
+                  android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
+                  android:layout_alignParentStart="true" android:hint="@string/first_name"
+                  android:layout_alignParentRight="true" android:layout_alignParentEnd="true"/>
+        <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:inputType="textPersonName" android:ems="10" android:id="@+id/lastNameEditText"
+                  android:layout_below="@+id/firstNameEditText" android:layout_alignParentLeft="true"
+                  android:layout_alignParentStart="true" android:layout_alignParentRight="true"
+                  android:layout_alignParentEnd="true" android:hint="@string/last_name"/>
+        <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:inputType="textEmailAddress" android:ems="10" android:id="@+id/emailEditText"
+                  android:layout_below="@+id/lastNameEditText" android:layout_alignParentLeft="true"
+                  android:layout_alignParentStart="true" android:layout_alignRight="@+id/lastNameEditText"
+                  android:layout_alignEnd="@+id/lastNameEditText" android:hint="@string/prompt_email"/>
+        <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:inputType="textPersonName" android:ems="10" android:id="@+id/usernameEditText"
+                  android:layout_below="@+id/emailEditText" android:layout_alignParentLeft="true"
+                  android:layout_alignParentStart="true" android:layout_alignRight="@+id/emailEditText"
+                  android:layout_alignEnd="@+id/emailEditText" android:hint="@string/username"
+                />
+        <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:inputType="textPassword" android:ems="10" android:id="@+id/passwordEditText"
+                  android:layout_below="@+id/usernameEditText" android:layout_alignParentLeft="true"
+                  android:layout_alignParentStart="true" android:layout_alignRight="@+id/usernameEditText"
+                  android:layout_alignEnd="@+id/usernameEditText" android:hint="@string/password"/>
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/promt_register" android:id="@+id/createAccountButton"
+                android:layout_centerVertical="true" android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+    </LinearLayout>
 </RelativeLayout>

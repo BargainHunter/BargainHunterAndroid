@@ -143,20 +143,20 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-//                if(requestCode == 1){
-//                if (resultCode == Activity.RESULT_OK) {
-//                    String newText = data.getStringExtra("password");
-//                    EditText passwordedit = (EditText) findViewById(R.id.passwordEditText);
-//                    passwordedit.setText(newText);
-//                }
-//
-//            }
-        Bundle extras = getIntent().getExtras();
-        String newText = extras.getString("email");
-        }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+////                if(requestCode == 1){
+////                if (resultCode == Activity.RESULT_OK) {
+////                    String newText = data.getStringExtra("password");
+////                    EditText passwordedit = (EditText) findViewById(R.id.passwordEditText);
+////                    passwordedit.setText(newText);
+////                }
+////
+////            }
+//        Bundle extras = getIntent().getExtras();
+//        String newText = extras.getString("email");
+//        }
 
 
     private void populateAutoComplete() {
@@ -211,7 +211,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            // TODO: create rest adapter
+
             // if every field is corrent  the login will be performed
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
@@ -404,6 +404,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             // TODO: attempt authentication against a network service.
 
             try {
+                // TODO: create rest adapter
                 // Simulate network access.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
