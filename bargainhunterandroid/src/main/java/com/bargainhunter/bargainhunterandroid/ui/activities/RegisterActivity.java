@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -46,6 +48,7 @@ public class RegisterActivity extends ActionBarActivity {
 //                showProgress(true);
                     showProgress(true);
                     registerTask = new UserRegisterTask();
+                    registerTask.execute();
             }
         }
     );
@@ -73,6 +76,7 @@ public class RegisterActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public void showProgress(final boolean show) {
@@ -120,7 +124,25 @@ public class RegisterActivity extends ActionBarActivity {
             super.onPostExecute(aBoolean);
             showProgress(false);
             if(aBoolean) {
-                finish();
+                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                builder.setMessage("Registration Successfull! Please Login")
+                        .setCancelable(false)
+                        .setPositiveButton("OK",new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id) {
+//                                EditText email = (EditText) findViewById(R.id.emailEditText);
+//                                EditText password = (EditText) findViewById(R.id.passwordEditText);
+//                                Intent intent = new Intent();
+//                                intent.putExtra("email",email.getText().toString());
+//                                intent.putExtra("password",password.getText().toString());
+//                                setResult(RESULT_OK,intent);
+                                finish();
+
+//                                startActivity(intent);
+                            }
+                        });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+               // finish();
             }
         }
     }

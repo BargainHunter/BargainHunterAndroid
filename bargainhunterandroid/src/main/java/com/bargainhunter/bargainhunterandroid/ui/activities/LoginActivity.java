@@ -22,11 +22,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.*;
 import com.bargainhunter.bargainhunterandroid.models.User;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -138,7 +134,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 intent.putExtra("email",mEmailView.getText().toString());
 
                 startActivity(intent);
-                startActivityForResult(intent,1);
+//                startActivityForResult(intent,1);
             }
         });
     }
@@ -154,8 +150,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 ////                }
 ////
 ////            }
-//        Bundle extras = getIntent().getExtras();
-//        String newText = extras.getString("email");
+//        String email = data.getStringExtra("email");
+//
+//        Toast.makeText(LoginActivity.this,email,Toast.LENGTH_LONG).show();
 //        }
 
 
@@ -432,7 +429,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             showProgress(false);
 
             if (success) { // if credentials was found in server email and password is correct
-                finish();
+                //finish();
                 Intent intent = new Intent(LoginActivity.this,SplashScreen.class);
                 LoginActivity.this.startActivity(intent);
             } else { // email is ok but password is incorrect
