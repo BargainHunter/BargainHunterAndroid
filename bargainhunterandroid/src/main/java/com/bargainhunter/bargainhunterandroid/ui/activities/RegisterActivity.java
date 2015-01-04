@@ -3,20 +3,18 @@ package com.bargainhunter.bargainhunterandroid.ui.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.models.User;
 
@@ -29,7 +27,9 @@ public class RegisterActivity extends ActionBarActivity {
     private View registerProgressView;
     private View registerFormView;
     private UserRegisterTask registerTask;
-    private EditText email;
+    private EditText emailEditText;
+    private EditText usernameEditText, passwordEditText, firstNameEditText, lastNameEditText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,9 +38,12 @@ public class RegisterActivity extends ActionBarActivity {
         registerFormView = findViewById(R.id.registerForm);
         Bundle extras = getIntent().getExtras();
         mEmail = extras.getString("email");
-        email = (EditText) findViewById(R.id.emailEditText);
-        email.setText(mEmail);
-        final EditText passworEdit = (EditText) findViewById(R.id.passwordEditText);
+        emailEditText = (EditText) findViewById(R.id.emailEditText);
+        emailEditText.setText(mEmail);
+        passwordEditText = (EditText) findViewById(R.id.passwordEditText);
+        usernameEditText = (EditText) findViewById(R.id.usernameEditText);
+        firstNameEditText = (EditText) findViewById(R.id.firstNameEditText);
+        lastNameEditText = (EditText) findViewById(R.id.lastNameEditText);
         Button registerBtn = (Button) findViewById(R.id.createAccountButton);
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +54,7 @@ public class RegisterActivity extends ActionBarActivity {
                // RegisterActivity.this.finish;
 //                showProgress(true);
 
-                    checkEmail(email.getText().toString());
+                    attemptRegister();
 
             }
         }
@@ -81,27 +84,78 @@ public class RegisterActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public boolean attemptRegister(){
+        boolean cancel =false;
+        firstNameEditText.setError(null);
+        lastNameEditText.setError(null);
+        emailEditText.setError(null);
+        usernameEditText.setError(null);
+        passwordEditText.setError(null);
 
-        public final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
-                "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
-                        "\\@" +
-                        "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
-                        "(" +
-                        "\\." +
-                        "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
-                        ")+"
-        );
-    private boolean checkEmail(String email) {
-        boolean res=false;
-        res = EMAIL_ADDRESS_PATTERN.matcher(email).matches();
-         if(res){
-             showProgress(true);
-             registerTask = new UserRegisterTask();
-             registerTask.execute();
+        View focusView = null;
+        if (!isEmailValid(emailEditText.getText().toString())){
+            emailEditText.setError("Email invalid or empty");
+            focusView = emailEditText;
+            cancel = true;
+        }
+
+        if (!isValid(passwordEditText.getText().toString())){
+            emailEditText.setError("Password too short");
+            focusView = passwordEditText;
+            cancel = true;
+        }
+
+        if (!isValid(usernameEditText.getText().toString())){
+            usernameEditText.setError("Username too short");
+            focusView = usernameEditText;
+            cancel = true;
+        }
+
+        if(!isValid(firstNameEditText.getText().toString())){
+            firstNameEditText.setError("Firstname too short");
+            focusView = firstNameEditText;
+            cancel = true;
+        }
+        if(!isValid(lastNameEditText.getText().toString())){
+            lastNameEditText.setError("Lastname too short");
+            focusView = lastNameEditText;
+            cancel = true;
+        }
+        if(cancel){
+            focusView.requestFocus();
         }
         else {
-             Toast.makeText(RegisterActivity.this,"wrong email",Toast.LENGTH_LONG).show();
-         }
+            showProgress(true);
+            registerTask = new UserRegisterTask();
+            registerTask.execute();
+        }
+        return cancel;
+    }
+
+    public final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
+            "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
+                    "\\@" +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                    "(" +
+                    "\\." +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                    ")+"
+    );
+
+
+    private boolean isEmailValid(String email){
+        boolean res = false;
+        if(EMAIL_ADDRESS_PATTERN.matcher(email).matches() && !TextUtils.isEmpty(email)){
+            res = true;
+        }
+        return res;
+    }
+
+    private boolean isValid(String field){
+        boolean res = false;
+        if(field.length() > 3 && !TextUtils.isEmpty(field)){
+            res = true;
+        }
         return res;
     }
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)

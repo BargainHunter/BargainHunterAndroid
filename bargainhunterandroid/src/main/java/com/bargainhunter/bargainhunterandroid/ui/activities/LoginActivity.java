@@ -126,12 +126,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 //        mEmailLoginFormView = findViewById(R.id.email_login_form);
 //        mSignOutButtons = findViewById(R.id.plus_sign_out_buttons);
 
-        Button regisertBtn = (Button) findViewById(R.id.registerButton);
-        regisertBtn.setOnClickListener(new OnClickListener() {
+        Button registerButton = (Button) findViewById(R.id.registerButton);
+        registerButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
-                intent.putExtra("email",mEmailView.getText().toString());
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                intent.putExtra("email", mEmailView.getText().toString());
 
                 startActivity(intent);
 //                startActivityForResult(intent,1);
@@ -224,14 +224,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        boolean res = true;
-        if( !(password.length() > 4)){
-            res=false;
-        }
-        if(password.isEmpty()){
-            res = false;
-        }
-        return res;
+        return password.length() > 4;
     }
 
     /**

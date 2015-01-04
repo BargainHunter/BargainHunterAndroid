@@ -6,10 +6,33 @@ package com.bargainhunter.bargainhunterandroid.models;
 public class User {
     private String email;
     private String password;
+    private String firstName;
+    private String lastName;
+    private String username;
 
-    public User(String email, String password) {
-        this.email = email;
-        this.password = password;
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public String getPassword() {
