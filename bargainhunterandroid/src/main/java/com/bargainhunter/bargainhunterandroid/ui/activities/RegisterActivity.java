@@ -16,8 +16,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.models.User;
+
+import java.util.regex.Pattern;
 
 
 public class RegisterActivity extends ActionBarActivity {
@@ -26,6 +29,7 @@ public class RegisterActivity extends ActionBarActivity {
     private View registerProgressView;
     private View registerFormView;
     private UserRegisterTask registerTask;
+    private EditText email;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +38,7 @@ public class RegisterActivity extends ActionBarActivity {
         registerFormView = findViewById(R.id.registerForm);
         Bundle extras = getIntent().getExtras();
         mEmail = extras.getString("email");
-        EditText email = (EditText) findViewById(R.id.emailEditText);
+        email = (EditText) findViewById(R.id.emailEditText);
         email.setText(mEmail);
         final EditText passworEdit = (EditText) findViewById(R.id.passwordEditText);
         Button registerBtn = (Button) findViewById(R.id.createAccountButton);
@@ -46,9 +50,9 @@ public class RegisterActivity extends ActionBarActivity {
 //                intent.putExtra("password",passworEdit.getText().toString());
                // RegisterActivity.this.finish;
 //                showProgress(true);
-                    showProgress(true);
-                    registerTask = new UserRegisterTask();
-                    registerTask.execute();
+
+                    checkEmail(email.getText().toString());
+
             }
         }
     );
@@ -78,6 +82,28 @@ public class RegisterActivity extends ActionBarActivity {
     }
 
 
+        public final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
+                "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
+                        "\\@" +
+                        "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                        "(" +
+                        "\\." +
+                        "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                        ")+"
+        );
+    private boolean checkEmail(String email) {
+        boolean res=false;
+        res = EMAIL_ADDRESS_PATTERN.matcher(email).matches();
+         if(res){
+             showProgress(true);
+             registerTask = new UserRegisterTask();
+             registerTask.execute();
+        }
+        else {
+             Toast.makeText(RegisterActivity.this,"wrong email",Toast.LENGTH_LONG).show();
+         }
+        return res;
+    }
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
