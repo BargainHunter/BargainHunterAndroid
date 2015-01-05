@@ -9,7 +9,7 @@
                 <RelativeLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="642dp"
                         android:orientation="vertical"
                         android:background="@color/LightGrey" >
 
@@ -95,6 +95,13 @@
                                 android:layout_below="@+id/priceView"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"/>
+                        <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" android:layout_below="@+id/colorLabel"
+                                android:id="@+id/StoreFragmentContainer" android:layout_alignParentLeft="false"
+                                android:layout_alignParentStart="false" android:layout_margin="5dp"
+                                android:layout_marginTop="5dp" android:layout_alignParentTop="false">
+                        </FrameLayout>
 
                 </RelativeLayout>
         </LinearLayout>

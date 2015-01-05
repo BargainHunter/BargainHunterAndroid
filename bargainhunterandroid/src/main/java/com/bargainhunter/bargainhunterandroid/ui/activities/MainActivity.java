@@ -23,6 +23,7 @@ public class MainActivity extends ActionBarActivity
         OfferListFragment.OnFragmentInteractionListener,
         OfferInfoFragment.OnFragmentInteractionListener,
         OfferListFromStoreFragment.OnFragmentInteractionListener,
+        StoreListFromOfferFragment.OnFragmentInteractionListener,
         FilterDialogFragment.OnDialogFilterFragmentInteractionListener,
         CategoryGridViewFragment.OnCategoryGridViewFragmentInteractionListener {
 
@@ -175,6 +176,15 @@ public class MainActivity extends ActionBarActivity
                 .commit();
     }
 
+    @Override
+    public void onStoreListFromOfferFragmentInteraction(String storeid) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment storeInfoFragment = StoreInfoFragment.newInstance(2, storeid);
+        fragmentManager.beginTransaction()
+                .replace(R.id.mainContainer, storeInfoFragment)
+                .addToBackStack(null)
+                .commit();
+    }
 
 
 
@@ -216,4 +226,6 @@ public class MainActivity extends ActionBarActivity
                 .addToBackStack(null)
                 .commit();
     }
+
+
 }

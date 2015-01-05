@@ -74,6 +74,13 @@ public class OfferInfoFragment extends Fragment {
         offer = new Select().from(Offer.class).where("offer_id = ?", mOfferId).executeSingle();
     }
 
+    public void addOfferListFragragment() {
+        Fragment storeListFromOfferFragment = StoreListFromOfferFragment.newInstance(2, mOfferId);
+
+        getChildFragmentManager().beginTransaction().add(R.id.StoreFragmentContainer, storeListFromOfferFragment).commit();
+        getChildFragmentManager().executePendingTransactions();
+    }
+
     //Updates the display!
     private void updateDisplay(View view, Offer offer) {
 
@@ -109,6 +116,8 @@ public class OfferInfoFragment extends Fragment {
             colorLabel.setText("Good Deal");
             colorLabel.setBackgroundResource(R.drawable.title_green);
         }
+
+        addOfferListFragragment();
     }
 
 
