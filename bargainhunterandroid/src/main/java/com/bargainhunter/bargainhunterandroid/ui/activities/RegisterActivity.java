@@ -16,7 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import com.bargainhunter.bargainhunterandroid.R;
-import com.bargainhunter.bargainhunterandroid.models.User;
+import com.bargainhunter.bargainhunterandroid.models.entities.User;
 
 import java.util.regex.Pattern;
 
@@ -28,7 +28,7 @@ public class RegisterActivity extends ActionBarActivity {
     private View registerFormView;
     private UserRegisterTask registerTask;
     private EditText emailEditText;
-    private EditText usernameEditText, passwordEditText, firstNameEditText, lastNameEditText;
+    private EditText passwordEditText, firstNameEditText, lastNameEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,6 @@ public class RegisterActivity extends ActionBarActivity {
         emailEditText = (EditText) findViewById(R.id.emailEditText);
         emailEditText.setText(mEmail);
         passwordEditText = (EditText) findViewById(R.id.passwordEditText);
-        usernameEditText = (EditText) findViewById(R.id.usernameEditText);
         firstNameEditText = (EditText) findViewById(R.id.firstNameEditText);
         lastNameEditText = (EditText) findViewById(R.id.lastNameEditText);
         Button registerBtn = (Button) findViewById(R.id.createAccountButton);
@@ -89,7 +88,6 @@ public class RegisterActivity extends ActionBarActivity {
         firstNameEditText.setError(null);
         lastNameEditText.setError(null);
         emailEditText.setError(null);
-        usernameEditText.setError(null);
         passwordEditText.setError(null);
 
         View focusView = null;
@@ -105,11 +103,6 @@ public class RegisterActivity extends ActionBarActivity {
             cancel = true;
         }
 
-        if (!isValid(usernameEditText.getText().toString())){
-            usernameEditText.setError("Username too short");
-            focusView = usernameEditText;
-            cancel = true;
-        }
 
         if(!isValid(firstNameEditText.getText().toString())){
             firstNameEditText.setError("Firstname too short");
