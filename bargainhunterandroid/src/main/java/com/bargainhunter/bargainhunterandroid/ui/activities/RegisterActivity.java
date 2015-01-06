@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
@@ -47,11 +48,6 @@ public class RegisterActivity extends ActionBarActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //finish();
-//                Intent intent =new Intent(RegisterActivity.this,LoginActivity.class);
-//                intent.putExtra("password",passworEdit.getText().toString());
-               // RegisterActivity.this.finish;
-//                showProgress(true);
 
                     attemptRegister();
 
@@ -184,7 +180,6 @@ public class RegisterActivity extends ActionBarActivity {
         }
     }
     public class UserRegisterTask extends AsyncTask<Void,Void,Boolean>{
-        User user;
 
         @Override
         protected Boolean doInBackground(Void... params) {
@@ -202,15 +197,9 @@ public class RegisterActivity extends ActionBarActivity {
                         .setCancelable(false)
                         .setPositiveButton("OK",new DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dialog, int id) {
-//                                EditText email = (EditText) findViewById(R.id.emailEditText);
-//                                EditText password = (EditText) findViewById(R.id.passwordEditText);
-//                                Intent intent = new Intent();
-//                                intent.putExtra("email",email.getText().toString());
-//                                intent.putExtra("password",password.getText().toString());
-//                                setResult(RESULT_OK,intent);
                                 finish();
-
-//                                startActivity(intent);
+                                Intent intent = new Intent(RegisterActivity.this,SplashScreen.class);
+                                startActivity(intent);
                             }
                         });
                 AlertDialog alertDialog = builder.create();
