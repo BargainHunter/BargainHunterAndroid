@@ -6,7 +6,6 @@ import android.annotation.TargetApi;
 
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -23,10 +22,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
-import com.bargainhunter.bargainhunterandroid.models.User;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.SignInButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,26 +129,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 intent.putExtra("email", mEmailView.getText().toString());
 
                 startActivity(intent);
-//                startActivityForResult(intent,1);
+
             }
         });
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-////                if(requestCode == 1){
-////                if (resultCode == Activity.RESULT_OK) {
-////                    String newText = data.getStringExtra("password");
-////                    EditText passwordedit = (EditText) findViewById(R.id.passwordEditText);
-////                    passwordedit.setText(newText);
-////                }
-////
-////            }
-//        String email = data.getStringExtra("email");
-//
-//        Toast.makeText(LoginActivity.this,email,Toast.LENGTH_LONG).show();
-//        }
+
 
 
     private void populateAutoComplete() {
@@ -411,8 +392,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 }
             }
 
-            // TODO: register the new account here.
-
             return res;
         }
 
@@ -422,7 +401,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             showProgress(false);
 
             if (success) { // if credentials was found in server email and password is correct
-                //finish();
+                finish();
                 Intent intent = new Intent(LoginActivity.this,SplashScreen.class);
                 LoginActivity.this.startActivity(intent);
             } else { // email is ok but password is incorrect
