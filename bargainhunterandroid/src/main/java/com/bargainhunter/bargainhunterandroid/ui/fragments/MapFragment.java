@@ -2,7 +2,9 @@ package com.bargainhunter.bargainhunterandroid.ui.fragments;
 
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,6 +15,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -199,7 +202,7 @@ public class MapFragment extends Fragment implements IRoutingListener {
                     // Drawing marker on the map
                     drawMarker(store, iconBmp);
                     // Drawing circle on the map
-                    drawCircle(point);
+                    drawCircle(point,getRadius("notificationRadius",getActivity()));
                     // This intent will call the activity ProximityActivity
                     Intent proximityIntent = new Intent("com.bargainhunter.activity.proximity");
 
@@ -220,7 +223,7 @@ public class MapFragment extends Fragment implements IRoutingListener {
                     // The pending intent will be invoked when the device enters or exits the region 100 meters
                     // away from the marked point
                     // The -1 indicates that, the monitor will not be expired
-                    locationManager.addProximityAlert(point.latitude, point.longitude, 200, -1, pendingIntent);
+                    locationManager.addProximityAlert(point.latitude, point.longitude, getRadius("notificationRadius",getActivity()), -1, pendingIntent);
                     reqCode++;
                     stringOffers = "";
                 }
@@ -254,7 +257,12 @@ public class MapFragment extends Fragment implements IRoutingListener {
         map.addPolyline(polyoptions);
     }
 
-    private void drawCircle(LatLng point) {
+    public static float getRadius(String key, Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        float radius = (float)preferences.getInt(key,0);
+        return radius;
+    }
+    private void drawCircle(LatLng point, float radius) {
         // Instantiating CircleOptions to draw a circle around the marker
         CircleOptions circleOptions = new CircleOptions();
 
@@ -262,7 +270,7 @@ public class MapFragment extends Fragment implements IRoutingListener {
         circleOptions.center(point);
 
         // Radius of the circle
-        circleOptions.radius(200);
+        circleOptions.radius(radius);
 
         // Border color of the circle
         circleOptions.strokeColor(Color.BLACK);

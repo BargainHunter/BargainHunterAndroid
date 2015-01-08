@@ -7,8 +7,8 @@
                 android:key="notificationRadius"
                 android:title="Notification Radius"
                 android:summary="Store Radius in which you receive Notifications"
-                android:defaultValue="5000"
-                android:max="20000"
+                android:defaultValue="500"
+                android:max="2500"
                 />
         <EditTextPreference
                 android:title="Enter Notification Radius"
