@@ -11,9 +11,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.bargainhunter.bargainhunterandroid.R;
+import com.bargainhunter.bargainhunterandroid.models.components.ListParentItem;
 import com.bargainhunter.bargainhunterandroid.ui.fragments.*;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
@@ -22,8 +23,8 @@ public class MainActivity extends ActionBarActivity
         OfferListFragment.OnFragmentInteractionListener,
         OfferInfoFragment.OnFragmentInteractionListener,
         OfferListFromStoreFragment.OnFragmentInteractionListener,
-        FavoriteFragment.OnFragmentInteractionListener,
-        FilterDialogFragment.OnDialogFilterFragmentInteractionListener {
+        FilterDialogFragment.OnDialogFilterFragmentInteractionListener,
+        CategoryGridViewFragment.OnCategoryGridViewFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -56,19 +57,17 @@ public class MainActivity extends ActionBarActivity
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        // Change to Map fragment.
-        //Fragment fragment = OfferListFragment.newInstance(sectionNumber);
-        Fragment fragment = MapFragment.newInstance(sectionNumber);
+        Fragment fragment = new Fragment();
 
         switch (sectionNumber) {
             case 1:
-                fragment = MapFragment.newInstance(sectionNumber);
+                fragment = CategoryGridViewFragment.newInstance(sectionNumber);
                 break;
             case 2:
-                fragment = OfferListFragment.newInstance(sectionNumber);
+                fragment = StoreListFragment.newInstance(sectionNumber);
                 break;
             case 3:
-                fragment = StoreListFragment.newInstance(sectionNumber);
+                fragment = MapFragment.newInstance(sectionNumber);
                 break;
             case 4:
                 fragment = FavoriteFragment.newInstance(sectionNumber);
@@ -76,7 +75,7 @@ public class MainActivity extends ActionBarActivity
         }
 
         fragmentManager.beginTransaction()
-                .replace(R.id.mainContainer, fragment)
+                .replace(R.id.mainContainer, fragment, String.valueOf(sectionNumber))
                 .addToBackStack(null)
                 .commit();
     }
@@ -147,7 +146,6 @@ public class MainActivity extends ActionBarActivity
                 .commit();
     }
 
-
     @Override
     public void onStoreInfoFragmentInteraction(Uri uri) {
     }
@@ -177,20 +175,45 @@ public class MainActivity extends ActionBarActivity
                 .commit();
     }
 
-    @Override
-    public void onFavoriteFragmentInteraction(Uri uri) {
-    }
+
+
 
     @Override
-    public void onDialogFilterFragmentInteraction(HashMap<Integer, boolean[]> childCheckStates) {
-        boolean[] priceFilters = childCheckStates.get(0);
-        if (priceFilters.length >= 0) {
+    public void onDialogFilterFragmentInteraction(String categoryId,
+                                                  ArrayList<ListParentItem> parentItems) {
+        if (categoryId!=null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
-            Fragment offerListFragment = OfferListFragment.newInstance(1, priceFilters);
+            ((OfferListFragment) getSupportFragmentManager()
+                    .findFragmentByTag("offer_list_frag"))
+                    .setParents(parentItems);
+
             fragmentManager.beginTransaction()
-                    .replace(R.id.mainContainer, offerListFragment)
-                    .addToBackStack(null)
+                    .replace(R.id.mainContainer,
+                            getSupportFragmentManager().findFragmentByTag("offer_list_frag")
+                            , "offer_list_frag")
+                    .commit();
+        } else {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            ((OfferFavoriteFragment) getSupportFragmentManager()
+                    .findFragmentByTag("favorite_offers_fragment"))
+                    .setParents(parentItems);
+
+            fragmentManager.beginTransaction()
+                    .replace(R.id.mainContainer,
+                            getSupportFragmentManager().findFragmentByTag("favorite_offers_fragment")
+                            , "favorite_offers_fragment")
                     .commit();
         }
+    }
+
+
+    @Override
+    public void OnCategoryGridViewFragmentInteractionListener(String categoryId) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment offerListFragment = OfferListFragment.newInstance(1, categoryId);
+        fragmentManager.beginTransaction()
+                .replace(R.id.mainContainer, offerListFragment, "offer_list_frag")
+                .addToBackStack(null)
+                .commit();
     }
 }
