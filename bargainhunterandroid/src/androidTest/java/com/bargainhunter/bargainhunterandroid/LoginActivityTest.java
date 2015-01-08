@@ -28,7 +28,7 @@ import static org.robolectric.Robolectric.shadowOf;
 /**
  * Created by vasovourka on 12/31/14.
  */
-@Config(emulateSdk=18)
+@Config(emulateSdk=18, reportSdk = 18)
 @RunWith(RobolectricTestRunner.class)
 public class LoginActivityTest {
     Activity loginActivity;
