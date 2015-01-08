@@ -25,6 +25,7 @@ import android.widget.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import com.bargainhunter.bargainhunterandroid.R;
 
@@ -197,14 +198,20 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         }
     }
 
-
+    public final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
+            "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
+                    "\\@" +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                    "(" +
+                    "\\." +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                    ")+"
+    );
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
+        return EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 4;
     }
 
@@ -363,8 +370,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         private final String mEmail;
         private final String mPassword;
         private  String[] pieces;
-        private boolean res=true,emailInDb=false;
-        //UserLoginTask(String email, String password) {
+
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
@@ -385,14 +391,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             for (String credential : DUMMY_CREDENTIALS) {
                pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    emailInDb=true;
-                    res = pieces[1].equals(mPassword);
-                    return res;
+                    return pieces[1].equals(mPassword);
                 }
             }
 
-            return res;
+            return true;
         }
 
         @Override
@@ -407,10 +410,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             } else { // email is ok but password is incorrect
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
-            }
-            if (success && !emailInDb){
-                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
-                LoginActivity.this.startActivity(intent);
             }
 
 

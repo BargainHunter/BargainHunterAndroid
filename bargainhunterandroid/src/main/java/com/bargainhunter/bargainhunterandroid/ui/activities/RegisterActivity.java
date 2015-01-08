@@ -3,6 +3,7 @@ package com.bargainhunter.bargainhunterandroid.ui.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -38,7 +39,9 @@ public class RegisterActivity extends ActionBarActivity {
         registerProgressView =findViewById(R.id.registerProgressBar);
         registerFormView = findViewById(R.id.registerForm);
         Bundle extras = getIntent().getExtras();
-        mEmail = extras.getString("email");
+        if(extras != null) {
+            mEmail = extras.getString("email");
+        }
         emailEditText = (EditText) findViewById(R.id.emailEditText);
         emailEditText.setText(mEmail);
         passwordEditText = (EditText) findViewById(R.id.passwordEditText);
@@ -94,7 +97,7 @@ public class RegisterActivity extends ActionBarActivity {
         }
 
         if (!isValid(passwordEditText.getText().toString())){
-            emailEditText.setError("Password too short");
+            passwordEditText.setError("Password too short");
             focusView = passwordEditText;
             cancel = true;
         }
