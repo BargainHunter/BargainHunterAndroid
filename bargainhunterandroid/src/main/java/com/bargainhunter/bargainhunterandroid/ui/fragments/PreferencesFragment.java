@@ -41,7 +41,7 @@ public class PreferencesFragment extends android.preference.PreferenceFragment i
          */
         if ("editText".equals(key)) {
             String val = sharedPreferences.getString("editText", "500");
-            if (val == null || val.trim().equals("")) {
+            if (val == null || val.trim().equals("") || val.trim().equals("0")) {
                 val = "" + R.string.default_radius; // <-- our default value
             }
 
