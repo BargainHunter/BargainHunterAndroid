@@ -6,7 +6,6 @@ import android.annotation.TargetApi;
 
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -22,15 +21,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import com.bargainhunter.bargainhunterandroid.models.User;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.SignInButton;
+import android.widget.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -130,33 +121,20 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 //        mEmailLoginFormView = findViewById(R.id.email_login_form);
 //        mSignOutButtons = findViewById(R.id.plus_sign_out_buttons);
 
-        Button regisertBtn = (Button) findViewById(R.id.registerButton);
-        regisertBtn.setOnClickListener(new OnClickListener() {
+        Button registerButton = (Button) findViewById(R.id.registerButton);
+        registerButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
-                intent.putExtra("email",mEmailView.getText().toString());
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                intent.putExtra("email", mEmailView.getText().toString());
 
                 startActivity(intent);
-                startActivityForResult(intent,1);
+
             }
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-//                if(requestCode == 1){
-//                if (resultCode == Activity.RESULT_OK) {
-//                    String newText = data.getStringExtra("password");
-//                    EditText passwordedit = (EditText) findViewById(R.id.passwordEditText);
-//                    passwordedit.setText(newText);
-//                }
-//
-//            }
-        Bundle extras = getIntent().getExtras();
-        String newText = extras.getString("email");
-        }
+
 
 
     private void populateAutoComplete() {
@@ -211,7 +189,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            // TODO: create rest adapter
+
             // if every field is corrent  the login will be performed
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
@@ -227,14 +205,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        boolean res = true;
-        if( !(password.length() > 4)){
-            res=false;
-        }
-        if(password.isEmpty()){
-            res = false;
-        }
-        return res;
+        return password.length() > 4;
     }
 
     /**
@@ -404,6 +375,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             // TODO: attempt authentication against a network service.
 
             try {
+                // TODO: create rest adapter
                 // Simulate network access.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -419,8 +391,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                     return res;
                 }
             }
-
-            // TODO: register the new account here.
 
             return res;
         }

@@ -20,10 +20,10 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 
     private final String TAG = getClass().getName();
 
-    private int mMaxValue = 100;
-    private int mMinValue = 0;
-    private int mInterval = 1;
-    private int mCurrentValue;
+    private int mMaxValue = 2500;
+    private int mMinValue = 100;
+    private int mInterval = 10;
+    protected int mCurrentValue;
     private SeekBar mSeekBar;
 
     private TextView mStatusText;

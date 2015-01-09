@@ -40,8 +40,8 @@ public class PreferencesFragment extends android.preference.PreferenceFragment i
          * will show the maximum distance instead.
          */
         if ("editText".equals(key)) {
-            String val = sharedPreferences.getString("editText", "50");
-            if (val == null || val.trim().equals("")) {
+            String val = sharedPreferences.getString("editText", "500");
+            if (val == null || val.trim().equals("") || val.trim().equals("0")) {
                 val = "" + R.string.default_radius; // <-- our default value
             }
 
@@ -54,7 +54,7 @@ public class PreferencesFragment extends android.preference.PreferenceFragment i
             addPreferencesFromResource(R.xml.preferences);
 
         } else if ("notificationRadius".equals(key)) {
-            String val = "" + sharedPreferences.getInt("notificationRadius", 50);
+            String val = "" + sharedPreferences.getInt("notificationRadius", 500);
             if (val == null || val.trim().equals("")) {
                 val = "" + R.string.default_radius; // <-- our default value
             }
