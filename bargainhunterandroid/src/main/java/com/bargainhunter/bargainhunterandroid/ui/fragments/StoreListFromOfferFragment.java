@@ -4,7 +4,7 @@ package com.bargainhunter.bargainhunterandroid.ui.fragments;
 import android.app.Activity;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.*;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +16,8 @@ import com.bargainhunter.bargainhunterandroid.controllers.LocationController;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class StoreListFromOfferFragment extends ListFragment implements AbsListV
     private String mOfferId;
     private int mSectionNumber;
     private OnFragmentInteractionListener mListener;
-
+    private MapFragment fragment;
     private AbsListView mListView;
 
     private ListAdapter mAdapter;
@@ -104,6 +106,12 @@ public class StoreListFromOfferFragment extends ListFragment implements AbsListV
         if (null != mListener){
             mListener.onStoreListFromOfferFragmentInteraction(String.valueOf(storeId));
         }
+        /*super.onListItemClick(l, v, position, id);
+        Map Fragment nextFrag= new MapFragment();
+        this.getFragmentManager().beginTransaction()
+                .replace(R.id.mainContainer, nextFrag, null)
+                .addToBackStack(null)
+                .commit();*/
     }
 
     @Override
