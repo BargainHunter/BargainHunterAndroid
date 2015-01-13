@@ -5,7 +5,7 @@ import retrofit.Callback;
 import retrofit.http.GET;
 
 public interface ICategoryAPI {
-    //GET method for ENDPOINT/search_in_radius?latitude={}&longitude={}&radius={} (Asynchronous execution)
+    //GET method for ENDPOINT/categories (Asynchronous execution)
     @GET("/categories")
     public void getAllCategories(Callback<CategoriesDTO> response);
 }

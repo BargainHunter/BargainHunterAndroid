@@ -16,7 +16,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class DatabaseController {
-    private static final String mEndpoint = "http://bargainhunter.dyndns.org:8080/bargainhunterws";
+    private static final String mEndpoint = "http://bargainhunter.dyndns.org:8080";
 
     public static void updateDatabaseCategories(final Context context) {
         RestAdapter adapter = new RestAdapter.Builder()
@@ -55,19 +55,17 @@ public class DatabaseController {
         });
     }
 
-    public static void updateDatabase(final Context context) {
+    public static void updateDatabase(final Context context, Coordinates phoneLoc) {
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(mEndpoint)
                 .build();
 
         ISearchAPI api = adapter.create(ISearchAPI.class);
 
-        Coordinates phoneLoc = new LocationController().findCoordinates(context);
-
         api.getAllBranchesWithStoresAndOffersInRadius(
                 phoneLoc.getLatitude(),
                 phoneLoc.getLongitude(),
-                100D,
+                100000D,
                 new Callback<SearchInRadiusDTO>() {
                     @Override
                     public void success(SearchInRadiusDTO searchInRadiusDTO, Response response) {

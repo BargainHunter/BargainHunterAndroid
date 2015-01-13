@@ -2,7 +2,8 @@ package com.bargainhunter.bargainhunterandroid;
 
 import android.app.Application;
 import com.activeandroid.ActiveAndroid;
-import com.bargainhunter.bargainhunterandroid.controllers.DatabaseController;
+import com.activeandroid.Configuration;
+import com.bargainhunter.bargainhunterandroid.models.entities.*;
 
 /**
  * Created by Achilleas Naoumidis on 12/9/14.
@@ -14,10 +15,20 @@ public class BargainHunterApplication extends Application {
 
         this.deleteDatabase("bargain_hunter.db");
 
-        ActiveAndroid.initialize(this);
+        Configuration.Builder configurationBuilder = new Configuration.Builder(this);
+        configurationBuilder.addModelClasses(Offer.class);
+        configurationBuilder.addModelClasses(Branch.class);
+        configurationBuilder.addModelClasses(Category.class);
+        configurationBuilder.addModelClasses(OfferSubcategory.class);
+        configurationBuilder.addModelClasses(Store.class);
+        configurationBuilder.addModelClasses(Subcategory.class);
+        configurationBuilder.addModelClasses(FavoriteOffers.class);
+        configurationBuilder.addModelClasses(FavoriteStores.class);
 
-        DatabaseController.updateDatabaseCategories(this);
-        DatabaseController.updateDatabase(this);
+        ActiveAndroid.initialize(configurationBuilder.create());
+
+//        DatabaseController.updateDatabaseCategories(this);
+//        DatabaseController.updateDatabase(this);
     }
 
     @Override

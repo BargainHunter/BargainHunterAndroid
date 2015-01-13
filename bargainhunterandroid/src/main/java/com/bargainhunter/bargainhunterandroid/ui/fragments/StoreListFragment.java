@@ -28,22 +28,22 @@ import java.util.List;
 public class StoreListFragment extends ListFragment implements AbsListView.OnItemClickListener {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_SECTION_NUMBER = "section_number";
+    protected static final String ARG_SECTION_NUMBER = "section_number";
 
     private int mSectionNumber;
-    private List<Store> stores;
+    protected List<Store> stores;
     private OnFragmentInteractionListener mListener;
 
     /**
      * The fragment's ListView/GridView.
      */
-    private AbsListView mListView;
+    protected AbsListView mListView;
 
     /**
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ListAdapter mAdapter;
+    protected ListAdapter mAdapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -72,6 +72,10 @@ public class StoreListFragment extends ListFragment implements AbsListView.OnIte
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
         }
 
+       loadStoreList();
+    }
+
+    public void loadStoreList(){
         stores = new Select().from(Store.class).execute();
     }
 

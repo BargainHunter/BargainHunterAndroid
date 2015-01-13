@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              tools:context="com.bargainhunter.bargainhunterandroid.ui.fragments.StoreListFragment">
+
+        <TextView
+                android:id="@+id/storeTextView"
+                android:text="Favorite Stores"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/material_blue_grey_950"
+                android:gravity="center_vertical"
+                android:layout_marginRight="3dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+
+        <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="#c0c0c0"/>
+
+
+        <TextView
+                android:id="@+id/offerTextView"
+                android:text="Favorite Offers"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/material_blue_grey_950"
+                android:gravity="center_vertical"
+                android:layout_marginRight="3dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:clickable="true"/>
+
+</LinearLayout>

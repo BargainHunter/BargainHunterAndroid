@@ -4,14 +4,17 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.bargainhunter.bargainhunterandroid.R;
+import com.bargainhunter.bargainhunterandroid.models.entities.FavoriteStores;
 import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
+
+import java.util.List;
 
 
 /**
@@ -28,6 +31,8 @@ public class StoreInfoFragment extends Fragment {
     private static final String ARG_STORE_ID = "param1";
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String ARG_ENDPOINT = "endpoint";
+
+    private FavoriteStores favorite_store;
 
     private String mStoreId;
     private int mSectionNumber;
@@ -60,6 +65,7 @@ public class StoreInfoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         if (getArguments() != null) {
             mStoreId = getArguments().getString(ARG_STORE_ID);
@@ -111,6 +117,61 @@ public class StoreInfoFragment extends Fragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    /**
+     *Creates the initial options menu with Favorite Icon on the actionbar of the fragment
+     */
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.favorite_action, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    /**
+     * If the store hasn't been added to the favorites table beforehand it wil default to OFF
+     * In case the store in question had been added to the favorites table beforehand, the icon is set to ON
+     */
+
+    @Override
+    public void onPrepareOptionsMenu (Menu menu){
+        //TODO: result analogous with SQL result
+        List<FavoriteStores> resultSet = new Select().from(FavoriteStores.class).where("store_id = " + store.getStoreId()).execute();
+        if(resultSet.size()==0) {
+            menu.getItem(menu.size()-1).setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_off_disable));
+        }else{
+            menu.getItem(menu.size()-1).setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_on));
+        }
+    }
+
+    /**
+     * Once the user selects the Favorite icon, the store ID will be saved to local table while
+     * the icon will change to ON and a toast confirming the action will be displayed.
+     * An already favorited store will simply be removed from the table with an appropriate change
+     * of icon and toast.
+     */
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.favorite:
+                //TODO: enter offer into favorite table
+                List<FavoriteStores> resultSet = new Select().from(FavoriteStores.class).orderBy("store_id ASC").execute();
+                if(resultSet.size()==0) {
+                    favorite_store = new FavoriteStores(store.getStoreId());
+                    favorite_store.save();
+                    item.setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_on));
+                    Toast.makeText(getActivity(),"Added to Favorites",Toast.LENGTH_SHORT).show();
+                }else{
+                    new Delete().from(FavoriteStores.class).where("store_id = ?", store.getStoreId()).execute();
+                    item.setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_off_disable));
+                    Toast.makeText(getActivity(),"Removed from Favorites",Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
