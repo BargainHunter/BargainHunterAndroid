@@ -1,17 +1,13 @@
 package com.bargainhunter.bargainhunterandroid.ui.fragments;
 
-import android.database.Cursor;
+
 import android.os.Bundle;
 import android.view.*;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
 import android.widget.ListAdapter;
 import com.activeandroid.query.Select;
 import com.bargainhunter.bargainhunterandroid.R;
-import com.bargainhunter.bargainhunterandroid.controllers.LocalDBController;
-import com.bargainhunter.bargainhunterandroid.models.components.ListChildItem;
-import com.bargainhunter.bargainhunterandroid.models.components.ListParentItem;
 import com.bargainhunter.bargainhunterandroid.models.entities.FavoriteOffers;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 
@@ -25,8 +21,6 @@ public class OfferFavoriteFragment extends OfferListFragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     private int mSectionNumber;
-
-    private LocalDBController ctrl;
 
     public OfferFavoriteFragment(){
         // Required empty public constructor
@@ -42,7 +36,6 @@ public class OfferFavoriteFragment extends OfferListFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        ctrl = LocalDBController.getInstance(getActivity().getBaseContext());
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
@@ -54,11 +47,6 @@ public class OfferFavoriteFragment extends OfferListFragment {
 
     @Override
     public void initializeOfferList(){
-        //ctrl = LocalDBController.getInstance(getActivity().getBaseContext());
-
-        //Cursor resultSet = ctrl.getReadableDatabase().rawQuery("Select offer_id from FAVORITE_OFFERS ORDER BY offer_id" , null);
-        //resultSet.moveToFirst();
-
         List<FavoriteOffers> resultSet = new Select().from(FavoriteOffers.class).orderBy("offer_id ASC").execute();
 
         if(resultSet.size()==0) {
@@ -112,5 +100,7 @@ public class OfferFavoriteFragment extends OfferListFragment {
     @Override
     public void onResume() {
         super.onResume();
+        initializeOfferList();
+        updateDisplay(offerList);
     }
 }

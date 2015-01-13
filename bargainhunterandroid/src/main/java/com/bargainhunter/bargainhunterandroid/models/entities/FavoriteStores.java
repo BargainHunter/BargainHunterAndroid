@@ -11,22 +11,22 @@ import com.activeandroid.annotation.Table;
 @Table(name = "FAVORITE_STORES")
 public class FavoriteStores extends Model {
     @Column(name = "store_id")
-    private Long id;
+    private Long store_id;
 
     public FavoriteStores(){ super(); }
 
-    public FavoriteStores(Long id){
+    public FavoriteStores(Long store_id){
         super();
 
-        this.id = id;
+        this.store_id = store_id;
     }
 
     public Long getStoreId() {
-        return id;
+        return store_id;
     }
 
-    public void setStoreId(Long id) {
-        this.id = id;
+    public void setStoreId(Long store_id) {
+        this.store_id = store_id;
     }
 }
 
