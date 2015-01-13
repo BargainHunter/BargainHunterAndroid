@@ -8,14 +8,14 @@ import com.activeandroid.annotation.Table;
  * Created by Veruz on 9/1/2015.
  */
 
-@Table(name = "FavStores")
-public class FavStores extends Model {
+@Table(name = "FAVORITE_STORES")
+public class FavoriteStores extends Model {
     @Column(name = "store_id")
     private Long id;
 
-    public FavStores(){ super(); }
+    public FavoriteStores(){ super(); }
 
-    public FavStores(Long id){
+    public FavoriteStores(Long id){
         super();
 
         this.id = id;

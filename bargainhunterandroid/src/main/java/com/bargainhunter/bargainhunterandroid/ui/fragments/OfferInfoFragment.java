@@ -1,6 +1,7 @@
 package com.bargainhunter.bargainhunterandroid.ui.fragments;
 
 import android.app.Activity;
+import android.content.ClipData;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,11 +9,16 @@ import android.support.v4.app.Fragment;
 import android.view.*;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
+import com.activeandroid.query.Update;
 import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.controllers.LocalDBController;
+import com.bargainhunter.bargainhunterandroid.models.entities.FavoriteOffers;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
+
+import java.util.List;
 
 
 /**
@@ -33,6 +39,8 @@ public class OfferInfoFragment extends Fragment {
     private int mSectionNumber;
 
     private Offer offer;
+
+    private FavoriteOffers favorite_offer;
 
     private OnFragmentInteractionListener mListener;
 
@@ -178,14 +186,22 @@ public class OfferInfoFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.favorite:
                 //TODO: enter offer into favorite table
-                Cursor resultSet = ctrl.getReadableDatabase().rawQuery("Select id from FavOffers WHERE id = " + offer.getOfferId(), null);
-                resultSet.moveToFirst();
-                if(resultSet.getCount()==0) {
-                    ctrl.getReadableDatabase().execSQL("INSERT INTO FavOffers VALUES("+offer.getOfferId()+")");
+               // Cursor resultSet = ctrl.getReadableDatabase().rawQuery("Select offer_id from FAVORITE_OFFERS WHERE offer_id = " + offer.getOfferId(), null);
+               // resultSet.moveToFirst();
+
+                List<FavoriteOffers> resultSet = new Select().from(FavoriteOffers.class).orderBy("offer_id ASC").execute();
+                if(resultSet.size()==0) {
+                    favorite_offer = new FavoriteOffers();
+                    favorite_offer.setOfferId( offer.getOfferId());
+                    favorite_offer.save();
+                    //ctrl.getReadableDatabase().execSQL("INSERT INTO FavOffers VALUES("+offer.getOfferId()+")");
+                   // favorite_offer = new .from(FavoriteOffers.class).where("offer_id = ?", offer.getOfferId()).executeSingle();
                     item.setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_on));
                     Toast.makeText(getActivity(),"Added to Favorites",Toast.LENGTH_SHORT).show();
                 }else{
-                    ctrl.getReadableDatabase().execSQL("DELETE FROM FavOffers WHERE id="+offer.getOfferId());
+
+                    //ctrl.getReadableDatabase().execSQL("DELETE FROM FavOffers WHERE id="+offer.getOfferId());
+                    favorite_offer = new Delete().from(FavoriteOffers.class).where("offer_id = ?", offer.getOfferId()).executeSingle();
                     item.setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_off_disable));
                     Toast.makeText(getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
                 }

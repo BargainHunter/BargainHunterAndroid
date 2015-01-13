@@ -12,6 +12,7 @@ import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.controllers.LocalDBController;
 import com.bargainhunter.bargainhunterandroid.models.components.ListChildItem;
 import com.bargainhunter.bargainhunterandroid.models.components.ListParentItem;
+import com.bargainhunter.bargainhunterandroid.models.entities.FavoriteOffers;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 
 import java.util.ArrayList;
@@ -53,27 +54,28 @@ public class OfferFavoriteFragment extends OfferListFragment {
 
     @Override
     public void initializeOfferList(){
-        ctrl = LocalDBController.getInstance(getActivity().getBaseContext());
+        //ctrl = LocalDBController.getInstance(getActivity().getBaseContext());
 
-        Cursor resultSet = ctrl.getReadableDatabase().rawQuery("Select id from FavOffers ORDER BY id" , null);
-        resultSet.moveToFirst();
+        //Cursor resultSet = ctrl.getReadableDatabase().rawQuery("Select offer_id from FAVORITE_OFFERS ORDER BY offer_id" , null);
+        //resultSet.moveToFirst();
 
-        if(resultSet.getCount()==0) {
+        List<FavoriteOffers> resultSet = new Select().from(FavoriteOffers.class).orderBy("offer_id ASC").execute();
+
+        if(resultSet.size()==0) {
             // TODO print message  "no favs"
             offerList = new ArrayList<>();
         }else {
             String list = "(";
             // parsing returned ids and converting them to sql list
 
-            if(resultSet.getCount()==1)
-                list = "("+resultSet.getLong(0)+")";
+            if(resultSet.size()==1)
+                list = "("+resultSet.get(0).getOfferId()+")";
             else {
-                list += resultSet.getLong(0)+",";
-                while (resultSet.moveToNext()) { // may skip first row - to_check
-                    if (!resultSet.isLast())
-                        list += resultSet.getLong(0) + ", ";
+                for (int i=0;i<resultSet.size();i++) {
+                    if (i==resultSet.size()-1)
+                        list += resultSet.get(i).getOfferId() + ", ";
                     else
-                        list += resultSet.getLong(0);
+                        list += resultSet.get(i).getOfferId();
                 }
 
                 list += ")";
