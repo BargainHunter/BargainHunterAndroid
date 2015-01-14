@@ -10,9 +10,15 @@ public class NotificationView extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notification);
 
-        TextView tv = (TextView) findViewById(R.id.tv_notification);
-        tv.setTextSize(25);
         Bundle data = getIntent().getExtras();
+
+        TextView tv = (TextView) findViewById(R.id.tv_notification);
         tv.setText(data.getString("content"));
+
+        TextView storeName = (TextView) findViewById(R.id.notif_storeNameView);
+        storeName.setText(data.getString("storeName"));
+
+        TextView storeAddr = (TextView) findViewById(R.id.notif_addressView);
+        storeAddr.setText(data.getString("storeAddr"));
     }
 }

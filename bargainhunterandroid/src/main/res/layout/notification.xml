@@ -1,11 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="642dp"
+        android:orientation="vertical"
+        android:background="@color/LightGrey">
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/abc_action_bar_stacked_max_height"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:gravity="center"
+            android:text="Store Name"
+            android:id="@+id/notif_storeNameLabel"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/title_back"
+            android:textColor="@color/Ivory"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="5dp"/>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:gravity="center"
+            android:id="@+id/notif_storeNameView"
+            android:background="@drawable/rounded_corner"
+            android:layout_below="@+id/notif_storeNameLabel"
+            android:layout_margin="5dp"/>
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/abc_action_bar_stacked_max_height"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:gravity="center"
+            android:id="@+id/notif_addressLabel"
+            android:text="Address"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/title_back"
+            android:textColor="@color/Ivory"
+            android:layout_below="@+id/notif_storeNameView"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"/>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/notif_addressView"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/rounded_corner"
+            android:layout_below="@+id/notif_addressLabel"
+            android:layout_margin="5dp"/>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/abc_action_bar_stacked_max_height"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:gravity="center"
+            android:id="@+id/notif_offer_view"
+            android:text="New Offers"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/title_back"
+            android:textColor="@color/Ivory"
+            android:layout_below="@+id/notif_addressView"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"/>
 
     <TextView
             android:id="@+id/tv_notification"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
-</LinearLayout>
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corner"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:gravity="center_horizontal"
+            android:layout_margin="5dp"
+            android:layout_below="@+id/notif_offer_view"/>
+
+</RelativeLayout>
+
