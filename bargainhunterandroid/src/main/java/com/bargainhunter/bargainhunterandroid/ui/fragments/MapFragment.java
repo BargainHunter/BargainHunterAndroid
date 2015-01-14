@@ -59,6 +59,7 @@ public class MapFragment extends Fragment implements IRoutingListener {
     private List<Store> storelist = new ArrayList<>();
     private GoogleMap map;
     private LatLng myPosition;
+    SharedPreferences preferences;
     public MapFragment() {
         // Required empty public constructor
     }
@@ -227,7 +228,7 @@ public class MapFragment extends Fragment implements IRoutingListener {
             else {
                 Toast.makeText(getActivity(), "location is null", Toast.LENGTH_LONG).show();
             }
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            preferences= PreferenceManager.getDefaultSharedPreferences(getActivity());
             String show_on_map = preferences.getString("Show_on_map","0");
             String storeid = preferences.getString("StoreId","Not Found!");
             if (show_on_map.equals("1"))
@@ -235,7 +236,7 @@ public class MapFragment extends Fragment implements IRoutingListener {
                 Toast.makeText(getActivity(), storeid, Toast.LENGTH_SHORT).show();
                 Store route_store=new Select().from(Store.class).where("store_id = ?",storeid).executeSingle();
                 storePosition= new LatLng(route_store.getLatitude(), route_store.getLongitude());
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(storePosition,17));
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(storePosition, 17));
                 Routing routing = new Routing(Routing.TravelMode.WALKING);
                 routing.registerListener(this);
                 routing.execute(myPosition, storePosition);
@@ -305,9 +306,24 @@ public class MapFragment extends Fragment implements IRoutingListener {
         map.addMarker(markerOptions);
 
     }
+
+    @Override
+    public void onDestroyView() {
+        preferences  = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        preferences.edit().putString("Show_on_map","0").commit();
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onPause() {
+        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        preferences.edit().putString("Show_on_map","0").commit();
+        super.onPause();
+    }
+
     @Override
     public void onDetach() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         preferences.edit().putString("Show_on_map","0").commit();
         super.onDetach();
         mListener = null;
