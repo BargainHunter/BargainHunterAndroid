@@ -7,7 +7,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import com.bargainhunter.bargainhunterandroid.ui.activities.LoginActivity;
+import com.bargainhunter.bargainhunterandroid.ui.activities.PlusBaseActivity;
 import com.bargainhunter.bargainhunterandroid.ui.activities.SplashScreen;
+import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.hamcrest.MatcherAssert;
 import org.junit.After;
 import org.junit.Before;
@@ -26,7 +28,7 @@ import static org.robolectric.Robolectric.shadowOf;
 /**
  * Created by vasovourka on 12/31/14.
  */
-@Config(emulateSdk=18)
+@Config(emulateSdk=18, reportSdk = 18)
 @RunWith(RobolectricTestRunner.class)
 public class LoginActivityTest {
     Activity loginActivity;
