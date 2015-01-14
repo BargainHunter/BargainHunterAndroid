@@ -73,7 +73,7 @@ public class StoreFavoriteFragment extends StoreListFragment {
                 list = "("+resultSet.get(0).getStoreId()+")";
             else {
                 for (int i=0;i<resultSet.size();i++) {
-                    if (i==resultSet.size()-1)
+                    if (i!=resultSet.size()-1)
                         list += resultSet.get(i).getStoreId() + ", ";
                     else
                         list += resultSet.get(i).getStoreId();

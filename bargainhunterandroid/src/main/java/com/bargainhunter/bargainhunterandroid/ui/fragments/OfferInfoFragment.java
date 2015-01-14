@@ -178,7 +178,8 @@ public class OfferInfoFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.favorite:
                 //TODO: enter offer into favorite table
-                List<FavoriteOffers> resultSet = new Select().from(FavoriteOffers.class).orderBy("offer_id ASC").execute();
+
+                List<FavoriteOffers> resultSet = new Select().from(FavoriteOffers.class).where("offer_id = "  + offer.getOfferId()).execute();
 
                 if(resultSet.size()==0) {
                     favorite_offer = new FavoriteOffers(offer.getOfferId());
@@ -186,7 +187,7 @@ public class OfferInfoFragment extends Fragment {
                     item.setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_on));
                     Toast.makeText(getActivity(),"Added to Favorites",Toast.LENGTH_SHORT).show();
                 }else{
-                    new Delete().from(FavoriteOffers.class).where("offer_id = ?", offer.getOfferId()).execute();
+                    new Delete().from(FavoriteOffers.class).where("offer_id = " + offer.getOfferId()).execute();
                     item.setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_off_disable));
                     Toast.makeText(getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
                 }

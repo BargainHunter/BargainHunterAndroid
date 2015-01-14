@@ -157,15 +157,15 @@ public class StoreInfoFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.favorite:
-                //TODO: enter offer into favorite table
-                List<FavoriteStores> resultSet = new Select().from(FavoriteStores.class).orderBy("store_id ASC").execute();
+                //TODO: enter store into favorite table
+                List<FavoriteStores> resultSet = new Select().from(FavoriteStores.class).where("store_id = " + store.getStoreId()).execute();
                 if(resultSet.size()==0) {
                     favorite_store = new FavoriteStores(store.getStoreId());
                     favorite_store.save();
                     item.setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_on));
                     Toast.makeText(getActivity(),"Added to Favorites",Toast.LENGTH_SHORT).show();
                 }else{
-                    new Delete().from(FavoriteStores.class).where("store_id = ?", store.getStoreId()).execute();
+                    new Delete().from(FavoriteStores.class).where("store_id = " + store.getStoreId()).execute();
                     item.setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_off_disable));
                     Toast.makeText(getActivity(),"Removed from Favorites",Toast.LENGTH_SHORT).show();
                 }

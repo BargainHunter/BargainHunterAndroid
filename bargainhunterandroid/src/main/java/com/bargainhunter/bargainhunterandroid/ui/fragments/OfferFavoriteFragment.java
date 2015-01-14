@@ -60,7 +60,7 @@ public class OfferFavoriteFragment extends OfferListFragment {
                 list = "("+resultSet.get(0).getOfferId()+")";
             else {
                 for (int i=0;i<resultSet.size();i++) {
-                    if (i==resultSet.size()-1)
+                    if (i!=resultSet.size()-1)
                         list += resultSet.get(i).getOfferId() + ", ";
                     else
                         list += resultSet.get(i).getOfferId();
