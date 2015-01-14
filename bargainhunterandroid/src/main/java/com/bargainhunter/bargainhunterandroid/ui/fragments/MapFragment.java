@@ -217,9 +217,9 @@ public class MapFragment extends Fragment implements IRoutingListener {
                     // entered or exited
                     pendingIntent = PendingIntent.getActivity(getActivity().getBaseContext(), reqCode, proximityIntent, PendingIntent.FLAG_ONE_SHOT);
                     // Setting proximity alert
-                    // The pending intent will be invoked when the device enters or exits the region 100 meters
+                    // The pending intent will fire when the device enters the region x meters
                     // away from the marked point
-                    // The -1 indicates that, the monitor will not be expired
+                    // If -1 , it will not be expired
                     locationManager.addProximityAlert(point.latitude, point.longitude, getRadius("notificationRadius",getActivity()), -1, pendingIntent);
                     reqCode++;
                     stringOffers = "";
