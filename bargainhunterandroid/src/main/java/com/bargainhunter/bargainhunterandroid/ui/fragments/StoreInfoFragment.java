@@ -1,18 +1,20 @@
 package com.bargainhunter.bargainhunterandroid.ui.fragments;
 
 import android.app.Activity;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.*;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.bargainhunter.bargainhunterandroid.R;
-import com.bargainhunter.bargainhunterandroid.controllers.LocalDBController;
+import com.bargainhunter.bargainhunterandroid.models.entities.FavoriteStores;
 import com.bargainhunter.bargainhunterandroid.models.entities.Store;
 import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
+
+import java.util.List;
 
 
 /**
@@ -30,7 +32,7 @@ public class StoreInfoFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String ARG_ENDPOINT = "endpoint";
 
-    private LocalDBController ctrl;
+    private FavoriteStores favorite_store;
 
     private String mStoreId;
     private int mSectionNumber;
@@ -64,8 +66,6 @@ public class StoreInfoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-        ctrl = LocalDBController.getInstance(getActivity().getBaseContext());
 
         if (getArguments() != null) {
             mStoreId = getArguments().getString(ARG_STORE_ID);
@@ -138,9 +138,8 @@ public class StoreInfoFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu (Menu menu){
         //TODO: result analogous with SQL result
-        Cursor resultSet = ctrl.getReadableDatabase().rawQuery("Select id from FavStores WHERE id = " + store.getStoreId(), null);
-        resultSet.moveToFirst();
-        if(resultSet.getCount()==0) {
+        List<FavoriteStores> resultSet = new Select().from(FavoriteStores.class).where("store_id = " + store.getStoreId()).execute();
+        if(resultSet.size()==0) {
             menu.getItem(menu.size()-1).setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_off_disable));
         }else{
             menu.getItem(menu.size()-1).setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_on));
@@ -159,14 +158,14 @@ public class StoreInfoFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.favorite:
                 //TODO: enter offer into favorite table
-                Cursor resultSet = ctrl.getReadableDatabase().rawQuery("Select id from FavStores WHERE id = " + store.getStoreId(), null);
-                resultSet.moveToFirst();
-                if(resultSet.getCount()==0) {
-                    ctrl.getReadableDatabase().execSQL("INSERT INTO FavStores VALUES("+store.getStoreId()+")");
+                List<FavoriteStores> resultSet = new Select().from(FavoriteStores.class).orderBy("store_id ASC").execute();
+                if(resultSet.size()==0) {
+                    favorite_store = new FavoriteStores(store.getStoreId());
+                    favorite_store.save();
                     item.setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_on));
                     Toast.makeText(getActivity(),"Added to Favorites",Toast.LENGTH_SHORT).show();
                 }else{
-                    ctrl.getReadableDatabase().execSQL("DELETE FROM FavStores WHERE id="+store.getStoreId());
+                    new Delete().from(FavoriteStores.class).where("store_id = ?", store.getStoreId()).execute();
                     item.setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_off_disable));
                     Toast.makeText(getActivity(),"Removed from Favorites",Toast.LENGTH_SHORT).show();
                 }

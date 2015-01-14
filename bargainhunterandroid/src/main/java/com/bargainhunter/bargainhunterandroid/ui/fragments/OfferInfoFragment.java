@@ -1,7 +1,6 @@
 package com.bargainhunter.bargainhunterandroid.ui.fragments;
 
 import android.app.Activity;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,11 +8,14 @@ import android.view.*;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.bargainhunter.bargainhunterandroid.R;
-import com.bargainhunter.bargainhunterandroid.controllers.LocalDBController;
+import com.bargainhunter.bargainhunterandroid.models.entities.FavoriteOffers;
 import com.bargainhunter.bargainhunterandroid.models.entities.Offer;
 import com.bargainhunter.bargainhunterandroid.ui.activities.MainActivity;
+
+import java.util.List;
 
 
 /**
@@ -35,9 +37,9 @@ public class OfferInfoFragment extends Fragment {
 
     private Offer offer;
 
-    private OnFragmentInteractionListener mListener;
+    private FavoriteOffers favorite_offer;
 
-    private LocalDBController ctrl;
+    private OnFragmentInteractionListener mListener;
 
     public OfferInfoFragment() {
         // Required empty public constructor
@@ -63,9 +65,6 @@ public class OfferInfoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-
-        ctrl = LocalDBController.getInstance(getActivity().getBaseContext());
 
         if (getArguments() != null) {
             mOfferId = getArguments().getString(ARG_OFFER_ID);
@@ -174,9 +173,10 @@ public class OfferInfoFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu (Menu menu){
         //TODO: result analogous with SQL result
-        Cursor resultSet = ctrl.getReadableDatabase().rawQuery("Select id from FavOffers WHERE id = " + offer.getOfferId(), null);
-        resultSet.moveToFirst();
-        if(resultSet.getCount()==0) {
+
+        List<FavoriteOffers> resultSet = new Select().from(FavoriteOffers.class).where("offer_id = " + offer.getOfferId()).execute();
+
+        if(resultSet.size()==0) {
             menu.getItem(menu.size()-1).setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_off_disable));
             //iv.setImageDrawable(getView().getResources().getDrawable(R.drawable.favourites));
         }else{
@@ -197,17 +197,19 @@ public class OfferInfoFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.favorite:
                 //TODO: enter offer into favorite table
-                Cursor resultSet = ctrl.getReadableDatabase().rawQuery("Select id from FavOffers WHERE id = " + offer.getOfferId(), null);
-                resultSet.moveToFirst();
-                if(resultSet.getCount()==0) {
-                    ctrl.getReadableDatabase().execSQL("INSERT INTO FavOffers VALUES("+offer.getOfferId()+")");
+                List<FavoriteOffers> resultSet = new Select().from(FavoriteOffers.class).orderBy("offer_id ASC").execute();
+
+                if(resultSet.size()==0) {
+                    favorite_offer = new FavoriteOffers(offer.getOfferId());
+                    favorite_offer.save();
                     item.setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_on));
                     Toast.makeText(getActivity(),"Added to Favorites",Toast.LENGTH_SHORT).show();
                 }else{
-                    ctrl.getReadableDatabase().execSQL("DELETE FROM FavOffers WHERE id="+offer.getOfferId());
+                    new Delete().from(FavoriteOffers.class).where("offer_id = ?", offer.getOfferId()).execute();
                     item.setIcon(getView().getResources().getDrawable(R.drawable.btn_star_big_off_disable));
                     Toast.makeText(getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
                 }
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

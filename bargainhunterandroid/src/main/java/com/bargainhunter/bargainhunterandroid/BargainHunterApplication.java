@@ -3,7 +3,6 @@ package com.bargainhunter.bargainhunterandroid;
 import android.app.Application;
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
-import com.bargainhunter.bargainhunterandroid.controllers.DatabaseController;
 import com.bargainhunter.bargainhunterandroid.models.entities.*;
 
 /**
@@ -23,6 +22,8 @@ public class BargainHunterApplication extends Application {
         configurationBuilder.addModelClasses(OfferSubcategory.class);
         configurationBuilder.addModelClasses(Store.class);
         configurationBuilder.addModelClasses(Subcategory.class);
+        configurationBuilder.addModelClasses(FavoriteOffers.class);
+        configurationBuilder.addModelClasses(FavoriteStores.class);
 
         ActiveAndroid.initialize(configurationBuilder.create());
 
