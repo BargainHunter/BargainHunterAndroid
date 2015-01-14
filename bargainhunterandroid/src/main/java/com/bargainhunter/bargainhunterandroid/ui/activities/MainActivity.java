@@ -1,8 +1,10 @@
 package com.bargainhunter.bargainhunterandroid.ui.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -10,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.models.components.ListParentItem;
 import com.bargainhunter.bargainhunterandroid.ui.fragments.*;
@@ -23,6 +26,7 @@ public class MainActivity extends ActionBarActivity
         OfferListFragment.OnFragmentInteractionListener,
         OfferInfoFragment.OnFragmentInteractionListener,
         OfferListFromStoreFragment.OnFragmentInteractionListener,
+        StoreListFromOfferFragment.OnFragmentInteractionListener,
         FilterDialogFragment.OnDialogFilterFragmentInteractionListener,
         CategoryGridViewFragment.OnCategoryGridViewFragmentInteractionListener {
 
@@ -175,6 +179,18 @@ public class MainActivity extends ActionBarActivity
                 .commit();
     }
 
+    @Override
+    public void onStoreListFromOfferFragmentInteraction(String storeid) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment map = MapFragment.newInstance(3);
+        fragmentManager.beginTransaction()
+                .replace(R.id.mainContainer, map)
+                .addToBackStack(null)
+                .commit();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplication());
+        preferences.edit().putString("StoreId",storeid).commit();
+        preferences.edit().putString("Show_on_map","1").commit();
+    }
 
 
 
@@ -216,4 +232,6 @@ public class MainActivity extends ActionBarActivity
                 .addToBackStack(null)
                 .commit();
     }
+
+
 }

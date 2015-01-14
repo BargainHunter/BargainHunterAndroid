@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.*;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.activeandroid.query.Delete;
@@ -73,8 +74,17 @@ public class OfferInfoFragment extends Fragment {
         offer = new Select().from(Offer.class).where("offer_id = ?", mOfferId).executeSingle();
     }
 
+    public void addStoreListFragragment() {
+        Fragment storeListFromOfferFragment = StoreListFromOfferFragment.newInstance(1, mOfferId);
+
+        getChildFragmentManager().beginTransaction().add(R.id.StoreFragmentContainer, storeListFromOfferFragment).commit();
+        getChildFragmentManager().executePendingTransactions();
+    }
+
     //Updates the display!
     private void updateDisplay(View view, Offer offer) {
+
+        addStoreListFragragment();
 
         TextView titleView = (TextView) view.findViewById(R.id.titleView);
         titleView.setText(offer.getTitle());
@@ -87,6 +97,13 @@ public class OfferInfoFragment extends Fragment {
 
         TextView colorLabel = (TextView) view.findViewById(R.id.colorLabel);
 
+        final ScrollView scroll = (ScrollView) view.findViewById(R.id.scrollView);
+        scroll.post(new Runnable() {
+            @Override
+            public void run() {
+                scroll.fullScroll(ScrollView.FOCUS_UP);
+            }
+        });
         /**
          * Sets a TextView at the bottom of the Fragment that changes accordingly with
          * the discount of the Bargain in question .
@@ -108,6 +125,8 @@ public class OfferInfoFragment extends Fragment {
             colorLabel.setText("Good Deal");
             colorLabel.setBackgroundResource(R.drawable.title_green);
         }
+
+
     }
 
 

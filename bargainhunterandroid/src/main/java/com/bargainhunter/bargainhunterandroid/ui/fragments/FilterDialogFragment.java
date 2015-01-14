@@ -91,7 +91,7 @@ public class FilterDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_filter_dialog, container, false);
 
         // Title of the dialog
-        getDialog().setTitle("Chose Filters");
+        getDialog().setTitle("Choose Filters");
 
         mExpandableListView = (ExpandableListView) view.findViewById(R.id.expandableListView);
         mParent = new ArrayList<>();
@@ -201,7 +201,7 @@ public class FilterDialogFragment extends DialogFragment {
         //adding child data
         ArrayList<ListChildItem> children = new ArrayList<>();
         children.add(new ListChildItem("No Filter", true, new CheckBox(getActivity())));
-        children.add(new ListChildItem("> 5 EUR", false, new CheckBox(getActivity())));
+        children.add(new ListChildItem("< 5 EUR", false, new CheckBox(getActivity())));
         children.add(new ListChildItem("5 - 10 EUR", false, new CheckBox(getActivity())));
         children.add(new ListChildItem("10 - 80 EUR", false, new CheckBox(getActivity())));
         children.add(new ListChildItem("80 - 100 EUR", false, new CheckBox(getActivity())));

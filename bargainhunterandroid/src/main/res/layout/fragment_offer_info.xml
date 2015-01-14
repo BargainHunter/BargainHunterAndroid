@@ -9,7 +9,7 @@
                 <RelativeLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="732dp"
                         android:orientation="vertical"
                         android:background="@color/LightGrey" >
 
@@ -95,6 +95,28 @@
                                 android:layout_below="@+id/priceView"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"/>
+                        <TextView
+                                android:layout_width="fill_parent"
+                                android:layout_height="@dimen/abc_action_bar_stacked_max_height"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:gravity="center"
+                                android:id="@+id/available_at"
+                                android:text="Available at"
+                                android:layout_gravity="center_horizontal"
+                                android:background="@drawable/title_back"
+                                android:textColor="@color/Ivory"
+                                android:layout_below="@+id/colorLabel"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginBottom="5dp"/>
+                        <FrameLayout
+
+                                android:layout_width="match_parent"
+                                android:layout_height="fill_parent"
+                                android:layout_below="@+id/available_at"
+                                android:id="@+id/StoreFragmentContainer"
+                                android:layout_margin="5dp"
+                                android:layout_marginTop="5dp">
+                        </FrameLayout>
 
                 </RelativeLayout>
         </LinearLayout>

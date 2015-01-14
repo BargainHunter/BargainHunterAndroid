@@ -59,7 +59,7 @@ public class MapFragment extends Fragment implements IRoutingListener {
     private List<Store> storelist = new ArrayList<>();
     private GoogleMap map;
     private LatLng myPosition;
-
+    SharedPreferences preferences;
     public MapFragment() {
         // Required empty public constructor
     }
@@ -185,16 +185,13 @@ public class MapFragment extends Fragment implements IRoutingListener {
                 List<Offer> tempOffers;
                 int reqCode = 1;
                 String stringOffers = "";
-                /*Store testStore = new Store((long)8,"Mikel","Thessaloniki","Papanastasiou","56",40.612390, 22.964106, new Branch((long)1));
-                storelist.add(testStore);
-                testStore = new Store((long)9,"Mikel2","Thessaloniki","Papanastasiou","56",40.612571, 22.964959, new Branch((long)1));
-                storelist.add(testStore);*/
+
                 for (Store store : storelist) {
                     tempOffers = store.getBranch().getOffers();
-                    if (store.getAddress().equals("Tsimiski")) {
+                    /*if (store.getAddress().equals("Tsimiski")) {
                         storePosition = new LatLng(store.getLatitude(), store.getLongitude());
                         Toast.makeText(getActivity(), store.getStoreName() + ":" + store.getAddress(), Toast.LENGTH_LONG).show();
-                    }
+                    }*/
                     for (Offer toffer : tempOffers) {
                         stringOffers = stringOffers.concat(toffer.getTitle() + "\n\n");
                     }
@@ -220,20 +217,36 @@ public class MapFragment extends Fragment implements IRoutingListener {
                     // entered or exited
                     pendingIntent = PendingIntent.getActivity(getActivity().getBaseContext(), reqCode, proximityIntent, PendingIntent.FLAG_ONE_SHOT);
                     // Setting proximity alert
-                    // The pending intent will be invoked when the device enters or exits the region 100 meters
+                    // The pending intent will fire when the device enters the region x meters
                     // away from the marked point
-                    // The -1 indicates that, the monitor will not be expired
+                    // If -1 , it will not be expired
                     locationManager.addProximityAlert(point.latitude, point.longitude, getRadius("notificationRadius",getActivity()), -1, pendingIntent);
                     reqCode++;
                     stringOffers = "";
                 }
-            } else {
-
+            }
+            else {
                 Toast.makeText(getActivity(), "location is null", Toast.LENGTH_LONG).show();
             }
+            preferences= PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String show_on_map = preferences.getString("Show_on_map","0");
+            String storeid = preferences.getString("StoreId","Not Found!");
+            if (show_on_map.equals("1"))
+            {
+                Toast.makeText(getActivity(), storeid, Toast.LENGTH_SHORT).show();
+                Store route_store=new Select().from(Store.class).where("store_id = ?",storeid).executeSingle();
+                storePosition= new LatLng(route_store.getLatitude(), route_store.getLongitude());
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(storePosition, 17));
+                Routing routing = new Routing(Routing.TravelMode.WALKING);
+                routing.registerListener(this);
+                routing.execute(myPosition, storePosition);
+            }
+
+
+/*
             Routing routing = new Routing(Routing.TravelMode.WALKING);
             routing.registerListener(this);
-            routing.execute(myPosition, storePosition);
+            routing.execute(myPosition, storePosition);*/
         }
 
     }
@@ -293,11 +306,28 @@ public class MapFragment extends Fragment implements IRoutingListener {
         map.addMarker(markerOptions);
 
     }
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
+
+    @Override
+    public void onDestroyView() {
+        preferences  = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        preferences.edit().putString("Show_on_map","0").commit();
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onPause() {
+        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        preferences.edit().putString("Show_on_map","0").commit();
+        super.onPause();
+    }
+
+    @Override
+    public void onDetach() {
+        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        preferences.edit().putString("Show_on_map","0").commit();
+        super.onDetach();
+        mListener = null;
+    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -311,7 +341,7 @@ public class MapFragment extends Fragment implements IRoutingListener {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+        public void onMapFragmentInteraction(String id);
     }
 
 }
