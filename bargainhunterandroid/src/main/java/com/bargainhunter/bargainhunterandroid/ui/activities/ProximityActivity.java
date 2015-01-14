@@ -41,8 +41,8 @@ public class ProximityActivity extends Activity {
         String StoreOffers = getIntent().getStringExtra("StoreOffers");
         if (proximity_entering) {
             //Toast.makeText(getBaseContext(),"Entering the region"  ,Toast.LENGTH_LONG).show();
-            notificationTitle = "You are Near " + theStoreName + " " + theStoreAddr;
-            notificationContent = "New Offers: " + "\n" + theStoreName + " " + StoreOffers;
+            notificationTitle = "You are Near " + theStoreName + "\n" + theStoreAddr;
+            notificationContent = "New Offers: " + "\n\n" + StoreOffers;
             tickerMessage = "New Offers: " + theStoreName + " " + theStoreAddr;
         } else {
             Toast.makeText(getBaseContext(), "Exiting the region", Toast.LENGTH_LONG).show();

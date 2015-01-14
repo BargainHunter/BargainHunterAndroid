@@ -11,6 +11,7 @@ public class NotificationView extends Activity {
         setContentView(R.layout.notification);
 
         TextView tv = (TextView) findViewById(R.id.tv_notification);
+        tv.setTextSize(25);
         Bundle data = getIntent().getExtras();
         tv.setText(data.getString("content"));
     }
