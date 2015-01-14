@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 import com.bargainhunter.bargainhunterandroid.R;
 import com.bargainhunter.bargainhunterandroid.models.components.ListParentItem;
 import com.bargainhunter.bargainhunterandroid.ui.fragments.*;
@@ -179,11 +180,12 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onStoreListFromOfferFragmentInteraction(String storeid) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment storeInfoFragment = StoreInfoFragment.newInstance(2, storeid);
+        Fragment map = MapFragment.newInstance(3);
         fragmentManager.beginTransaction()
-                .replace(R.id.mainContainer, storeInfoFragment)
+                .replace(R.id.mainContainer, map)
                 .addToBackStack(null)
                 .commit();
+        Toast.makeText(getApplication(),storeid,Toast.LENGTH_SHORT).show();
     }
 
 
