@@ -1,8 +1,10 @@
 package com.bargainhunter.bargainhunterandroid.ui.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -185,7 +187,9 @@ public class MainActivity extends ActionBarActivity
                 .replace(R.id.mainContainer, map)
                 .addToBackStack(null)
                 .commit();
-        Toast.makeText(getApplication(),storeid,Toast.LENGTH_SHORT).show();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplication());
+        preferences.edit().putString("StoreId",storeid).commit();
+        preferences.edit().putString("Show_on_map","1").commit();
     }
 
 
