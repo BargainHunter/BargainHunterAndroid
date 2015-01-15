@@ -1,4 +1,4 @@
-package com.bargainhunter.bargainhunterandroid.ui.activities;
+package com.bargainhunter.bargainhunterandroid;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -10,6 +10,8 @@ import android.os.AsyncTask;
 import android.widget.Button;
 import android.widget.EditText;
 import com.bargainhunter.bargainhunterandroid.R;
+import com.bargainhunter.bargainhunterandroid.ui.activities.LoginActivity;
+import com.bargainhunter.bargainhunterandroid.ui.activities.RegisterActivity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -57,8 +57,9 @@ android {
     }
 }
 robolectric {
-    include '**/*Test.class'
-//    include '**/androidTest/ui/activities/*ResgisterActivityTest.class'
+    include '**/*LoginActivityTest.class'
+    include '**/*RegisterActivityTest.class'
+
 }
 dependencies {
     repositories {
