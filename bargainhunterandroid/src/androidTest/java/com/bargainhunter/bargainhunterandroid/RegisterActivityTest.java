@@ -32,7 +32,7 @@ import static org.robolectric.RobolectricForMaps.shadowOf;
 @RunWith(RobolectricTestRunner.class)
 public class RegisterActivityTest {
 
-    Activity loginActivity,splashScreen,registerActivity;
+    Activity loginActivity,registerActivity;
     RegisterActivity activity;
     EditText firstName,lastName, email, password;
     Button createAccount;
@@ -65,32 +65,5 @@ public class RegisterActivityTest {
         assertThat(cancel,equalTo(true));
 
 
-    }
-
-    @Test
-    public void testAlertDialogAppears() throws Exception {
-//        firstName.setText("jdgfjshdgfjdsh");
-//        lastName.setText("dskfhsdjfhksjdhf");
-//        email.setText("vasovrk@gmail.com");
-//        password.setText("fdsjfhskjfhs");
-//        ShadowActivity shadowActivity = Robolectric.shadowOf(registerActivity);
-//        createAccount.performClick();
-//        AlertDialog.Builder builder = new AlertDialog.Builder(registerActivity);
-//        builder.setMessage("Registration Successfull! Please Login")
-//                .setCancelable(false);
-//        AlertDialog alertDialog = builder.create();
-//        alertDialog.show();
-//        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
-////       // ShadowAlertDialog shadowAlertDialog = shadowOf(alertDialog);
-////        assertThat(ShadowAlertDialog.getLatestAlertDialog(), notNullValue());
-//
-//        Intent startedIntent = shadowActivity.getNextStartedActivity();
-//        assertThat(startedIntent.getComponent().getClassName(),equalTo(SplashScreen.class.getName()));
-
-
-    }
-
-    @Test
-    public void testNextActivityCalled() throws Exception {
     }
 }
