@@ -15,5 +15,3 @@ android:
 
     # Additional components
     - extra
-
-script: gradle check
