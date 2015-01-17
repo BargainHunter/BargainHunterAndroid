@@ -15,3 +15,7 @@ android:
 
     # Additional components
     - extra
+
+install: gradle clean build
+
+script: gradle check
